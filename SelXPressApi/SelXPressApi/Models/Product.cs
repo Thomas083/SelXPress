@@ -10,6 +10,7 @@ public class Product
     public string Picture { get; set; }
     public DateTime CreatedAt { get; set; }
     public User SellPeople { get; set; }
-    
+    public ICollection<Comment> Comments { get; set; }
+    public ICollection<Cart> Carts { get; set; }
     //promotion Id <optional>
 }

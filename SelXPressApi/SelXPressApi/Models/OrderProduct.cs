@@ -3,6 +3,8 @@ namespace SelXPressApi.Models;
 public class OrderProduct
 {
     public int Id { get; set; }
-    public Product ProductOrder { get; set; }
-    public Order OrderProductOrder { get; set; }
+    public int ProductId { get; set; }
+    public int OrderId { get; set; }
+    public Product Product { get; set; }
+    public Order Order { get; set; }
 }
