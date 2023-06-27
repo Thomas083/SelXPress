@@ -28,8 +28,27 @@ public class DataContext : DbContext
         // handle the many to many relationship between Order and Product
         modelBuilder.Entity<OrderProduct>()
             .HasKey(op => new { op.ProductId, op.OrderId });
-        
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(p => p.Product)
+            .WithMany(op => op.OrderProducts)
+            .HasForeignKey(pr => pr.ProductId);
+        modelBuilder.Entity<OrderProduct>()
+            .HasOne(o => o.Order)
+            .WithMany(op => op.OrderProducts)
+            .HasForeignKey(o => o.OrderId);
+
         //handle the amny to many relationship between User and Product
-        
+
+        modelBuilder.Entity<Cart>()
+            .HasKey(c => new { c.ProductId, c.UserId });
+        modelBuilder.Entity<Cart>()
+            .HasOne(u => u.User)
+            .WithMany(u => u.Carts)
+            .HasForeignKey(c => c.UserId);
+        modelBuilder.Entity<Cart>()
+            .HasOne(p => p.Product)
+            .WithMany(p => p.Carts)
+            .HasForeignKey(p => p.ProductId);
+
     }
 }
