@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    //options.useSqlServer();
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 });
 var app = builder.Build();
 
