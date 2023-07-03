@@ -8,33 +8,55 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		// GET: api/<UserController>
+		/// <summary>
+		/// GET: api/<UserController>
+		/// Get all users
+		/// </summary>
+		/// <returns>array of all user</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/<UserController>/5
+		/// <summary>
+		/// GET api/<UserController>/5
+		/// get user by id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>an user</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
 			return "value";
 		}
 
-		// POST api/<UserController>
+		/// <summary>
+		/// POST api/<UserController>
+		/// create a new user
+		/// </summary>
+		/// <param name="value"></param>
 		[HttpPost]
 		public void Post([FromBody] string value)
 		{
 		}
 
-		// PUT api/<UserController>/5
+		/// <summary>
+		/// PUT api/<UserController>/5
+		/// modify an user
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody] string value)
 		{
 		}
 
-		// DELETE api/<UserController>/5
+		/// <summary>
+		/// DELETE api/<UserController>/5
+		/// delete an user
+		/// </summary>
+		/// <param name="id"></param>
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
