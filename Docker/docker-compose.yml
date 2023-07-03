@@ -13,18 +13,18 @@ services:
     depends_on:
       - db
 
-  front:
-    build: ./front
-    env_file:
-      - .env
-    ports:
-      - 4000:80
-    restart: on-failure
-    networks:
-      - network
-    depends_on:
-      - db
-      - API
+  # front:
+  #   build: ./front
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 4000:80
+  #   restart: on-failure
+  #   networks:
+  #     - network
+  #   depends_on:
+  #     - db
+  #     - API
 
   db:
     image: mariadb:10.6.14
@@ -36,24 +36,24 @@ services:
     environment:
       MARIADB_USER: ${MARIADB_USER}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-    volumes: 
+    volumes:
       - db-data:/var/lib/mariadb/data
       - ../SelXPressApi/database-files/database-template.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - network
 
-  back_office:
-    build: ./back_office
-    env_file:
-      - .env
-    ports:
-      - 4001:80
-    restart: on-failure
-    networks:
-      - network
-    depends_on:
-      - db
-      - API
+  # back_office:
+  #   build: ./back_office
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 4001:80
+  #   restart: on-failure
+  #   networks:
+  #     - network
+  #   depends_on:
+  #     - db
+  #     - API
 
 volumes:
   db-data:
