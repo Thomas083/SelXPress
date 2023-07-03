@@ -10,8 +10,9 @@ namespace SelXPressApi.Controllers
 	{
 		/// <summary>
 		/// GET: api/<CommentController>
+		/// Get all comments
 		/// </summary>
-		/// <returns>array of all comment</returns>
+		/// <returns>Return an Array of all comment</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -20,9 +21,10 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// GET api/<CommentController>/5
+		/// Get a comment by id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>a comment</returns>
+		/// <returns>Return a specific comment</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
@@ -31,7 +33,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// POST api/<CommentController>
-		/// create a new comment
+		/// Create a new comment
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
@@ -41,7 +43,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// PUT api/<CommentController>/5
-		/// modify a comment
+		/// Modify a comment
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
@@ -52,7 +54,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// DELETE api/<CommentController>/5
-		/// delete a comment
+		/// Delete a comment
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]

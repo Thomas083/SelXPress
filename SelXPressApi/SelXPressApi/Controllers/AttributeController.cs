@@ -10,8 +10,9 @@ namespace SelXPressApi.Controllers
 	{
 		/// <summary>
 		/// GET: api/<AttributeController>
+		/// Get all attributes
 		/// </summary>
-		/// <returns>Array of all attributes</returns>
+		/// <returns>Return an Array of all attributes</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -20,9 +21,10 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// GET api/<AttributeController>/5
+		/// Get an attribute by id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>The attribute</returns>
+		/// <returns>Return a specific attribute</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
@@ -31,7 +33,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// POST api/<AttributeController>
-		/// create new attribute
+		/// Create new attribute
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
@@ -41,7 +43,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// PUT api/<AttributeController>/5
-		/// modify an attribute
+		/// Modify an attribute
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
@@ -52,7 +54,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// DELETE api/<AttributeController>/5
-		/// delete an attribute
+		/// Delete an attribute
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]

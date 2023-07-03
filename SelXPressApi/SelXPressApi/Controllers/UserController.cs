@@ -12,7 +12,7 @@ namespace SelXPressApi.Controllers
 		/// GET: api/<UserController>
 		/// Get all users
 		/// </summary>
-		/// <returns>array of all user</returns>
+		/// <returns>Return an Array of all user</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -24,7 +24,7 @@ namespace SelXPressApi.Controllers
 		/// get user by id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>an user</returns>
+		/// <returns>Return a specific user</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
@@ -33,7 +33,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// POST api/<UserController>
-		/// create a new user
+		/// Create a new user
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
@@ -43,7 +43,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// PUT api/<UserController>/5
-		/// modify an user
+		/// Modify an user
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
@@ -54,7 +54,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// DELETE api/<UserController>/5
-		/// delete an user
+		/// Delete an user
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]

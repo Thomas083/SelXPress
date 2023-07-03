@@ -12,7 +12,7 @@ namespace SelXPressApi.Controllers
 		/// GET: api/<TagController>
 		/// Get all tags
 		/// </summary>
-		/// <returns>Array of all tags</returns>
+		/// <returns>Return an Array of all tags</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -24,7 +24,7 @@ namespace SelXPressApi.Controllers
 		/// Get a specific tag
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>A specific tag</returns>
+		/// <returns>Return a specific tag</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
