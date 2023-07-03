@@ -8,33 +8,53 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class CartController : ControllerBase
 	{
-		// GET: api/<CartController>
+		/// <summary>
+		/// GET: api/<CartController>
+		/// </summary>
+		/// <returns>Array of all cart</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/<CartController>/5
+		/// <summary>
+		/// GET api/<CartController>/5
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>information of the cart</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
 			return "value";
 		}
 
-		// POST api/<CartController>
+		/// <summary>
+		/// POST api/<CartController>
+		/// create new cart
+		/// </summary>
+		/// <param name="value"></param>
 		[HttpPost]
 		public void Post([FromBody] string value)
 		{
+
 		}
 
-		// PUT api/<CartController>/5
+		/// <summary>
+		/// PUT api/<CartController>/5
+		/// modify a cart
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody] string value)
 		{
 		}
-
-		// DELETE api/<CartController>/5
+		/// <summary>
+		/// DELETE api/<CartController>/5
+		/// delete a cart
+		/// </summary>
+		/// <param name="id"></param>
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
