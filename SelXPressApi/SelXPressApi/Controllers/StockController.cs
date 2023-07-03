@@ -12,7 +12,7 @@ namespace SelXPressApi.Controllers
 		/// GET: api/<StockController>
 		/// Get all stock items
 		/// </summary>
-		/// <returns>Array with all stock for each product</returns>
+		/// <returns>Return an Array with all stock for each product</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -24,7 +24,7 @@ namespace SelXPressApi.Controllers
 		/// Get stock for a specific product
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns></returns>
+		/// <returns>Return the stock for a specific product</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{

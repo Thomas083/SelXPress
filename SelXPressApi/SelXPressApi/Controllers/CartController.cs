@@ -10,8 +10,9 @@ namespace SelXPressApi.Controllers
 	{
 		/// <summary>
 		/// GET: api/<CartController>
+		/// Get all carts
 		/// </summary>
-		/// <returns>Array of all cart</returns>
+		/// <returns>Return an Array of all cart</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
@@ -20,9 +21,10 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// GET api/<CartController>/5
+		/// Get a cart by id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>information of the cart</returns>
+		/// <returns>Return the information of a specific cart</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
@@ -31,7 +33,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// POST api/<CartController>
-		/// create new cart
+		/// Create new cart
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
@@ -42,7 +44,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// PUT api/<CartController>/5
-		/// modify a cart
+		/// Modify a cart
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
@@ -52,7 +54,7 @@ namespace SelXPressApi.Controllers
 		}
 		/// <summary>
 		/// DELETE api/<CartController>/5
-		/// delete a cart
+		/// Delete a cart
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
