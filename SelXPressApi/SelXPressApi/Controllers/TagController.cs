@@ -8,33 +8,55 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class TagController : ControllerBase
 	{
-		// GET: api/<TagController>
+		/// <summary>
+		/// GET: api/<TagController>
+		/// Get all tags
+		/// </summary>
+		/// <returns>Array of all tags</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/<TagController>/5
+		/// <summary>
+		/// GET api/<TagController>/5
+		/// Get a specific tag
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>A specific tag</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
 			return "value";
 		}
 
-		// POST api/<TagController>
+		/// <summary>
+		/// POST api/<TagController>
+		/// Create a new tag
+		/// </summary>
+		/// <param name="value"></param>
 		[HttpPost]
 		public void Post([FromBody] string value)
 		{
 		}
 
-		// PUT api/<TagController>/5
+		/// <summary>
+		/// PUT api/<TagController>/5
+		/// Modify a specific tag
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody] string value)
 		{
 		}
 
-		// DELETE api/<TagController>/5
+		/// <summary>
+		/// DELETE api/<TagController>/5
+		/// Delete a specific tag
+		/// </summary>
+		/// <param name="id"></param>
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
