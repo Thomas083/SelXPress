@@ -12,7 +12,7 @@ using SelXPressApi.Data;
 namespace SelXPressApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230702182911_InitialCreate")]
+    [Migration("20230703142006_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
