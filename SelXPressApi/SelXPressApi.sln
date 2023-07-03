@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelXPressApi", "SelXPressApi\SelXPressApi.csproj", "{B4690607-1B0D-4C6B-A8B1-AC2846F88644}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4690607-1B0D-4C6B-A8B1-AC2846F88644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4690607-1B0D-4C6B-A8B1-AC2846F88644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4690607-1B0D-4C6B-A8B1-AC2846F88644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4690607-1B0D-4C6B-A8B1-AC2846F88644}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F5AF637C-2619-4E19-BCC7-1CD6A89AE2F0}
+	EndGlobalSection
+EndGlobal
