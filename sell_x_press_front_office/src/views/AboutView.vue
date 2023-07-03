@@ -16,13 +16,14 @@ export default {
 </script>
 
 <style>
+  
   .about {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   .maxence {
-    background-color: pink;
+    background-color: var(--main-blue);
     border-radius: 20px;
     height: 30%;
     width: 30%;
