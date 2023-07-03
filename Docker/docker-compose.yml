@@ -2,7 +2,7 @@ version: '3'
 
 services:
   API:
-    build: ./API
+    build: ../SelXPressApi/SelXPressApi
     env_file:
       - .env
     ports:
