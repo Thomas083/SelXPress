@@ -18,12 +18,7 @@ namespace SelXPressApi.Controllers
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
-			return new[]
-			{
-				"product1",
-				"product2",
-				"product3"
-			};
+			return new string[] { "value1", "value2" };
 		}
 
 		/// <summary>
