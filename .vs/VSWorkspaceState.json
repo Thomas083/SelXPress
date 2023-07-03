@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SelXPressApi",
+    "\\SelXPressApi\\SelXPressApi",
+    "\\SelXPressApi\\SelXPressApi\\Controllers"
   ],
-  "SelectedNode": "\\C:\\Users\\thoma\\Source\\Repos\\SelXPress",
+  "SelectedNode": "\\SelXPressApi\\SelXPressApi\\appsettings.json",
   "PreviewInSolutionExplorer": false
 }
