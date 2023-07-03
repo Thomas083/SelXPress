@@ -8,33 +8,55 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class StockController : ControllerBase
 	{
-		// GET: api/<StockController>
+		/// <summary>
+		/// GET: api/<StockController>
+		/// Get all stock items
+		/// </summary>
+		/// <returns>Array with all stock for each product</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/<StockController>/5
+		/// <summary>
+		/// GET api/<StockController>/5
+		/// Get stock for a specific product
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
 			return "value";
 		}
 
-		// POST api/<StockController>
+		/// <summary>
+		/// POST api/<StockController>
+		/// Create a new stock item
+		/// </summary>
+		/// <param name="value"></param>
 		[HttpPost]
 		public void Post([FromBody] string value)
 		{
 		}
 
-		// PUT api/<StockController>/5
+		/// <summary>
+		/// PUT api/<StockController>/5
+		/// Modify a stock item
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody] string value)
 		{
 		}
 
-		// DELETE api/<StockController>/5
+		/// <summary>
+		/// DELETE api/<StockController>/5
+		/// Delete a stock item
+		/// </summary>
+		/// <param name="id"></param>
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
