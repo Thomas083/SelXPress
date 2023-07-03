@@ -8,33 +8,55 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class CategoryController : ControllerBase
 	{
-		// GET: api/<CategoryController>
+		/// <summary>
+		/// GET: api/<CategoryController>
+		/// Get all categories
+		/// </summary>
+		/// <returns>Return an Array of all categories</returns>
 		[HttpGet]
 		public IEnumerable<string> Get()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/<CategoryController>/5
+		/// <summary>
+		/// GET api/<CategoryController>/5
+		/// Get a category by id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>Return a specific category</returns>
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
 			return "value";
 		}
 
-		// POST api/<CategoryController>
+		/// <summary>
+		/// POST api/<CategoryController>
+		/// Create a new category
+		/// </summary>
+		/// <param name="value"></param>
 		[HttpPost]
 		public void Post([FromBody] string value)
 		{
 		}
 
-		// PUT api/<CategoryController>/5
+		/// <summary>
+		/// PUT api/<CategoryController>/5
+		/// Modify a category
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="value"></param>
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody] string value)
 		{
 		}
 
-		// DELETE api/<CategoryController>/5
+		/// <summary>
+		/// DELETE api/<CategoryController>/5
+		/// Delete a category
+		/// </summary>
+		/// <param name="id"></param>
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
