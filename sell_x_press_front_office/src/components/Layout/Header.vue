@@ -51,7 +51,7 @@ export default {
     background-color: var(--main-blue);
     display: grid;
     grid-template-columns: 10vw 60vw 15vw 15vw;
-    width: 100%;
+    width: 100vw;
     height: 20vh;
 }
 

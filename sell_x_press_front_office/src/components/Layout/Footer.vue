@@ -52,6 +52,7 @@ a {
 
 a:hover {
     opacity: 0.5;
+    text-decoration: underline;
 }
 
 .help_us {
@@ -65,12 +66,29 @@ a:hover {
     background-color: var(--main-orange);
     border-radius: 15px;
     font-size: 25px;
-    height: 8vh;
+    padding: 1rem;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .help_us_btn:hover {
     opacity: 0.5;
+}
+
+/* Media queries for mobile screens */
+@media only screen and (max-width: 600px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .get_to_know_us,
+    .make_money_with_us {
+        align-items: center;
+        margin: 1vh 0;
+    }
+
+    .help_us_btn {
+        font-size: 16px;
+    }
 }
 </style>
   
