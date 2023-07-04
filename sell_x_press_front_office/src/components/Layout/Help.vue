@@ -15,6 +15,14 @@
     </div>
 </template>
 
+<script>
+
+export default {
+    name: "Help",
+};
+
+</script>
+
 <style scoped>
 .modal-layout {
     width: 100vw;
