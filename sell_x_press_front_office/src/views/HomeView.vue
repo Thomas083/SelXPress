@@ -1,27 +1,27 @@
 <template>
-  <Header_Not_Registered />
-  <Header_Regitered />
-  <!-- <Header_Identification_Page /> -->
-  <Footer/>
-  <!-- <Help /> -->
+  <header-not-registered />
+  <header-regitered />
+  <header-identification-page />
+  <footer-layout />
+  <!-- <help-modal /> -->
 </template>
 
 <script>
 // @ is an alias to /src
-import Header_Not_Registered from '@/components/Layout/Header_Not_Registered.vue';
-import Header_Regitered from '@/components/Layout/Header_Regitered.vue';
-import Header_Identification_Page from '@/components/Layout/Header_Identification_Page.vue';
-import Footer from '@/components/Layout/Footer.vue';
-import Help from '@/components/Layout/Help.vue'
+import HeaderNotRegistered from '@/components/Layout/HeaderNotRegistered.vue';
+import HeaderRegitered from '@/components/Layout/HeaderRegitered.vue';
+import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPage.vue';
+import FooterLayout from '@/components/Layout/FooterLayout.vue';
+import HelpModal from '@/components/Layout/HelpModal.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    Header_Not_Registered,
-    Header_Regitered,
-    Header_Identification_Page,
-    Footer,
-    Help
+    HeaderNotRegistered,
+    HeaderRegitered,
+    HeaderIdentificationPage,
+    FooterLayout,
+    HelpModal,
   }
 }
 </script>

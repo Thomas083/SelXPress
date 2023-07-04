@@ -18,7 +18,7 @@
 <script>
 
 export default {
-    name: "Footer",
+    name: "FooterLayout",
 };
 </script>
   

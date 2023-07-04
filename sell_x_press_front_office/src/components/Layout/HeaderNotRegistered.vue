@@ -15,7 +15,7 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user">ELSHARION</button>
+                <button class="btn-signin">Sign In</button>
                 <button class="btn-signup">Sign Up</button>
             </div>
         </div>
@@ -31,7 +31,7 @@
 <script>
 
 export default {
-    name: "Header_Registered",
+    name: "HeaderNotRegistered",
 };
 </script>
   
@@ -86,10 +86,6 @@ export default {
     height: 10vh;
 }
 
-p {
-    margin-bottom: 0;
-}
-
 .header-login {
     grid-column: 3;
     color: var(--main-white);
@@ -105,6 +101,7 @@ p {
     height: inherit;
 }
 
+.btn-signin,
 .btn-signup {
     border-radius: 9px;
     display: flex;
@@ -117,17 +114,15 @@ p {
     border: none;
 }
 
-.user:hover,
+.btn-signin:hover,
 .btn-signup:hover {
     opacity: 0.7;
 }
 
-.user {
+.btn-signin {
+    background-color: var(--main-orange);
     color: var(--main-white);
-    padding: 0.5rem 2rem;
-    border: none;
-    background-color: transparent;
-    text-decoration: underline;
+    padding: 1rem 2rem;
 
 }
 

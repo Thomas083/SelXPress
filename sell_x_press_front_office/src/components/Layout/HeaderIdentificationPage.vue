@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: "Header_Not_Registered",
+    name: "HeaderIdentificationPage",
 };
 </script>
 
