@@ -31,7 +31,7 @@
 <script>
 
 export default {
-    name: "Header",
+    name: "Header_Not_Registered",
 };
 </script>
   

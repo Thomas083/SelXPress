@@ -1,19 +1,22 @@
 <template>
-  <Header />
-  <Footer/>
-  <Help />
+  <!-- <Header /> -->
+  <Header_Identification_Page />
+  <!-- <Footer/> -->
+  <!-- <Help /> -->
 </template>
 
 <script>
 // @ is an alias to /src
-import Header from '@/components/Layout/Header.vue';
+import Header_Not_Registered from '@/components/Layout/Header_Not_Registered.vue';
+import Header_Identification_Page from '@/components/Layout/Header_Identification_Page.vue';
 import Footer from '@/components/Layout/Footer.vue';
 import Help from '@/components/Layout/Help.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    Header,
+    Header_Not_Registered,
+    Header_Identification_Page,
     Footer,
     Help
   }
