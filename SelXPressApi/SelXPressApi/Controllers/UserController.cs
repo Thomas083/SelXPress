@@ -24,17 +24,34 @@ namespace SelXPressApi.Controllers
 		/// <returns>Return an Array of all user</returns>
 		[HttpGet]
 		[ProducesResponseType(200, Type = typeof(ICollection<User>))]
-		[ProducesResponseType(400, Type = typeof(NotFoundErrorMessage))]
-		public ActionResult<ICollection<User>> Get()
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
+		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]
+		public IActionResult GetUsers()
 		{
-			ICollection<User> result = _userRepository.GetAllUsers();
-
-			if (!ModelState.IsValid)
+			try
 			{
-				return BadRequest(ModelState);
-			}
+                ICollection<User> result = _userRepository.GetAllUsers();
 
-			return Ok(result);
+                if (!ModelState.IsValid)
+                {
+                    BadRequestErrorMessage error = new BadRequestErrorMessage("Bad request occured", 002);
+                    return BadRequest(error);
+                }
+
+                if (result.Count == 0)
+                {
+                    NotFoundErrorMessage error = new NotFoundErrorMessage("There is no user in the database", 003);
+                    return NotFound(error);
+                }
+
+                return Ok(result);
+            }
+			catch(Exception ex)
+			{
+				ServerErrorMessage error = new ServerErrorMessage(ex.Message,005);
+				return StatusCode(500, error);
+			}
 		}
 
 		/// <summary>
@@ -44,15 +61,33 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific user</returns>
 		[HttpGet("{id}")]
-		public ActionResult Get(int id)
+		[ProducesResponseType(200, Type = typeof(User))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
+		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]
+		public IActionResult GetUser(int id)
 		{
-			if (!_userRepository.UserExists(id))
+			try
 			{
-				return NotFound("The user with the id : " + id + " doesn't exists");
+                if (!_userRepository.UserExists(id))
+                {
+                    NotFoundErrorMessage error = new NotFoundErrorMessage("There is no user with the id " + id, 001);
+                    return NotFound(error);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    BadRequestErrorMessage error = new BadRequestErrorMessage("A badrequest occured", 004);
+                    return BadRequest(error);
+                }
+                var user = _userRepository.GetUserById(id);
+                return Ok(user);
+            }
+			catch(Exception ex)
+			{
+				ServerErrorMessage error = new ServerErrorMessage(ex.Message, 006);
+				return StatusCode(500, error);
 			}
-			return Ok();
-
-
 		}
 
 		/// <summary>
@@ -61,8 +96,9 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		public void CreateUser([FromBody] string value)
 		{
+
 		}
 
 		/// <summary>
@@ -72,7 +108,7 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		public void UpdateUser(int id, [FromBody] string value)
 		{
 		}
 
@@ -82,7 +118,7 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		public void DeleteUser(int id)
 		{
 		}
 	}
