@@ -1,5 +1,5 @@
 <template>
-    <div class="footer-container">
+    <footer class="footer-container">
         <div class="get_to_know_us">
             <p>Get to know us:</p>
             <a href="#">Carreer</a>
@@ -12,7 +12,7 @@
         <div class="help_us">
             <button class="help_us_btn">Help Us To Upgrade</button>
         </div>
-    </div>
+    </footer>
 </template>
   
 <script>
