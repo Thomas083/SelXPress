@@ -4,7 +4,7 @@
             <h1>Sign Up</h1>
             <login-form @input-form="updateData" />
             <button class="btn btn-secondary signup-button">Sign Up</button>
-            <a :onClick="updateData" class="link-dark" href="#">You already have an account ?</a>
+            <a class="link-dark" href="#">You already have an account ?</a>
             <button class="btn btn-primary signin-button">Sign In</button>
         </div>
     </div>
