@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-layout">
+    <div class="modal-layout" v-on:click="setModalState">
         <div class="modal-container">
             <div class="modal-title">Help Us To Upgrade</div>
             <form class="modal-form">
@@ -19,6 +19,11 @@
 
 export default {
     name: "HelpModal",
+    methods: {
+        setModalState() {
+            this.$emit('sendModalState')
+        }
+    },
 };
 
 </script>
