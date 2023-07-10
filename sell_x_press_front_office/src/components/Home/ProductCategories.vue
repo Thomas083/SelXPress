@@ -2,22 +2,22 @@
         <div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/test/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
+                    <img src="../../assets/Tests/categories-product-maquette-1.jpg" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -35,11 +35,11 @@
             <button class="show-more-btn">Show more</button>
         </div>
         <div class="products-container">
-            <img src="../../assets/test/categories-product-maquette-1.jpg" />
-            <img src="../../assets/test/categories-product-maquette-1.jpg" />
-            <img src="../../assets/test/categories-product-maquette-1.jpg" />
-            <img src="../../assets/test/categories-product-maquette-1.jpg" />
-            <img src="../../assets/test/categories-product-maquette-1.jpg" />
+            <img src="../../assets/Tests/categories-product-maquette-1.jpg" />
+            <img src="../../assets/Tests/categories-product-maquette-1.jpg" />
+            <img src="../../assets/Tests/categories-product-maquette-1.jpg" />
+            <img src="../../assets/Tests/categories-product-maquette-1.jpg" />
+            <img src="../../assets/Tests/categories-product-maquette-1.jpg" />
         </div>
     </div>
 </template>
