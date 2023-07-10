@@ -394,6 +394,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 .env
-
 AWS/
 SelXPressApi/.idea/.idea.SelXPressApi/.idea/
+.vs/
