@@ -5,10 +5,10 @@
             <form class="modal-form">
                 <textarea class="modal-form-input" type="text" placeholder="Write your comment here..." ></textarea>
                 <div class="modal-form-btn-container">
-                    <button class="modal-form-btn-cancel" v-on:click="setModalState">
+                    <button class="btn btn-secondary modal-form-btn-cancel" v-on:click="setModalState">
                         Cancel
                     </button>
-                    <button class="modal-form-btn-send">
+                    <button class="btn btn-primary modal-form-btn-send">
                         SEND
                         <img class="modal-img" src='../../assets/Modal/send.png' />
                     </button>
@@ -97,19 +97,5 @@ export default {
     gap: 1rem;
     border-radius: 1rem;
     border: none
-}
-
-.modal-form-btn-cancel {
-    background-color: var(--main-grey-separation);
-    color: var(--main-black);
-}
-
-.modal-form-btn-send {
-    background-color: var(--main-orange);
-    color: var(--main-white);
-}
-
-.modal-form-btn-send:hover, .modal-form-btn-cancel:hover {
-    opacity: 0.5;
 }
 </style>
