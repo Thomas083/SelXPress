@@ -15,8 +15,8 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="btn-signin">Sign In</button>
-                <button class="btn-signup">Sign Up</button>
+                <button class="btn btn-primary btn-signin">Sign In</button>
+                <button class="btn btn-secondary btn-signup">Sign Up</button>
             </div>
         </div>
         <div class="header-order">
@@ -114,21 +114,12 @@ export default {
     border: none;
 }
 
-.btn-signin:hover,
-.btn-signup:hover {
-    opacity: 0.7;
-}
-
 .btn-signin {
-    background-color: var(--main-orange);
-    color: var(--main-white);
     padding: 1rem 2rem;
 
 }
 
 .btn-signup {
-    background-color: var(--main-grey-separation);
-    color: var(--main-black);
     padding: 1rem 3rem;
 }
 

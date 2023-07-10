@@ -10,15 +10,33 @@
             <a href="#">Sell on SelXPress</a>
         </div>
         <div class="help_us">
-            <button class="help_us_btn">Help Us To Upgrade</button>
+            <button class="btn btn-primary help_us_btn" v-on:click="setModalState">Help Us To Upgrade</button>
         </div>
     </footer>
+    <div v-if="modalState">
+        <help-modal @send-modal-state="setModalState" />
+    </div>
 </template>
   
 <script>
 
+import HelpModal from './HelpModal.vue';
+
 export default {
     name: "FooterLayout",
+    data() {
+        return {
+            modalState: false,
+        }
+    },
+    components: {
+        HelpModal,
+    },
+    methods: {
+        setModalState() {
+            this.modalState = !this.modalState
+        }
+    },
 };
 </script>
   
@@ -62,16 +80,10 @@ a:hover {
 }
 
 .help_us_btn {
-    color: var(--main-white);
-    background-color: var(--main-orange);
     border-radius: 15px;
     font-size: 25px;
     padding: 1rem;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-
-.help_us_btn:hover {
-    opacity: 0.5;
 }
 
 /* Media queries for mobile screens */

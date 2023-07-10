@@ -16,7 +16,7 @@
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
                 <button class="user">ELSHARION</button>
-                <button class="btn-signup">Sign Up</button>
+                <button class="btn btn-secondary btn-signup">Sign Up</button>
             </div>
         </div>
         <div class="header-order">
@@ -117,8 +117,7 @@ p {
     border: none;
 }
 
-.user:hover,
-.btn-signup:hover {
+.user:hover {
     opacity: 0.7;
 }
 
@@ -132,8 +131,6 @@ p {
 }
 
 .btn-signup {
-    background-color: var(--main-grey-separation);
-    color: var(--main-black);
     padding: 1rem 3rem;
 }
 
