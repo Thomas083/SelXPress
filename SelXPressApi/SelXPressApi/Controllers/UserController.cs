@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.ErrorMessage;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
+using System.Reflection;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,9 +15,11 @@ namespace SelXPressApi.Controllers
 	public class UserController : ControllerBase
 	{
 		private readonly IUserRepository _userRepository;
-		public UserController(IUserRepository userRepository)
+		private readonly IMapper _mapper;
+		public UserController(IUserRepository userRepository, IMapper mapper)
 		{
 			this._userRepository = userRepository;
+			_mapper = mapper;
 		}
 
 		/// <summary>
@@ -23,7 +28,7 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <returns>Return an Array of all user</returns>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(ICollection<User>))]
+		[ProducesResponseType(200, Type = typeof(ICollection<UserDto>))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
 		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]
@@ -31,7 +36,8 @@ namespace SelXPressApi.Controllers
 		{
 			try
 			{
-                ICollection<User> result = _userRepository.GetAllUsers();
+				var users = _mapper.Map<List<UserDto>>(_userRepository.GetAllUsers());
+				
 
                 if (!ModelState.IsValid)
                 {
@@ -39,13 +45,13 @@ namespace SelXPressApi.Controllers
                     return BadRequest(error);
                 }
 
-                if (result.Count == 0)
+                if (users.Count == 0)
                 {
                     NotFoundErrorMessage error = new NotFoundErrorMessage("There is no user in the database", 003);
                     return NotFound(error);
                 }
 
-                return Ok(result);
+                return Ok(users);
             }
 			catch(Exception ex)
 			{
@@ -61,7 +67,7 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific user</returns>
 		[HttpGet("{id}")]
-		[ProducesResponseType(200, Type = typeof(User))]
+		[ProducesResponseType(200, Type = typeof(UserDto))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
 		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]

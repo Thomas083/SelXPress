@@ -1,4 +1,5 @@
-﻿using SelXPressApi.Data;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using SelXPressApi.Data;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 
@@ -30,10 +31,21 @@ namespace SelXPressApi.Repository
             }
 
         }
-
-        public ICollection<User> GetAllUsers()
+        /// <summary>
+        /// select Users.Id, Users.Username, Users.Password, Users.Email, Roles.Name, Roles.Id from Users join Roles on Roles.Id = Users.Id;
+        /// </summary>
+        /// <returns></returns>
+        public List<User> GetAllUsers()
         {
-            return _context.Users.OrderBy(u => u.Id).ToList();
+            return _context.Users.Join(_context.Roles, user => user.Id, role => role.Id, (user, role) => new User
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Password = user.Password,
+                Role = role,
+                Carts = null
+            }).ToList();
         }
 
         public User? GetUserById(int id)
