@@ -18,7 +18,7 @@ export default {
         this.$router.push({ path: '/' });
     },
     goToUserProfile() {
-      this.$router.push({ path: '/user' });
+        this.$router.push({ path: '/user' });
     },
   }
 };
