@@ -1,9 +1,9 @@
 <template>
     <div class="header-container">
-        <img class="logo" src="../../assets/Header/logo_back_office.png" />
+        <img @click="gotToHome()" class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
             <button class="header-btn-add">Add Product</button>
-            <h3 class="header-name">Elsharion</h3>
+            <h3 class="header-name" @click="gotToUserProfile()">Elsharion</h3>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
         </div>
     </div>
@@ -13,6 +13,14 @@
 
 export default {
     name: "HeaderNotAdmin",
+    methods: {
+    goToHome() {
+        this.$router.push({ path: '/' });
+    },
+    goToUserProfile() {
+      this.$router.push({ path: '/user' });
+    },
+  }
 };
 
 </script>
