@@ -1,10 +1,29 @@
 <template>
+  <header-not-admin />
   <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav> -->
   <router-view/>
+  <footer-layout />
 </template>
+
+<script>
+// @ is an alias to /src
+import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPage.vue';
+import HeaderNotAdmin from '@/components/Layout/HeaderNotAdmin.vue';
+import HeaderAdmin from '@/components/Layout/HeaderAdmin.vue';
+import FooterLayout from '@/components/Layout/FooterLayout.vue';
+
+export default {
+  components: {
+    HeaderIdentificationPage,
+    HeaderNotAdmin,
+    HeaderAdmin,
+    FooterLayout
+  }
+}
+</script>
 
 <style>
 #app {
