@@ -36,19 +36,23 @@
 </template>
 
 <script>
-    export default {
-        name: 'LoginForm',
-        data() {
-            return {
-                formData: {
-                    username: '',
-                    email: '',
-                    password: '',
-                    cpassword: '',
-                },
-            }
-        },
-    }
+import InputComponent from "@/components/global/InputComponent.vue";
+export default {
+  name: "LoginForm",
+  components: {
+    InputComponent,
+  },
+  data() {
+    return {
+      formData: {
+        username: "",
+        email: "",
+        password: "",
+        cpassword: "",
+      },
+    };
+  },
+};
 </script>
 
 <style scoped>
