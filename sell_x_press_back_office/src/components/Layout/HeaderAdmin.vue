@@ -2,8 +2,14 @@
     <div class="header-container">
         <img class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
-            <button class="header-btn-add">Add Product</button>
-            <h3 class="header-name">Elsharion</h3>
+            <div class="header-btns">
+                <button class="header-btn-admin">Admin Panel</button>
+                <button class="header-btn-add">Add Product</button>
+            </div>
+            <div class="header-admin">
+                <h3 class="header-name">Elsharion,</h3>
+                <h3 class="header-name">Administrator</h3>
+            </div>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
         </div>
     </div>
@@ -12,7 +18,7 @@
 <script>
 
 export default {
-    name: "HeaderNotAdmin",
+    name: "HeaderAdmin",
 };
 
 </script>
@@ -51,21 +57,48 @@ export default {
     opacity: 0.7;
 }
 
+.header-btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-btn-admin,
 .header-btn-add {
     border-radius: 9px;
-    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    color: var(--main-white);
     border: none;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    background-color: var(--main-green);
+    
 }
 
+.header-btn-admin {
+    background-color: var(--main-green);
+    color: var(--main-white);
+    padding: 1rem 1.5rem ;
+}
+
+.header-btn-add {
+    background-color: var(--main-grey-separation);
+    color: var(--main-black);
+    padding: 0.5rem;
+    width: fit-content;
+}
+
+.header-btn-admin:hover, 
 .header-btn-add:hover {
     opacity: 0.7;
+}
+
+.header-admin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-name {
