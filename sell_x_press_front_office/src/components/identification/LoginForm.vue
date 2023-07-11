@@ -1,36 +1,36 @@
 <template>
   <div :onChange="$emit('inputForm', formData)" class="form-container">
-    <label for="input-uname">Username</label>
-    <input
+    <input-component
+      label="Username"
       id="input-uname"
       name="input-uname"
       type="text"
       placeholder="Enter your username"
-      v-model="formData.username"
+      @input="updateData($event, 'username')"
     />
-    <label for="input-mail">Email Address</label>
-    <input
+    <input-component
+      label="Email Address"
       id="input-mail"
       name="input-mail"
       type="email"
       placeholder="Enter your email"
-      v-model="formData.email"
+      @input="updateData($event, 'email')"
     />
-    <label for="input-pwd">Password</label>
-    <input
+    <input-component
+      label="Password"
       id="input-pwd"
       name="input-pwd"
       type="password"
       placeholder="Enter your password"
-      v-model="formData.password"
+      @input="updateData($event, 'password')"
     />
-    <label for="input-confirm-pwd">Confirm Password</label>
-    <input
+    <input-component
+      label="Confirm Password"
       id="input-confirm-pwd"
       name="input-confirm-pwd"
       type="password"
       placeholder="Confirm your password"
-      v-model="formData.cpassword"
+      @input="updateData($event, 'cpassword')"
     />
   </div>
 </template>
@@ -51,6 +51,11 @@ export default {
         cpassword: "",
       },
     };
+  },
+  methods: {
+    updateData(e, key) {
+      this.formData = Object.assign(this.formData, { [key]: e });
+    },
   },
 };
 </script>

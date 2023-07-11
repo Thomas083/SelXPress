@@ -1,12 +1,20 @@
 <template>
   <div :onChange="$emit('inputForm', formData)" class="form-container">
     <input-component
-      label="Username"
-      id="input-uname"
-      name="input-uname"
+      label="Email address"
+      id="input-mail"
+      name="input-mail"
       type="text"
-      placeholder="Enter your username"
-      @input="updateData($event, 'username')"
+      placeholder="Enter your email"
+      @input="updateData($event, 'email')"
+    />
+    <input-component
+      label="Password"
+      id="input-pwd"
+      name="input-pwd"
+      type="password"
+      placeholder="Enter your password"
+      @input="updateData($event, 'password')"
     />
   </div>
 </template>
@@ -21,18 +29,14 @@ export default {
   data() {
     return {
       formData: {
-        username: "",
         email: "",
         password: "",
-        cpassword: "",
       },
     };
   },
   methods: {
     updateData(e, key) {
-      this.formData = {
-        [key]: e,
-      };
+      this.formData = Object.assign(this.formData, { [key]: e });
     },
   },
 };
