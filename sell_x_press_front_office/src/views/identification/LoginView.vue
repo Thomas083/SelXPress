@@ -3,9 +3,9 @@
         <div class="identification-container col-11 col-md-5">
             <h1>Sign In</h1>
             <login-form @input-form="updateData" />
-            <button class="btn btn-primary signin-button">Sign In</button>
+            <button class="btn btn-primary signin-button" @click="logUser()">Sign In</button>
             <a class="link-dark" href="/forgot">Forgot password ?</a>
-            <button class="btn btn-secondary signup-button" @click="goToSignUp">Sign Up</button>
+            <button class="btn btn-secondary signup-button" @click="goToSignUp()">Sign Up</button>
         </div>
     </div>
 </template>
@@ -13,7 +13,7 @@
 <script>
 import LoginForm from '@/components/identification/LoginForm.vue';
 import { auth } from "@/config/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
 
 export default {
@@ -30,12 +30,17 @@ export default {
         updateData(e) {
             this.formData = e;
         },
-        showData() {
-            createUserWithEmailAndPassword(auth, this.formData.email, this.formData.password)
-                .then((userCredential) => {
-                    console.dir(userCredential);
-                    createToast({title: 'Sign UP Success', description: 'You are sucessfuly register'}, {type: 'success', position: 'bottom-right'});
-                })
+        goToSignUp() {
+            this.$router.push({ path: '/register' });
+        },
+        logUser() {
+            signInWithEmailAndPassword(auth, this.formData.email, this.formData.password)
+          .then((userCredential) => {
+            createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
+          })
+          .catch(() => {
+            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+          });
         },
     }
 }

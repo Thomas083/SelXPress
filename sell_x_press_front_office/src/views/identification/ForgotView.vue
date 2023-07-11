@@ -11,7 +11,7 @@
         @input="updateData"
       />
       <a class="link-dark" href="/login">You already have an account ?</a>
-      <button class="btn btn-primary send-button">
+      <button class="btn btn-primary send-button" @click="forgotPassword()">
         SEND
         <img class="send-img" src="../../assets/Modal/send.png" />
       </button>
@@ -21,6 +21,10 @@
 
 <script>
 import InputComponent from "@/components/global/InputComponent.vue";
+import { auth } from "@/config/firebase-config";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { createToast } from 'mosha-vue-toastify';
+
 export default {
   name: "ForgotView",
   components: {
@@ -35,6 +39,15 @@ export default {
     updateData(e) {
       this.email = e;
     },
+    forgotPassword() {
+      sendPasswordResetEmail(auth, this.email)
+      .then(() => {
+        createToast(`An Email was sent to reset your password at ${this.email}`, { type: 'success', position: 'bottom-right' });
+      })
+      .catch(() => {
+        createToast(`An error occured or this email does not exist... Please try again`, { type: 'danger', position: 'bottom-right' });
+          });
+    }
   },
 };
 </script>

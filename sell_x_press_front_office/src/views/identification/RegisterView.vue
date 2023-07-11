@@ -3,34 +3,47 @@
         <div class="identification-container col-11 col-md-5">
             <h1>Sign Up</h1>
             <register-form @input-form="updateData" />
-            <button class="btn btn-secondary signup-button">Sign Up</button>
+            <button class="btn btn-secondary signup-button" @click="createUser()">Sign Up</button>
             <a class="link-dark mb-4" href="/login">You already have an account ?</a>
         </div>
     </div>
 </template>
 
 <script>
-    import RegisterForm from '@/components/identification/RegisterForm.vue';
-    export default {
-        name: 'RegisterView',
-        components: {
-            RegisterForm,
+import RegisterForm from '@/components/identification/RegisterForm.vue';
+import { auth } from "@/config/firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createToast } from 'mosha-vue-toastify';
+export default {
+    name: 'RegisterView',
+    components: {
+        RegisterForm,
+    },
+    data() {
+        return {
+            formData: null,
+        }
+    },
+    methods: {
+        updateData(e) {
+            this.formData = e;
         },
-        data() {
-            return {
-                formData: null,
-            }
-        },
-        methods: {
-            updateData(e) {
-                this.formData = e;
-            }
-        },      
-    }
+        createUser() {
+            createUserWithEmailAndPassword(auth, this.formData.email, this.formData.password)
+                .then((userCredential) => {
+                    console.dir(userCredential);
+                    createToast({ title: 'Sign UP Success', description: 'You are sucessfuly register' }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+          });
+        }
+    },
+}
 </script>
 
 <style scoped>
-.container{
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +53,7 @@
     padding-bottom: 5vh;
 }
 
-.identification-container{
+.identification-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -51,12 +64,12 @@
     padding-top: 3vh;
 }
 
-.signup-button{
+.signup-button {
     margin-top: 5vh;
     margin-bottom: 5vh;
 }
 
-a{
+a {
     align-self: flex-end;
     margin-right: 2vw;
 }
