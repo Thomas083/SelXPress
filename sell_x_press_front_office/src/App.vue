@@ -1,6 +1,6 @@
 <template>
   <header-not-registered v-if="!isIdentificationPage" />
-  <header-regitered v-else-if="isUserLoggedIn" />
+  <header-registered v-else-if="isUserLoggedIn" />
   <header-identification-page v-else />
   <router-view />
   <footer-layout />
@@ -9,7 +9,7 @@
 <script>
 // @ is an alias to /src
 import HeaderNotRegistered from '@/components/Layout/HeaderNotRegistered.vue';
-import HeaderRegitered from '@/components/Layout/HeaderRegitered.vue';
+import HeaderRegistered from '@/components/Layout/HeaderRegitered.vue';
 import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPage.vue';
 import FooterLayout from '@/components/Layout/FooterLayout.vue';
 import ProductCategories from '@/components/Home/ProductCategories.vue';
@@ -17,14 +17,14 @@ export default {
   name: 'Appvue',
   components: {
     HeaderNotRegistered,
-    HeaderRegitered,
+    HeaderRegistered,
     HeaderIdentificationPage,
     FooterLayout,
     ProductCategories,
   },
   computed: {
     isIdentificationPage() {
-      if (this.$route.path === '/login' || this.$route.path === '/register') return true;
+      return (this.$route.path === '/login' || this.$route.path === '/register')
     },
     isUserLoggedIn() {
       return false;
