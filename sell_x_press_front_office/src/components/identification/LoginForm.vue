@@ -1,18 +1,10 @@
 <template>
   <div :onChange="$emit('inputForm', formData)" class="form-container">
     <input-component
-      label="Username"
-      id="input-uname"
-      name="input-uname"
-      type="text"
-      placeholder="Enter your username"
-      @input="updateData($event, 'username')"
-    />
-    <input-component
-      label="Email Address"
+      label="Email address"
       id="input-mail"
       name="input-mail"
-      type="email"
+      type="text"
       placeholder="Enter your email"
       @input="updateData($event, 'email')"
     />
@@ -24,31 +16,21 @@
       placeholder="Enter your password"
       @input="updateData($event, 'password')"
     />
-    <input-component
-      label="Confirm Password"
-      id="input-confirm-pwd"
-      name="input-confirm-pwd"
-      type="password"
-      placeholder="Confirm your password"
-      @input="updateData($event, 'cpassword')"
-    />
   </div>
 </template>
 
 <script>
 import InputComponent from "@/components/global/InputComponent.vue";
 export default {
-  name: "LoginForm",
+  name: "RegisterForm",
   components: {
     InputComponent,
   },
   data() {
     return {
       formData: {
-        username: "",
         email: "",
         password: "",
-        cpassword: "",
       },
     };
   },
@@ -69,17 +51,5 @@ export default {
   width: 100%;
   border-radius: 10px;
   margin-top: 5vh;
-}
-
-label {
-  align-self: start;
-  margin-left: 3vw;
-}
-
-input {
-  border-radius: 15px;
-  height: 53px;
-  width: 90%;
-  text-align: center;
 }
 </style>
