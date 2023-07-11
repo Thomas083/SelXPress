@@ -1,18 +1,15 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Front Office SelXpress"/>
-  </div>
+  <product-categories />
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ProductCategories from '@/components/Home/ProductCategories.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    ProductCategories,
   }
 }
 </script>
