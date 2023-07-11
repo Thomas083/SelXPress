@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,6 +13,13 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
+		private readonly IProductRepository _productRepository;
+		private readonly IMapper _mapper;
+		public ProductController(IProductRepository productRepository, IMapper mapper)
+		{
+			_productRepository = productRepository;
+			_mapper = mapper;
+		}
 		/// <summary>
 		/// GET: api/<ProductController>
 		/// Get all products
