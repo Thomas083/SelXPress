@@ -1,7 +1,7 @@
 <template>
     <header class="header-container">
         <div class="header-logo">
-            <img class="logo" src="../../assets/Header/Logo.png" />
+            <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
         <div class="header-search">
             <select class="select-categories">
@@ -15,8 +15,8 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user">ELSHARION</button>
-                <button class="btn btn-secondary btn-signup">Sign Up</button>
+                <button class="user" @click="goToUserProfile()">ELSHARION</button>
+                <button class="btn btn-secondary btn-signup">Sign Out</button>
             </div>
         </div>
         <div class="header-order">
@@ -32,6 +32,14 @@
 
 export default {
     name: "HeaderRegistered",
+    methods: {
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+        goToUserProfile() {
+            this.$router.push({ path: '/user' });
+        },
+    }
 };
 </script>
   
@@ -51,6 +59,7 @@ export default {
 
 .logo {
     height: inherit;
+    cursor: pointer;
 }
 
 .header-search {
