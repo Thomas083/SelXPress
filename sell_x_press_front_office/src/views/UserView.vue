@@ -16,7 +16,7 @@
 <script>
 import UserProfileForm from "@/components/UserProfile/UserProfileForm.vue";
 import BusinessStatusForm from "@/components/UserProfile/BusinessStatusForm.vue";
-import { auth } from "@/config-firebase/firebase-config";
+import { auth } from "@/config/firebase-config";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
 

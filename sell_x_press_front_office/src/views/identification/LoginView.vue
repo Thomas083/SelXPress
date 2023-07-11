@@ -12,9 +12,10 @@
 
 <script>
 import LoginForm from '@/components/identification/LoginForm.vue';
-import { auth } from "@/config-firebase/firebase-config";
+import { auth } from "@/config/firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
+
 export default {
     name: 'LoginView',
     components: {
@@ -34,7 +35,6 @@ export default {
                 .then((userCredential) => {
                     console.dir(userCredential);
                     createToast({title: 'Sign UP Success', description: 'You are sucessfuly register'}, {type: 'success', position: 'bottom-right'});
-                    localStorage.setItem('email', userCredential.user.email);
                 })
         },
     }

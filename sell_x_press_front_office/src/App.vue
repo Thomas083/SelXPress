@@ -13,6 +13,7 @@ import HeaderRegistered from '@/components/Layout/HeaderRegitered.vue';
 import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPage.vue';
 import FooterLayout from '@/components/Layout/FooterLayout.vue';
 import ProductCategories from '@/components/Home/ProductCategories.vue';
+
 export default {
   name: 'Appvue',
   components: {

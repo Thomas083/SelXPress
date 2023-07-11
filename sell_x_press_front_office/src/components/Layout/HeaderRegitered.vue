@@ -15,7 +15,7 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user" @click="goToUserProfile()">{{ user_email }}</button>
+                <button class="user" @click="goToUserProfile()">{{ store }}</button>
                 <button class="btn btn-secondary btn-signup" @click="logOut()">Sign Out</button>
             </div>
         </div>
@@ -32,15 +32,6 @@
 
 export default {
     name: "HeaderRegistered",
-    data() {
-        return {
-            user_email: ''
-        }
-    },
-
-    created() {
-        this.user_email = localStorage.getItem("email");
-    },
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
