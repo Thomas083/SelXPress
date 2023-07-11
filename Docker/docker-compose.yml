@@ -14,7 +14,8 @@ services:
       - db
 
   front:
-    build: ./front_office
+    build: 
+      dockerfile: ./front_office/Dockerfile
     env_file:
       - .env
     ports:
@@ -44,7 +45,8 @@ services:
       - network
 
   back_office:
-    build: ./back_office
+    build:    
+      dockerfile: ./back_office/Dockerfile
     env_file:
       - .env
     ports:
