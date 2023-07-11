@@ -14,7 +14,7 @@ services:
       - db
 
   front:
-    build: ../sell_x_press_front_office
+    build: ./front_office
     env_file:
       - .env
     ports:
@@ -44,7 +44,7 @@ services:
       - network
 
   back_office:
-    build: ../sell_x_press_back_office
+    build: ./back_office
     env_file:
       - .env
     ports:
