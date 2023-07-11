@@ -1,5 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DTO.ProductDTO;
+using SelXPressApi.Exceptions.Product;
 using SelXPressApi.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,9 +28,30 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <returns>Return an Array of all product</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
+		[ProducesResponseType(400, Type = typeof(GetProductBadRequestException))]
+		[ProducesResponseType(404, Type = typeof(GetProductNotFoundException))]
+		public IActionResult GetProducts()
 		{
-			return new string[] { "value1", "value2" };
+			try
+			{
+				if(!ModelState.IsValid)
+					throw new GetProductBadRequestException("A bad request occured to return the", "1000", 400);
+
+				var products = _mapper .Map<List<ProductDTO>>(_productRepository.GetAllProducts());
+
+				if(products.Count == null)
+					throw new GetProductNotFoundException("There is no product in the database, please create some", "1001", 404);
+				return Ok(products);
+			}
+			catch(GetProductBadRequestException ex)
+			{
+				return BadRequest(ex);
+			}
+			catch (GetProductNotFoundException ex)
+			{
+				return NotFound(ex);
+			}
 		}
 
 		/// <summary>
