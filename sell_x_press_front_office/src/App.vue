@@ -1,7 +1,7 @@
 <template>
-  <header-not-registered v-if="!isIdentificationPage" />
+  <header-identification-page v-if="isIdentificationPage" />
   <header-registered v-else-if="isUserLoggedIn" />
-  <header-identification-page v-else />
+  <header-not-registered v-else />
   <router-view />
   <footer-layout />
 </template>
@@ -27,7 +27,7 @@ export default {
       return (this.$route.path === '/login' || this.$route.path === '/register')
     },
     isUserLoggedIn() {
-      return false;
+      return (localStorage.getItem("email") != null);
     },
   }
 }
