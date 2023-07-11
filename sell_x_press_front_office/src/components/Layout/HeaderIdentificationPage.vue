@@ -1,7 +1,7 @@
 <template>
     <div class="header-container">
         <div class="header-logo">
-            <img class="logo" src="../../assets/Header/Logo.png" />
+            <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
     </div>
 </template>
@@ -9,6 +9,11 @@
 <script>
 export default {
     name: "HeaderIdentificationPage",
+    methods: {
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+    }
 };
 </script>
 
@@ -28,5 +33,6 @@ export default {
 
 .logo {
     height: inherit;
+    cursor: pointer;
 }
 </style>

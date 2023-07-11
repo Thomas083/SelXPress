@@ -1,7 +1,7 @@
 <template>
     <header class="header-container">
         <div class="header-logo">
-            <img class="logo" src="../../assets/Header/Logo.png" />
+            <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
         <div class="header-search">
             <select class="select-categories">
@@ -15,8 +15,8 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="btn btn-primary btn-signin">Sign In</button>
-                <button class="btn btn-secondary btn-signup">Sign Up</button>
+                <button class="btn btn-primary btn-signin" @click="goToSignIn()">Sign In</button>
+                <button class="btn btn-secondary btn-signup" @click="goToSignUp()">Sign Up</button>
             </div>
         </div>
         <div class="header-order">
@@ -32,6 +32,17 @@
 
 export default {
     name: "HeaderNotRegistered",
+    methods: {
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+        goToSignIn() {
+            this.$router.push({ path: '/login'});
+        },
+        goToSignUp() {
+            this.$router.push({ path: '/register'});
+        }
+    }
 };
 </script>
   
@@ -44,6 +55,7 @@ export default {
     width: 100vw;
     height: auto;
 }
+
 .header-logo {
     grid-column: 1;
     height: 20vh;
@@ -51,6 +63,7 @@ export default {
 
 .logo {
     height: inherit;
+    cursor: pointer;
 }
 
 .header-search {
@@ -154,52 +167,52 @@ export default {
 
 @media screen and (max-width: 1080px) {
 
-.header-container {
-    background-color: var(--main-blue);
-    display: grid;
-    grid-template-columns: 33vw 33vw 33vw;
-    grid-template-rows: auto auto;
-    width: 100vw;
-    align-items: center;
-    height: auto;
-}
+    .header-container {
+        background-color: var(--main-blue);
+        display: grid;
+        grid-template-columns: 33vw 33vw 33vw;
+        grid-template-rows: auto auto;
+        width: 100vw;
+        align-items: center;
+        height: auto;
+    }
 
-.header-logo {
-    grid-column: 1;
-    grid-row: 1;
-    height: 10vh;
-}
+    .header-logo {
+        grid-column: 1;
+        grid-row: 1;
+        height: 10vh;
+    }
 
-.header-search {
-    grid-row: 2;
-    grid-column: 1/3;
-}
+    .header-search {
+        grid-row: 2;
+        grid-column: 1/3;
+    }
 
-.header-login {
-    grid-row: 1;
-    grid-column: 2;
-}
+    .header-login {
+        grid-row: 1;
+        grid-column: 2;
+    }
 
-.header-order {
-    grid-row: 1;
-    grid-column: 3;
-}
+    .header-order {
+        grid-row: 1;
+        grid-column: 3;
+    }
 
-.welcome-login {
-    display: none;
-}
+    .welcome-login {
+        display: none;
+    }
 
-.btn-signin {
-    margin-top: 1rem;
-}
+    .btn-signin {
+        margin-top: 1rem;
+    }
 
-.btn-signup {
-    padding: 1rem 2rem;
-}
+    .btn-signup {
+        padding: 1rem 2rem;
+    }
 
-.order-logo {
-    height: 10vh;
-}
+    .order-logo {
+        height: 10vh;
+    }
 
 }
 </style>
