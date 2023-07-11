@@ -58,7 +58,6 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    max-height: 70vh;
     background-color: #FFFFFF;
     border-radius: 10px;
     padding-top: 3vh;

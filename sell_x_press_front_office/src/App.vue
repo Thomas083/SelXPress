@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     isIdentificationPage() {
-      return (this.$route.path === '/login' || this.$route.path === '/register')
+      return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
     },
     isUserLoggedIn() {
       return (localStorage.getItem("email") != null);
