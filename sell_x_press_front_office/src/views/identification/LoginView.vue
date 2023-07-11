@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <div class="identification-container col-11 col-md-5">
-            <h1>Sign Up</h1>
+            <h1>Sign In</h1>
             <login-form @input-form="updateData" />
-            <button class="btn btn-secondary signup-button" @click="showData()">Sign Up</button>
-            <a class="link-dark" href="#">You already have an account ?</a>
             <button class="btn btn-primary signin-button">Sign In</button>
+            <a class="link-dark" href="/forgot">Forgot password ?</a>
+            <button class="btn btn-secondary signup-button" @click="goToSignUp">Sign Up</button>
         </div>
     </div>
 </template>
@@ -46,7 +46,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    max-height: 80vh;
     width: 100%;
     padding-top: 5vh;
     padding-bottom: 5vh;
@@ -57,15 +57,16 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    height: 100%;
+    max-height: 70vh;
     background-color: #FFFFFF;
     border-radius: 10px;
     padding-top: 3vh;
 }
 
-.signup-button {
-    margin-top: 5vh;
-    margin-bottom: 5%;
+.signup-button{
+    align-self: flex-end;
+    margin-right: 2vw;
+    margin-bottom: 2vh;
 }
 
 a {
@@ -73,9 +74,8 @@ a {
     margin-right: 2vw;
 }
 
-.signin-button {
-    align-self: flex-end;
-    margin-right: 2vw;
-    margin-bottom: 2vh;
+.signin-button{
+    margin-top: 5vh;
+    margin-bottom: 5vh;
 }
 </style>
