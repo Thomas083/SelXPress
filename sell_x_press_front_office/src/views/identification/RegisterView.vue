@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    max-height: 80vh;
     width: 100%;
     padding-top: 5vh;
     padding-bottom: 5vh;
@@ -45,7 +45,7 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    height: 70vh;
+    max-height: 70vh;
     background-color: #FFFFFF;
     border-radius: 10px;
     padding-top: 3vh;
