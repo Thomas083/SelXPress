@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     isIdentificationPage() {
-      if (this.$route.path === '/login' || this.$route.path === 'register') return true;
+      if (this.$route.path === '/login' || this.$route.path === '/register') return true;
     },
     isUserLoggedIn() {
       return false;
