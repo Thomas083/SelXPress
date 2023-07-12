@@ -9,6 +9,7 @@ namespace SelXPressApi.Helper
         public MappingProfiles()
         {
             CreateMap<User, UserDto>();
+            CreateMap<User, CreateUserDto>();
         }
     }
 }

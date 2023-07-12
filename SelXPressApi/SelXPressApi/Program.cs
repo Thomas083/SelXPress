@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SelXPressApi.Configurations;
 using SelXPressApi.Data;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Repository;
@@ -37,6 +38,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -49,5 +51,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddGlobalErrorHandler();
 
 app.Run();

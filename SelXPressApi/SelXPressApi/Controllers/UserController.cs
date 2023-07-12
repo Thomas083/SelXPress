@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DTO.UserDTO;
-using SelXPressApi.ErrorMessage;
+using SelXPressApi.Exceptions.User;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 using System.Reflection;
@@ -18,47 +18,31 @@ namespace SelXPressApi.Controllers
 		private readonly IMapper _mapper;
 		public UserController(IUserRepository userRepository, IMapper mapper)
 		{
-			this._userRepository = userRepository;
+			_userRepository = userRepository;
 			_mapper = mapper;
 		}
 
 		/// <summary>
-		/// GET: api/<UserController>
-		/// Get all users
+		/// GET method to get all the users
 		/// </summary>
-		/// <returns>Return an Array of all user</returns>
+		/// <returns>List of UserD</returns>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(ICollection<UserDto>))]
-		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
-		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
-		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]
-		public IActionResult GetUsers()
+		[ProducesResponseType(200, Type = typeof(List<UserDto>))]
+		//[ProducesResponseType(400, Type = typeof(GetUsersBadRequestException))]
+		//[ProducesResponseType(404, Type = typeof(GetUsersNotFoundException))]
+		//[ProducesResponseType(500, Type = typeof(Exception))]
+		public async Task<IActionResult> GetUsers()
 		{
-			try
-			{
-				var users = _mapper.Map<List<UserDto>>(_userRepository.GetAllUsers());
-				
+            if (!ModelState.IsValid)
+                throw new GetUsersBadRequestException("test bad request", "test bad request");
 
-                if (!ModelState.IsValid)
-                {
-                    BadRequestErrorMessage error = new BadRequestErrorMessage("Bad request occured", 002);
-                    return BadRequest(error);
-                }
+            var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
-                if (users.Count == 0)
-                {
-                    NotFoundErrorMessage error = new NotFoundErrorMessage("There is no user in the database", 003);
-                    return NotFound(error);
-                }
+            if (users.Count == 0)
+                throw new GetUsersNotFoundException("test not found", "test not found");
 
-                return Ok(users);
-            }
-			catch(Exception ex)
-			{
-				ServerErrorMessage error = new ServerErrorMessage(ex.Message,005);
-				return StatusCode(500, error);
-			}
-		}
+            return Ok(users);
+        }
 
 		/// <summary>
 		/// GET api/<UserController>/5
@@ -68,31 +52,34 @@ namespace SelXPressApi.Controllers
 		/// <returns>Return a specific user</returns>
 		[HttpGet("{id}")]
 		[ProducesResponseType(200, Type = typeof(UserDto))]
-		[ProducesResponseType(400, Type = typeof(BadRequestErrorMessage))]
-		[ProducesResponseType(404, Type = typeof(NotFoundErrorMessage))]
-		[ProducesResponseType(500, Type = typeof(ServerErrorMessage))]
-		public IActionResult GetUser(int id)
+		//[ProducesResponseType(400, Type = typeof(GetUserByIdBadRequestException))]
+		//[ProducesResponseType(404, Type = typeof(GetUserByIdNotFoundException))]
+		//[ProducesResponseType(500, Type = typeof(Exception))]
+		public async Task<ActionResult> GetUser(int id)
 		{
 			try
 			{
-                if (!_userRepository.UserExists(id))
-                {
-                    NotFoundErrorMessage error = new NotFoundErrorMessage("There is no user with the id " + id, 001);
-                    return NotFound(error);
-                }
+				if(!await _userRepository.UserExists(id))
+				{
+					throw new GetUserByIdNotFoundException("The user with the id : " + id + "doesn't exist", "USR-1003", 404);
+				}
+				if (!ModelState.IsValid)
+					throw new GetUserByIdBadRequestException("A bad request occured, please try again", "USR-1004", 400);
 
-                if (!ModelState.IsValid)
-                {
-                    BadRequestErrorMessage error = new BadRequestErrorMessage("A badrequest occured", 004);
-                    return BadRequest(error);
-                }
-                var user = _userRepository.GetUserById(id);
+                var user = _mapper.Map<UserDto>(await _userRepository.GetUserById(id));
                 return Ok(user);
             }
+			catch(GetUserByIdNotFoundException ex)
+			{
+				return NotFound(ex);
+			}
+			catch(GetUserByIdBadRequestException ex)
+			{
+				return BadRequest(ex);
+			}
 			catch(Exception ex)
 			{
-				ServerErrorMessage error = new ServerErrorMessage(ex.Message, 006);
-				return StatusCode(500, error);
+				return StatusCode(500, ex);
 			}
 		}
 
@@ -102,9 +89,25 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void CreateUser([FromBody] string value)
+		public async Task<ActionResult> CreateUser([FromBody] CreateUserDto newUser)
 		{
-
+			try
+			{
+				if(newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == null
+					|| newUser.RoleId == 0)
+				{
+					throw new CreateUserBadRequestException("There is a missing field, a bad request occured", "USR-1005", 400);
+				}
+				return Created("api/UserController/",typeof(User));
+			}
+			catch(CreateUserBadRequestException ex)
+			{
+				return BadRequest(ex);
+			}
+			catch(Exception ex)
+			{
+				return StatusCode(500, ex);
+			}
 		}
 
 		/// <summary>
@@ -114,8 +117,37 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void UpdateUser(int id, [FromBody] string value)
+		public async Task<ActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userUpdate)
 		{
+			try
+			{
+				if (userUpdate == null)
+					throw new UpdateUserBadRequestException("The value of the body is null, please try again with some data", "USR-1006", 400);
+
+				if (!await _userRepository.UserExists(id))
+					throw new UpdateUserNotFoundException("The user with the id " + id + " doesn't exist", "USR-1007", 404);
+				
+				if(await _userRepository.UpdateUser(userUpdate, id))
+				{
+					return NoContent();
+				}
+				else
+				{
+					throw new UpdateUserBadRequestException("A bad request occured because the data doesn't correspond at what is expected", "USR-1008", 400);
+				}
+			}
+			catch(UpdateUserBadRequestException ex)
+			{
+				return BadRequest(ex);
+			}
+			catch(UpdateUserNotFoundException ex)
+			{
+				return NotFound(ex);
+			}
+			catch(Exception ex)
+			{
+				return StatusCode(500, ex);
+			}
 		}
 
 		/// <summary>
@@ -124,8 +156,34 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void DeleteUser(int id)
+		public async Task<ActionResult> DeleteUser(int id)
 		{
+			try
+			{
+				if (!await _userRepository.UserExists(id))
+					throw new DeleteUserNotFoundException("The user with the id " + id + " doesn't exist", "USR-1009", 404);
+
+				if(await _userRepository.DeleteUser(id))
+				{
+					return NoContent();
+				}
+				else
+				{
+					throw new DeleteUserBadRequestException("A bad request occured when deleting the user", "USR-1010", 401);
+				}
+			}
+			catch(DeleteUserNotFoundException ex)
+			{
+				return NotFound(ex);
+			}
+			catch(DeleteUserBadRequestException ex)
+			{
+				return BadRequest(ex);
+			}
+			catch(Exception ex)
+			{
+				return StatusCode(500, ex);
+			}
 		}
 	}
 }

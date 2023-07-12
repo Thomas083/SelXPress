@@ -1,14 +1,18 @@
-﻿using SelXPressApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Interfaces
 {
     public interface IUserRepository
     {
-        List<User> GetAllUsers();
-        User? GetUserById(int id);
-        bool UserExists(int id);
+        Task<List<User>> GetAllUsers();
+        Task<User?> GetUserById(int id);
+        Task<bool> UserExists(int id);
+        Task<bool> CreateUser(CreateUserDto createUser);
+        Task<bool> Save();
+        Task<bool> UpdateUser(UpdateUserDTO updateUser, int id);
 
-        bool CreateUser(User user, int roleId);
-        bool Save();
+        Task<bool> DeleteUser(int id);
     }
 }
