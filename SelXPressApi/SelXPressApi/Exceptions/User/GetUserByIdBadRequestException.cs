@@ -1,9 +1,17 @@
 ﻿namespace SelXPressApi.Exceptions.User
 {
-    public class GetUserByIdBadRequestException : CommonException
+    /// <summary>
+    /// Class of the GetUserByIdBadRequestException's exception
+    /// </summary>
+    public class GetUserByIdBadRequestException : Exception
     {
-        public GetUserByIdBadRequestException(string message, string code, int status) : base(message, code, status)
+        /// <summary>
+        /// Constructor of the class
+        /// </summary>
+        /// <param name="message"> Message of the exception </param>
+        public GetUserByIdBadRequestException(string message) : base(message)
         {
         }
+
     }
 }

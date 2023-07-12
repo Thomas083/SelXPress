@@ -1,8 +1,15 @@
 ﻿namespace SelXPressApi.Exceptions.User
 {
-    public class CreateUserBadRequestException : CommonException
+    /// <summary>
+    /// Class for the CreateUserBadRequestException's exception
+    /// </summary>
+    public class CreateUserBadRequestException : Exception
     {
-        public CreateUserBadRequestException(string message, string code, int status) : base(message, code, status)
+        /// <summary>
+        /// Constructor of the class
+        /// </summary>
+        /// <param name="message"> Message of the exception </param>
+        public CreateUserBadRequestException(string message) : base(message)
         {
         }
     }

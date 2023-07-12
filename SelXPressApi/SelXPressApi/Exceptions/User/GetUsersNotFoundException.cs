@@ -5,15 +5,12 @@
     /// </summary>
     public class GetUsersNotFoundException : Exception
     {
-        private string Code { get; set; }
-        public GetUsersNotFoundException(string message, string code) : base(message)
+        /// <summary>
+        /// Constructor of the class
+        /// </summary>
+        /// <param name="message"> Message of the exception </param>
+        public GetUsersNotFoundException(string message) : base(message)
         {
-            Code = code;
-        }
-
-        public string GetCode()
-        {
-            return Code;
         }
     }
 }

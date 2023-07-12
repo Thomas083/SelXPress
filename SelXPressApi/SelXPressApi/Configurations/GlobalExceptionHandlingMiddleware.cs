@@ -45,6 +45,18 @@ namespace SelXPressApi.Configurations
                 status = HttpStatusCode.BadRequest;
                 code = "USR-1002";
             }
+            else if(exceptionType == typeof(GetUserByIdBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "USR-1003";
+            }
+            else if(exceptionType == typeof(GetUserByIdNotFoundException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "USR-1004";
+            }
             else
             {
                 message = ex.Message;

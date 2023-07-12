@@ -3,15 +3,13 @@
     /// <summary>
     /// Class for the UpdateUserNotFoundException's exception
     /// </summary>
-    public class UpdateUserNotFoundException : CommonException
+    public class UpdateUserNotFoundException : Exception
     {
         /// <summary>
-        /// Constructor for the UpdateUserNotFoundException's exception
+        /// Constructor of the class
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="code"></param>
-        /// <param name="status"></param>
-        public UpdateUserNotFoundException(string message, string code, int status) : base(message, code, status)
+        public UpdateUserNotFoundException(string message) : base(message)
         {
         }
     }

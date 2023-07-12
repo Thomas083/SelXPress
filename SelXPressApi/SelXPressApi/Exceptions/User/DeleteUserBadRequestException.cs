@@ -3,15 +3,13 @@
     /// <summary>
     /// Class of the DeleteUserBadRequestException's exception
     /// </summary>
-    public class DeleteUserBadRequestException : CommonException
+    public class DeleteUserBadRequestException : Exception
     {
         /// <summary>
-        /// Constructor of the DeleteUserBadRequestException's exception
+        /// Constructor of the class
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="code"></param>
-        /// <param name="status"></param>
-        public DeleteUserBadRequestException(string message, string code, int status) : base(message, code, status)
+        /// <param name="message"> Message of the exception </param>
+        public DeleteUserBadRequestException(string message) : base(message)
         {
         }
     }

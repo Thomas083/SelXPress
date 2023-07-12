@@ -3,15 +3,13 @@
     /// <summary>
     /// Class of the DeleteUserNotFoundException's exception
     /// </summary>
-    public class DeleteUserNotFoundException : CommonException
+    public class DeleteUserNotFoundException : Exception
     {
         /// <summary>
-        /// Constructor of the DeleteUserNotFoundException's exception
+        /// Constructor of the class
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="code"></param>
-        /// <param name="status"></param>
-        public DeleteUserNotFoundException(string message, string code, int status) : base(message, code, status)
+        /// <param name="message"> Message of the exception </param>
+        public DeleteUserNotFoundException(string message) : base(message)
         {
         }
     }

@@ -3,15 +3,13 @@
     /// <summary>
     /// Class for the GetUserByIdNotFoundException's exception
     /// </summary>
-    public class GetUserByIdNotFoundException : CommonException
+    public class GetUserByIdNotFoundException : Exception
     {
         /// <summary>
-        /// Constructor for the GetUserByNotFoundException's exception
+        /// Constructor of the class
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="code"></param>
-        /// <param name="status"></param>
-        public GetUserByIdNotFoundException(string message, string code, int status) : base(message, code, status)
+        /// <param name="message"> Message of the exception </param>
+        public GetUserByIdNotFoundException(string message) : base(message)
         {
         }
     }
