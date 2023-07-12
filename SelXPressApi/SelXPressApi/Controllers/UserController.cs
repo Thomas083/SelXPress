@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Exceptions.User;
 using SelXPressApi.Interfaces;
@@ -28,9 +29,8 @@ namespace SelXPressApi.Controllers
 		/// <returns>List of UserD</returns>
 		[HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<UserDto>))]
-		//[ProducesResponseType(400, Type = typeof(GetUsersBadRequestException))]
-		//[ProducesResponseType(404, Type = typeof(GetUsersNotFoundException))]
-		//[ProducesResponseType(500, Type = typeof(Exception))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		public async Task<IActionResult> GetUsers()
 		{
             if (!ModelState.IsValid)
