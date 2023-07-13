@@ -86,7 +86,7 @@ namespace SelXPressApi.Controllers
                 throw new CreateUserBadRequestException("There is a missing field, a bad request occured");
             }
 			await _userRepository.CreateUser(newUser);
-            return Created("api/UserController/", typeof(User));
+			return StatusCode(201);
         }
 
 		/// <summary>
@@ -104,14 +104,10 @@ namespace SelXPressApi.Controllers
             if (!await _userRepository.UserExists(id))
                 throw new UpdateUserNotFoundException("The user with the id " + id + " doesn't exist");
 
-            if (await _userRepository.UpdateUser(userUpdate, id))
-            {
-                return NoContent();
-            }
-            else
-            {
-                throw new UpdateUserBadRequestException("A bad request occured because the data doesn't correspond at what is expected");
-            }
+			await _userRepository.UpdateUser(userUpdate, id);
+			return NoContent();
+
+
         }
 
 		/// <summary>
@@ -125,14 +121,8 @@ namespace SelXPressApi.Controllers
             if (!await _userRepository.UserExists(id))
                 throw new DeleteUserNotFoundException("The user with the id " + id + " doesn't exist");
 
-            if (await _userRepository.DeleteUser(id))
-            {
-                return NoContent();
-            }
-            else
-            {
-                throw new DeleteUserBadRequestException("A bad request occured when deleting the user");
-            }
+			await _userRepository.DeleteUser(id);
+			return Ok();
         }
 	}
 }
