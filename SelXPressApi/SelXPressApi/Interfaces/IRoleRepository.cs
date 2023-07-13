@@ -4,6 +4,10 @@ namespace SelXPressApi.Interfaces
 {
     public interface IRoleRepository
     {
-        ICollection<Role> GetAllRoles();
+        List<Role> GetAllRoles();
+        Role GetRoleById(int id);
+        void UpdateRoleByID(int id);
+        void DeleteRole(int id);
+        void CreateRole(Role role);
     }
 }
