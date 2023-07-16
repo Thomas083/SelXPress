@@ -73,7 +73,7 @@ namespace SelXPressApi.Repository
         public async Task<bool> Save()
         {
             var saved = await   _context.SaveChangesAsync();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
 
         public async Task<bool> UpdateUser(UpdateUserDTO updateUser, int id)
