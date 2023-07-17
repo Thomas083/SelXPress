@@ -74,7 +74,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> CreateRole([FromBody] CreateRoleDTO role)
 		{
-			if (role != null || role.RoleName != null)
+			if (role == null || role.RoleName == null)
 				throw new CreateRoleBadRequestException("There is missing fields, please try again with some data");
 			if (await _roleRepository.CreateRole(role))
 			{
@@ -102,12 +102,8 @@ namespace SelXPressApi.Controllers
 				throw new UpdateRoleBadRequestException("There is missing fields, please try again with some data");
 			if (!await _roleRepository.RoleExists(id))
 				throw new UpdateRoleNotFoundException("The role with the id : " + id + " doesn't exist");
-			if (await _roleRepository.UpdateRoleByID(id, updateRole))
-			{
-				return Ok();
-			}
-
-			throw new Exception("An error occured while the updating the role");
+			await _roleRepository.UpdateRoleByID(id, updateRole);
+			return Ok();
 		}
 
 		/// <summary>
@@ -130,8 +126,8 @@ namespace SelXPressApi.Controllers
 			{
 				return Ok();
 			}
-
-			throw new Exception("An error occured while the deleting of the role");
+			await _roleRepository.DeleteRole(id);
+			return Ok();
 		}
 	}
 }
