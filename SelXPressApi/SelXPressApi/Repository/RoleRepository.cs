@@ -13,9 +13,29 @@ namespace SelXPressApi.Repository
             _context = context;
         }
 
-        public ICollection<Role> GetAllRoles()
+        public void CreateRole(Role role)
         {
-            return _context.Roles.OrderBy(r => r.Id).ToList();
+            throw new NotImplementedException();
+        }
+
+        public void DeleteRole(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Role> GetAllRoles()
+        {
+           return _context.Roles.OrderBy(r => r.Id).ToList();
+        }
+
+        public Role GetRoleById(int id)
+        {
+            return _context.Roles.Where(r => r.Id == id).FirstOrDefault();
+        }
+
+        public void UpdateRoleByID(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
