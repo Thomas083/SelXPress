@@ -4,7 +4,7 @@
             <h3 class="user-title">Personal Information</h3>
             <user-profile-form />
             <div class="user-btns-container">
-                <button class="btn btn-primary change-password-btn">Change Password</button>
+                <button class="btn btn-primary change-password-btn" v-on:click="resetPassword">Change Password</button>
                 <button class="btn btn-primary business-status-btn" v-on:click="setBusinesStatusState">Apply for Business Status</button>
                 <business-status-form v-if="businessStatusState"/>
                 <button class="btn btn-secondary save-information-btn">Save</button>
@@ -16,6 +16,9 @@
 <script>
 import UserProfileForm from "@/components/UserProfile/UserProfileForm.vue";
 import BusinessStatusForm from "@/components/UserProfile/BusinessStatusForm.vue";
+import { auth } from "@/config/firebase-config";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { createToast } from 'mosha-vue-toastify';
 
 export default {
     name: 'UserView',
@@ -31,6 +34,12 @@ export default {
     methods: {
         setBusinesStatusState() {
             this.businessStatusState = !this.businessStatusState
+        },
+        resetPassword() {
+            sendPasswordResetEmail(auth, "maxence.leroy59000@gmail.com")
+            .then(() => {
+                createToast("An Email was sent to reset your password", {type: 'success', position: 'bottom-right'});
+            });
         }
     },
 }

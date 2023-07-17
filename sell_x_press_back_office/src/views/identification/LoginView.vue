@@ -36,6 +36,7 @@ export default {
         logUser() {
             signInWithEmailAndPassword(auth, this.formData.email, this.formData.password)
           .then((userCredential) => {
+            console.log(userCredential);
             createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
           })
           .catch(() => {

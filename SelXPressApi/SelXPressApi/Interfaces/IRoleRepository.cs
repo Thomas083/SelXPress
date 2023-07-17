@@ -1,13 +1,16 @@
-﻿using SelXPressApi.Models;
+﻿using SelXPressApi.DTO.RoleDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Interfaces
 {
     public interface IRoleRepository
     {
-        List<Role> GetAllRoles();
-        Role GetRoleById(int id);
-        void UpdateRoleByID(int id);
-        void DeleteRole(int id);
-        void CreateRole(Role role);
+        Task<List<Role>> GetAllRoles();
+        Task<Role> GetRoleById(int id);
+        Task<bool> UpdateRoleByID(int id, UpdateRoleDTO updateRole);
+        Task<bool> DeleteRole(int id);
+        Task<bool> CreateRole(CreateRoleDTO role);
+        Task<bool> RoleExists(int id);
+        Task<bool> Save();
     }
 }
