@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.RoleDTO;
+using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 
@@ -10,10 +10,12 @@ namespace SelXPressApi.Repository
     public class RoleRepository : IRoleRepository
     {
         private readonly DataContext _context;
+        private readonly CommonMethods _commonMethods;
 
-        public RoleRepository(DataContext context)
+        public RoleRepository(DataContext context, CommonMethods commonMethods)
         {
             _context = context;
+            _commonMethods = commonMethods;
         }
 
         public async Task<bool> CreateRole(CreateRoleDTO role)
@@ -23,7 +25,7 @@ namespace SelXPressApi.Repository
                 Name = role.RoleName
             };
             await _context.Roles.AddAsync(newRole);
-            return await Save();
+            return await _commonMethods.Save();
         }
 
         public async Task<bool> DeleteRole(int id)
@@ -31,7 +33,7 @@ namespace SelXPressApi.Repository
             if (await RoleExists(id))
             {
                 await _context.Roles.Where(r => r.Id == id).ExecuteDeleteAsync();
-                return await Save();
+                return await _commonMethods.Save();
             }
             return false;
         }
@@ -55,15 +57,8 @@ namespace SelXPressApi.Repository
             if (role != null && updateRole.RoleName != null)
                 await _context.Roles.Where(r => r.Id == id)
                     .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateRole.RoleName));
-            return await Save();
+            return await _commonMethods.Save();
         }
-
-        public async Task<bool> Save()
-        {
-            var saved = await   _context.SaveChangesAsync();
-            return saved > 0;
-        }
-
         public async Task<bool> RoleExists(int id)
         {
             return await _context.Roles.Where(r => r.Id == id).AnyAsync();

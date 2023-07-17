@@ -11,6 +11,5 @@ namespace SelXPressApi.Interfaces
         Task<bool> DeleteRole(int id);
         Task<bool> CreateRole(CreateRoleDTO role);
         Task<bool> RoleExists(int id);
-        Task<bool> Save();
     }
 }
