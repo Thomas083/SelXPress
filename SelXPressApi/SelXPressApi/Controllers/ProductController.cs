@@ -31,7 +31,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
 		[ProducesResponseType(400, Type = typeof(GetProductBadRequestException))]
 		[ProducesResponseType(404, Type = typeof(GetProductNotFoundException))]
-		public IActionResult GetProducts()
+		public async Task<ActionResult> GetProducts()
 		{
 			try
 			{
@@ -61,10 +61,30 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>information of a specific product</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+        [ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
+        [ProducesResponseType(400, Type = typeof(GetProductBadRequestException))]
+        [ProducesResponseType(404, Type = typeof(GetProductNotFoundException))]
+        public async Task<ActionResult> GetProductByID(int id)
 		{
-			return "product";
-		}
+            try
+            {
+                if (!ModelState.IsValid)
+                    throw new GetProductBadRequestException("A bad request occured to return the", "1000", 400);
+
+				if (!_productRepository.ProductExists(id))
+					throw new GetProductNotFoundException("product not found", "1001", 404);
+				var product = _productRepository.GetProductById(id);
+                return Ok(product);
+            }
+            catch (GetProductBadRequestException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (GetProductNotFoundException ex)
+            {
+                return NotFound(ex);
+            }
+        }
 
 		/// <summary>
 		/// POST api/<ProductController>

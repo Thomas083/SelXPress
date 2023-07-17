@@ -4,6 +4,8 @@ namespace SelXPressApi.Interfaces
 {
     public interface IProductRepository
     {
-        ICollection<Product> GetAllProducts();
+        List<Product> GetAllProducts();
+        bool ProductExists(int id);
+        Product GetProductById(int id);
     }
 }

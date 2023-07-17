@@ -13,9 +13,19 @@ namespace SelXPressApi.Repository
             _context = context;
         }
 
-        public ICollection<Product> GetAllProducts()
+        public List<Product> GetAllProducts()
         {
             return _context.Products.OrderBy(p => p.Id).ToList();
+        }
+
+        public bool ProductExists(int id)
+        {
+            return _context.Products.Any(p => p.Id == id);
+        }
+
+        public Product GetProductById(int id)
+        {
+            return _context.Products.FirstOrDefault(p => p.Id == id);
         }
     }
 }
