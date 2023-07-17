@@ -12,10 +12,10 @@ using System.Runtime.InteropServices;
 
 namespace SelXPressApi.Controllers
 {
-	/// <summary>
-	/// Crud operations for products
-	/// </summary>
-	[Route("api/[controller]")]
+    /// <summary>
+    /// Crud operations for products
+    /// </summary>
+    [Route("api/[controller]")]
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
@@ -96,18 +96,29 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
-		[HttpPut("updateProduct/{id}")]
-		public void Put(int id, [FromBody] string value)
+		[HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDTO productUpdate)
 		{
+			if (productUpdate == null)
+				throw new UpdateProductBadRequestException("The value of the body is null, please try again with some data");
+			if(!ModelState.IsValid)
+				throw new UpdateProductBadRequestException("The model is not valid, a bad request occured");
+			if (!await _productRepository.UpdateProduct(productUpdate, id))
+				return Ok();
+            throw new Exception("An error occured while the update of the user");
 
-		}
+        }
 
-		/// <summary>
-		/// DELETE api/<ProductController>/5
-		/// Delete a product
-		/// </summary>
-		/// <param name="id"></param>
-		[HttpDelete("deleteProduct/{id}")]
+        /// <summary>
+        /// DELETE api/<ProductController>/5
+        /// Delete a product
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("deleteProduct/{id}")]
 		public void Delete(int id)
 		{
 		}

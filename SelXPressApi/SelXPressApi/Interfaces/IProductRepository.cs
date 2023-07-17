@@ -9,5 +9,6 @@ namespace SelXPressApi.Interfaces
         Task<bool> ProductExists(int id);
         Task<Product> GetProductById(int id);
         Task<bool> CreateProduct(CreateProductDTO createProduct);
+        Task<bool> UpdateProduct(UpdateProductDTO updateProduct, int id);
     }
 }
