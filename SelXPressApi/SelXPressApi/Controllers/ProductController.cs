@@ -76,10 +76,18 @@ namespace SelXPressApi.Controllers
 		/// Create a new product
 		/// </summary>
 		/// <param name="value"></param>
-		[HttpPost("addProduct")]
-		public void Post([FromBody] string value)
+		[HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO newProduct)
 		{
+			if (newProduct.Name == null || newProduct.Description == null || newProduct.Picture == null || newProduct.Price == null || newProduct.ProductAttributes == null || newProduct.Category == null)
+				throw new CreateProductBadRequestException("There is a missing field, a bad request occured");
 
+			if (await _productRepository.CreateProduct(newProduct))
+				return StatusCode(201);
+			throw new Exception("An error occured while the creation of the user");
 		}
 
 		/// <summary>

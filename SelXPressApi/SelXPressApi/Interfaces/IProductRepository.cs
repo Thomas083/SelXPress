@@ -1,4 +1,5 @@
-﻿using SelXPressApi.Models;
+﻿using SelXPressApi.DTO.ProductDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Interfaces
 {
@@ -7,5 +8,6 @@ namespace SelXPressApi.Interfaces
         Task<List<Product>> GetAllProducts();
         Task<bool> ProductExists(int id);
         Task<Product> GetProductById(int id);
+        Task<bool> CreateProduct(CreateProductDTO createProduct);
     }
 }

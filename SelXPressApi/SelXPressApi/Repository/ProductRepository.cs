@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
+using SelXPressApi.DTO.ProductDTO;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 
@@ -12,6 +13,20 @@ namespace SelXPressApi.Repository
         public ProductRepository(DataContext context)
         {
             _context = context;
+        }
+
+        public async Task<bool> CreateProduct(CreateProductDTO product)
+        {
+            Product newProduct = new Product
+            {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Picture = product.Picture,
+            };
+            await _context.Products.AddAsync(newProduct);
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0;
         }
 
         public async Task<List<Product>> GetAllProducts()
