@@ -2,12 +2,16 @@ version: '3'
 
 services:
   api:
-    build: ../SelXPressApi/SelXPressApi
+    build: 
+      context: ../SelXPressApi/SelXPressApi
     env_file:
       - .env
     ports:
-      - 5000:80
+      - 5288:80
+      - 7094:443
     restart: on-failure
+    volumes:
+      - ./https:/https/
     networks:
       - network
     depends_on:
