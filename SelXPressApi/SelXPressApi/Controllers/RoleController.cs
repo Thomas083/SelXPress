@@ -116,16 +116,12 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<IActionResult> DeleteRole(int id)
 		{
 			if (!await _roleRepository.RoleExists(id))
 				throw new DeleteRoleNotFoundException("The role with the id : " + id + " doesn't exist");
 			if (!ModelState.IsValid)
 				throw new DeleteRoleBadRequestException("The model is wrong, a bad request occured");
-			if (await _roleRepository.DeleteRole(id))
-			{
-				return Ok();
-			}
 			await _roleRepository.DeleteRole(id);
 			return Ok();
 		}
