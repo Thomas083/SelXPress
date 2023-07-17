@@ -1,8 +1,12 @@
 using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.ProductDTO;
 using SelXPressApi.Exceptions.Product;
+using SelXPressApi.Exceptions.User;
 using SelXPressApi.Interfaces;
+using System.Runtime.InteropServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,30 +32,21 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <returns>Return an Array of all product</returns>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
-		[ProducesResponseType(400, Type = typeof(GetProductBadRequestException))]
-		[ProducesResponseType(404, Type = typeof(GetProductNotFoundException))]
-		public async Task<ActionResult> GetProducts()
+		[ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<ActionResult> GetProducts()
 		{
-			try
-			{
-				if(!ModelState.IsValid)
-					throw new GetProductBadRequestException("A bad request occured to return the", "1000", 400);
+			if(!ModelState.IsValid)
+				throw new GetProductsBadRequestException("The model is wrong, a bad request occured");
 
-				var products = _mapper .Map<List<ProductDTO>>(_productRepository.GetAllProducts());
 
-				if(products.Count == null)
-					throw new GetProductNotFoundException("There is no product in the database, please create some", "1001", 404);
-				return Ok(products);
-			}
-			catch(GetProductBadRequestException ex)
-			{
-				return BadRequest(ex);
-			}
-			catch (GetProductNotFoundException ex)
-			{
-				return NotFound(ex);
-			}
+            var products = _mapper .Map<List<ProductDTO>>(_productRepository.GetAllProducts());
+
+			if(products.Count == 0)
+				throw new GetProductsNotFoundException("There are no products in the database");
+			return Ok(products);
 		}
 
 		/// <summary>
@@ -62,28 +57,18 @@ namespace SelXPressApi.Controllers
 		/// <returns>information of a specific product</returns>
 		[HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
-        [ProducesResponseType(400, Type = typeof(GetProductBadRequestException))]
-        [ProducesResponseType(404, Type = typeof(GetProductNotFoundException))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<ActionResult> GetProductByID(int id)
 		{
-            try
-            {
-                if (!ModelState.IsValid)
-                    throw new GetProductBadRequestException("A bad request occured to return the", "1000", 400);
+            if (!await _productRepository.ProductExists(id))
+				throw new GetProductByIdNotFoundException("The user with the id : " + id + "doesn't exist");
+            if (!ModelState.IsValid)
+                throw new GetProductByIdBadRequestException("The model is wrong, a bad request occured");
 
-				if (!_productRepository.ProductExists(id))
-					throw new GetProductNotFoundException("product not found", "1001", 404);
-				var product = _productRepository.GetProductById(id);
-                return Ok(product);
-            }
-            catch (GetProductBadRequestException ex)
-            {
-                return BadRequest(ex);
-            }
-            catch (GetProductNotFoundException ex)
-            {
-                return NotFound(ex);
-            }
+            var product = _productRepository.GetProductById(id);
+            return Ok(product);
         }
 
 		/// <summary>

@@ -1,4 +1,5 @@
 using AutoMapper;
+using SelXPressApi.DTO.ProductDTO;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Models;
 

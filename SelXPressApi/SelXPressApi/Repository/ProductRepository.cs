@@ -1,4 +1,5 @@
-﻿using SelXPressApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SelXPressApi.Data;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 
@@ -13,19 +14,55 @@ namespace SelXPressApi.Repository
             _context = context;
         }
 
-        public List<Product> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts()
         {
-            return _context.Products.OrderBy(p => p.Id).ToList();
+            return await _context.Products.Join(_context.Categories, product => product.Category.Id, category => category.Id, (product, category) => new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Picture = product.Picture,
+                Category = category,
+
+            }).Join(_context.Stocks, product => product.Stock.Id, stock => stock.Id, (product, stock) => new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Picture = product.Picture,
+                Category = product.Category,
+                Stock = stock,
+            }).ToListAsync();
         }
 
-        public bool ProductExists(int id)
+        public async Task<bool> ProductExists(int id)
         {
-            return _context.Products.Any(p => p.Id == id);
+            return await _context.Products.AnyAsync(p => p.Id == id);
         }
 
-        public Product GetProductById(int id)
+        public async Task<Product?> GetProductById(int id)
         {
-            return _context.Products.FirstOrDefault(p => p.Id == id);
+            return _context.Products.Where(p => p.Id == id).Join(_context.Categories, product => product.Category.Id, category => category.Id, (product, category) => new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Picture = product.Picture,
+                Category = category,
+
+            }).Join(_context.Stocks, product => product.Stock.Id, stock => stock.Id, (product, stock) => new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Picture = product.Picture,
+                Category = product.Category,
+                Stock = stock,
+            }).FirstOrDefault();
         }
     }
 }
