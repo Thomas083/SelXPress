@@ -21,7 +21,7 @@ namespace SelXPressApi.Repository
         public async Task<bool> CreateUser(CreateUserDto user)
         {
             var role = _context.Roles.Where(r => r.Id == user.RoleId).FirstOrDefault();
-            if(role == null)
+            if(role != null)
             {
                 User newUser = new User
                 {
@@ -48,14 +48,14 @@ namespace SelXPressApi.Repository
 
         public async Task<List<User>> GetAllUsers()
         {
-            return _context.Users.Join(_context.Roles, user => user.Role.Id, role => role.Id, (user, role) => new User
+            return await _context.Users.Join(_context.Roles, user => user.Role.Id, role => role.Id, (user, role) => new User
             {
                 Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
                 Password = user.Password,
                 Role = role,
-            }).ToList();
+            }).ToListAsync();
         }
 
         public Task<User?> GetUserById(int id)
@@ -72,8 +72,8 @@ namespace SelXPressApi.Repository
 
         public async Task<bool> Save()
         {
-            var saved = await _context.SaveChangesAsync();
-            return saved > 0 ? true : false;
+            var saved = await   _context.SaveChangesAsync();
+            return saved > 0;
         }
 
         public async Task<bool> UpdateUser(UpdateUserDTO updateUser, int id)
@@ -82,16 +82,14 @@ namespace SelXPressApi.Repository
                 return false;
             User? user =  _context.Users.Where(u => u.Id == id).FirstOrDefault();
 
-            if (user != null && updateUser.Username != null)
-                user.Username = updateUser.Username;
+            if (user != null && updateUser.Username != null && user.Username != updateUser.Username)
+                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Username, x => updateUser.Username));
 
-            if (user != null && updateUser.Email != null)
-                user.Email = updateUser.Email;
+            if (user != null && updateUser.Email != null && user.Email != updateUser.Email)
+                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p2 => p2.SetProperty(x => x.Email, x => updateUser.Email));
 
-            if (user != null && updateUser.Password != null)
-                user.Password = updateUser.Password;
-
-            _context.Users.Update(user);
+            if (user != null && updateUser.Password != null && user.Password != updateUser.Password)
+                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p3 => p3.SetProperty(x => x.Password, x => updateUser.Password));
 
             return await Save();
         }

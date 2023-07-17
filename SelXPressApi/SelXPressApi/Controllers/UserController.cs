@@ -35,7 +35,7 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetUsers()
 		{
             if (!ModelState.IsValid)
-                throw new GetUsersBadRequestException("A bad request occured, please try again");
+                throw new GetUsersBadRequestException("The model is wrong, a bad request occured");
 
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
@@ -63,7 +63,7 @@ namespace SelXPressApi.Controllers
                 throw new GetUserByIdNotFoundException("The user with the id : " + id + "doesn't exist");
             }
             if (!ModelState.IsValid)
-                throw new GetUserByIdBadRequestException("A bad request occured, please try again");
+                throw new GetUserByIdBadRequestException("The model is wrong, a bad request occured");
 
             var user = _mapper.Map<UserDto>(await _userRepository.GetUserById(id));
             return Ok(user);
@@ -75,7 +75,7 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		[ProducesResponseType(200, Type = typeof(User))]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
@@ -85,9 +85,13 @@ namespace SelXPressApi.Controllers
             {
                 throw new CreateUserBadRequestException("There is a missing field, a bad request occured");
             }
-			await _userRepository.CreateUser(newUser);
-            return Created("api/UserController/", typeof(User));
-        }
+
+            if (await _userRepository.CreateUser(newUser))
+            {
+	            return StatusCode(201);
+            }
+            throw new Exception("An error occured while the creation of the user");
+		}
 
 		/// <summary>
 		/// PUT api/<UserController>/5
@@ -96,23 +100,27 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userUpdate)
 		{
             if (userUpdate == null)
                 throw new UpdateUserBadRequestException("The value of the body is null, please try again with some data");
 
-            if (!await _userRepository.UserExists(id))
+            if (!ModelState.IsValid)
+	            throw new UpdateUserBadRequestException("The model is not valid, a bad request occured");
+            
+			if (!await _userRepository.UserExists(id))
                 throw new UpdateUserNotFoundException("The user with the id " + id + " doesn't exist");
 
             if (await _userRepository.UpdateUser(userUpdate, id))
             {
-                return NoContent();
+	            return Ok();
             }
-            else
-            {
-                throw new UpdateUserBadRequestException("A bad request occured because the data doesn't correspond at what is expected");
-            }
-        }
+            throw new Exception("An error occured while the update of the user");
+		}
 
 		/// <summary>
 		/// DELETE api/<UserController>/5
@@ -120,19 +128,23 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> DeleteUser(int id)
 		{
             if (!await _userRepository.UserExists(id))
                 throw new DeleteUserNotFoundException("The user with the id " + id + " doesn't exist");
 
+            if (!ModelState.IsValid)
+	            throw new DeleteUserBadRequestException("The model is not valid, a bad request occured");
+
             if (await _userRepository.DeleteUser(id))
             {
-                return NoContent();
+	            return Ok();
             }
-            else
-            {
-                throw new DeleteUserBadRequestException("A bad request occured when deleting the user");
-            }
-        }
+            throw new Exception("An error occured while the deleting of the user");
+		}
 	}
 }
