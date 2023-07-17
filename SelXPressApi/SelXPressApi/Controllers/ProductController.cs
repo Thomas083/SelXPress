@@ -118,9 +118,20 @@ namespace SelXPressApi.Controllers
         /// Delete a product
         /// </summary>
         /// <param name="id"></param>
-        [HttpDelete("deleteProduct/{id}")]
-		public void Delete(int id)
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> DeleteProduct(int id)
 		{
+			if (!await _productRepository.ProductExists(id))
+				throw new DeleteProductNotFoundException("The user with the id " + id + " doesn't exist");
+			if (!ModelState.IsValid)
+				throw new DeleteProductBadRequestException("The model is not valid, a bad request occured");
+			if(await _productRepository.DeleteProduct(id))
+				return Ok();
+			throw new Exception("An error occured while the deleting of the user");
 		}
 	}
 }

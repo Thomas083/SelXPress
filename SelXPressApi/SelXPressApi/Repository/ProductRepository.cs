@@ -100,5 +100,16 @@ namespace SelXPressApi.Repository
             var saved = await _context.SaveChangesAsync();
             return saved > 0;
         }
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+            if(await ProductExists(id))
+            {
+                await _context.Products.Where(p => p.Id != id).ExecuteDeleteAsync();
+                var saved = await _context.SaveChangesAsync();
+                return saved > 0;
+            }
+            return false;
+        }
     }
 }
