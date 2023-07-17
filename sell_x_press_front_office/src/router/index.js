@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/identification/LoginView.vue'
 import RegisterView from '../views/identification/RegisterView.vue'
 import ForgotView from '../views/identification/ForgotView.vue'
+import ProductListView from "../views/ProductListView.vue"
 import UserView from '../views/UserView.vue'
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     name: 'user',
     component: UserView
   },
+  {
+    path: '/products',
+    name: 'products',
+    component: ProductListView
+  }
 
 ]
 
