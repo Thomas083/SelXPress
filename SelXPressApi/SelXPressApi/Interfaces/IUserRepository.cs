@@ -10,7 +10,6 @@ namespace SelXPressApi.Interfaces
         Task<User?> GetUserById(int id);
         Task<bool> UserExists(int id);
         Task<bool> CreateUser(CreateUserDto createUser);
-        Task<bool> Save();
         Task<bool> UpdateUser(UpdateUserDTO updateUser, int id);
 
         Task<bool> DeleteUser(int id);

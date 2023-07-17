@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace SelXPressApi.Repository
 {
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
+        private readonly CommonMethods _commonMethods;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context, CommonMethods commonMethods)
         {
             _context = context;
+            _commonMethods = commonMethods;
         }
 
         public async Task<bool> CreateUser(CreateUserDto user)
@@ -31,7 +32,7 @@ namespace SelXPressApi.Repository
                     Role = role
                 };
                 await _context.Users.AddAsync(newUser);
-                return await Save();
+                return await _commonMethods.Save();
             }
             return false;
         }
@@ -41,7 +42,7 @@ namespace SelXPressApi.Repository
             if(await UserExists(id))
             {
                 await _context.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
-                return await Save() ;
+                return await _commonMethods.Save();
             }
             return false;
         }
@@ -69,13 +70,6 @@ namespace SelXPressApi.Repository
                 Role = role,
             }).FirstOrDefaultAsync();
         }
-
-        public async Task<bool> Save()
-        {
-            var saved = await   _context.SaveChangesAsync();
-            return saved > 0;
-        }
-
         public async Task<bool> UpdateUser(UpdateUserDTO updateUser, int id)
         {
             if (!await UserExists(id))
@@ -91,7 +85,7 @@ namespace SelXPressApi.Repository
             if (user != null && updateUser.Password != null && user.Password != updateUser.Password)
                 await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p3 => p3.SetProperty(x => x.Password, x => updateUser.Password));
 
-            return await Save();
+            return await _commonMethods.Save();
         }
 
         public async Task<bool> UserExists(int id)
