@@ -5,6 +5,8 @@
       :name="name"
       :type="type"
       :placeholder="placeholder"
+      :class="$attrs.class"
+      :style="styleObject"
       v-model="input"
       @change="$emit('input', input)"
     />
@@ -19,6 +21,7 @@ export default {
     type: String,
     placeholder: String,
     label: String,
+    styleObject: Object,
   },
   data() {
     return {
@@ -32,12 +35,5 @@ export default {
 label {
   align-self: start;
   margin-left: 3vw;
-}
-
-input {
-  border-radius: 15px;
-  height: 53px;
-  width: 90%;
-  text-align: center;
 }
 </style>
