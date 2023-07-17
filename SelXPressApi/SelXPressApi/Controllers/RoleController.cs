@@ -1,4 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.RoleDTO;
+using SelXPressApi.Exceptions.Role;
+using SelXPressApi.Interfaces;
+using SelXPressApi.Models;
+using SelXPressApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,15 +14,32 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class RoleController : ControllerBase
 	{
+		private readonly IRoleRepository _roleRepository;
+
+		public RoleController(IRoleRepository roleRepository)
+		{
+			_roleRepository = roleRepository;
+		}
 		/// <summary>
 		/// GET: api/<RoleController>
 		/// Get all roles
 		/// </summary>
 		/// <returns>Return an Array with all roles </returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200, Type = typeof(List<Role>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetRoles()
 		{
-			return new string[] { "value1", "value2" };
+			if (!ModelState.IsValid)
+				throw new GetRolesBadRequestException("The model is wrong, a bad request occured");
+			var roles = await _roleRepository.GetAllRoles();
+
+			if (roles.Count == 0)
+				throw new GetRolesNotFoundException("There is no roles in the database, please try again");
+			
+			return Ok(roles);
 		}
 
 		/// <summary>
@@ -26,9 +49,18 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a list of user with a specific role</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200, Type = typeof(Role))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetRole(int id)
 		{
-			return "value";
+			if (!await _roleRepository.RoleExists(id))
+				throw new GetRoleByIdNotFoundException("The role with the id : " + id + " doesn't exist");
+			if (!ModelState.IsValid)
+				throw new GetRoleByIdBadRequestException("The model is wrong, a bad request occured");
+			var role = await _roleRepository.GetRoleById(id);
+			return Ok(role);
 		}
 
 		/// <summary>
@@ -37,8 +69,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400 , Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateRole([FromBody] CreateRoleDTO role)
 		{
+			if (role == null || role.RoleName == null)
+				throw new CreateRoleBadRequestException("There is missing fields, please try again with some data");
+			if (await _roleRepository.CreateRole(role))
+			{
+				return StatusCode(201);
+			}
+			throw new Exception("An error occured while the creating of the role");
 		}
 
 		/// <summary>
@@ -48,8 +90,20 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRole)
 		{
+			if (!ModelState.IsValid)
+				throw new UpdateRoleBadRequestException("The model is wrong, a bad request occured");
+			if (updateRole == null)
+				throw new UpdateRoleBadRequestException("There is missing fields, please try again with some data");
+			if (!await _roleRepository.RoleExists(id))
+				throw new UpdateRoleNotFoundException("The role with the id : " + id + " doesn't exist");
+			await _roleRepository.UpdateRoleByID(id, updateRole);
+			return Ok();
 		}
 
 		/// <summary>
@@ -58,8 +112,22 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> Delete(int id)
 		{
+			if (!await _roleRepository.RoleExists(id))
+				throw new DeleteRoleNotFoundException("The role with the id : " + id + " doesn't exist");
+			if (!ModelState.IsValid)
+				throw new DeleteRoleBadRequestException("The model is wrong, a bad request occured");
+			if (await _roleRepository.DeleteRole(id))
+			{
+				return Ok();
+			}
+			await _roleRepository.DeleteRole(id);
+			return Ok();
 		}
 	}
 }
