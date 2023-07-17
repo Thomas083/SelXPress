@@ -2,6 +2,7 @@
 using SelXPressApi.Exceptions.User;
 using System.Net;
 using System.Text.Json;
+using SelXPressApi.Exceptions.Role;
 
 namespace SelXPressApi.Configurations
 {
@@ -86,6 +87,60 @@ namespace SelXPressApi.Configurations
                 message = ex.Message;
                 status = HttpStatusCode.NotFound;
                 code = "USR-1008";
+            }
+            else if (exceptionType == typeof(CreateRoleBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "RLE-1000";
+            }
+            else if (exceptionType == typeof(DeleteRoleBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "RLE-1001";
+            }
+            else if (exceptionType == typeof(DeleteRoleNotFoundException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "RLE-1002";
+            }
+            else if (exceptionType == typeof(GetRoleByIdBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "RLE-1003";
+            }
+            else if (exceptionType == typeof(GetRoleByIdNotFoundException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "RLE-1004";
+            }
+            else if (exceptionType == typeof(GetRolesBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "RLE-1005";
+            }
+            else if (exceptionType == typeof(GetRolesNotFoundException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "RLE-1006";
+            }
+            else if (exceptionType == typeof(UpdateRoleBadRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.BadRequest;
+                code = "RLE-1007";
+            }
+            else if (exceptionType == typeof(UpdateRoleNotFoundException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "RLE-1008";
             }
             else
             {

@@ -15,8 +15,8 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user" @click="goToUserProfile()">ELSHARION</button>
-                <button class="btn btn-secondary btn-signup">Sign Out</button>
+                <button class="user" @click="goToUserProfile()">{{ store }}</button>
+                <button class="btn btn-secondary btn-signup" @click="logOut()">Sign Out</button>
             </div>
         </div>
         <div class="header-order">
@@ -35,11 +35,16 @@ export default {
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
+            window.location.reload();
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
         },
-    }
+        logOut() {
+            localStorage.clear();
+            window.location.reload();
+        }
+    },
 };
 </script>
   
@@ -52,6 +57,7 @@ export default {
     width: 100vw;
     height: auto;
 }
+
 .header-logo {
     grid-column: 1;
     height: 20vh;
@@ -174,52 +180,52 @@ p {
 
 @media screen and (max-width: 1080px) {
 
-.header-container {
-    background-color: var(--main-blue);
-    display: grid;
-    grid-template-columns: 33vw 33vw 33vw;
-    grid-template-rows: auto auto;
-    width: 100vw;
-    align-items: center;
-    height: auto;
-}
+    .header-container {
+        background-color: var(--main-blue);
+        display: grid;
+        grid-template-columns: 33vw 33vw 33vw;
+        grid-template-rows: auto auto;
+        width: 100vw;
+        align-items: center;
+        height: auto;
+    }
 
-.header-logo {
-    grid-column: 1;
-    grid-row: 1;
-    height: 10vh;
-}
+    .header-logo {
+        grid-column: 1;
+        grid-row: 1;
+        height: 10vh;
+    }
 
-.header-search {
-    grid-row: 2;
-    grid-column: 1/3;
-}
+    .header-search {
+        grid-row: 2;
+        grid-column: 1/3;
+    }
 
-.header-login {
-    grid-row: 1;
-    grid-column: 2;
-}
+    .header-login {
+        grid-row: 1;
+        grid-column: 2;
+    }
 
-.header-order {
-    grid-row: 1;
-    grid-column: 3;
-}
+    .header-order {
+        grid-row: 1;
+        grid-column: 3;
+    }
 
-.welcome-login {
-    display: none;
-}
+    .welcome-login {
+        display: none;
+    }
 
-.btn-signin {
-    margin-top: 1rem;
-}
+    .btn-signin {
+        margin-top: 1rem;
+    }
 
-.btn-signup {
-    padding: 1rem 2rem;
-}
+    .btn-signup {
+        padding: 1rem 2rem;
+    }
 
-.order-logo {
-    height: 10vh;
-}
+    .order-logo {
+        height: 10vh;
+    }
 
 }
 </style>
