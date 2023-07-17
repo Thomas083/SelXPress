@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Exceptions.User;
+using SelXPressApi.Interfaces;
+using SelXPressApi.Models;
+using System.Reflection;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,16 +15,35 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		/// <summary>
-		/// GET: api/<UserController>
-		/// Get all users
-		/// </summary>
-		/// <returns>Return an Array of all user</returns>
-		[HttpGet]
-		public IEnumerable<string> Get()
+		private readonly IUserRepository _userRepository;
+		private readonly IMapper _mapper;
+		public UserController(IUserRepository userRepository, IMapper mapper)
 		{
-			return new string[] { "value1", "value2" };
+			_userRepository = userRepository;
+			_mapper = mapper;
 		}
+
+		/// <summary>
+		/// GET method to get all the users
+		/// </summary>
+		/// <returns>List of UserD</returns>
+		[HttpGet]
+		[ProducesResponseType(200, Type = typeof(List<UserDto>))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetUsers()
+		{
+            if (!ModelState.IsValid)
+                throw new GetUsersBadRequestException("The model is wrong, a bad request occured");
+
+            var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
+
+            if (users.Count == 0)
+                throw new GetUsersNotFoundException("There are no users in the database");
+
+            return Ok(users);
+        }
 
 		/// <summary>
 		/// GET api/<UserController>/5
@@ -26,10 +52,22 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific user</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200, Type = typeof(UserDto))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetUser(int id)
 		{
-			return "value";
-		}
+            if (!await _userRepository.UserExists(id))
+            {
+                throw new GetUserByIdNotFoundException("The user with the id : " + id + "doesn't exist");
+            }
+            if (!ModelState.IsValid)
+                throw new GetUserByIdBadRequestException("The model is wrong, a bad request occured");
+
+            var user = _mapper.Map<UserDto>(await _userRepository.GetUserById(id));
+            return Ok(user);
+        }
 
 		/// <summary>
 		/// POST api/<UserController>
@@ -37,8 +75,22 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
 		{
+            if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == null
+                    || newUser.RoleId == 0)
+            {
+                throw new CreateUserBadRequestException("There is a missing field, a bad request occured");
+            }
+
+            if (await _userRepository.CreateUser(newUser))
+            {
+	            return StatusCode(201);
+            }
+            throw new Exception("An error occured while the creation of the user");
 		}
 
 		/// <summary>
@@ -48,8 +100,26 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userUpdate)
 		{
+            if (userUpdate == null)
+                throw new UpdateUserBadRequestException("The value of the body is null, please try again with some data");
+
+            if (!ModelState.IsValid)
+	            throw new UpdateUserBadRequestException("The model is not valid, a bad request occured");
+            
+			if (!await _userRepository.UserExists(id))
+                throw new UpdateUserNotFoundException("The user with the id " + id + " doesn't exist");
+
+            if (await _userRepository.UpdateUser(userUpdate, id))
+            {
+	            return Ok();
+            }
+            throw new Exception("An error occured while the update of the user");
 		}
 
 		/// <summary>
@@ -58,8 +128,23 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteUser(int id)
 		{
+            if (!await _userRepository.UserExists(id))
+                throw new DeleteUserNotFoundException("The user with the id " + id + " doesn't exist");
+
+            if (!ModelState.IsValid)
+	            throw new DeleteUserBadRequestException("The model is not valid, a bad request occured");
+
+            if (await _userRepository.DeleteUser(id))
+            {
+	            return Ok();
+            }
+            throw new Exception("An error occured while the deleting of the user");
 		}
 	}
 }
