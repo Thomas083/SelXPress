@@ -5,7 +5,7 @@ namespace SelXPressApi.Helper;
 /// <summary>
 /// Class to invoke common methods
 /// </summary>
-public class CommonMethods
+public class CommonMethods : ICommonMethods
 {
     private readonly DataContext _context;
     /// <summary>

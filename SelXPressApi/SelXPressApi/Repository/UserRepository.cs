@@ -11,9 +11,9 @@ namespace SelXPressApi.Repository
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
-        private readonly CommonMethods _commonMethods;
+        private readonly ICommonMethods _commonMethods;
 
-        public UserRepository(DataContext context, CommonMethods commonMethods)
+        public UserRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;
             _commonMethods = commonMethods;

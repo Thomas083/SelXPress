@@ -10,9 +10,9 @@ namespace SelXPressApi.Repository
     public class RoleRepository : IRoleRepository
     {
         private readonly DataContext _context;
-        private readonly CommonMethods _commonMethods;
+        private ICommonMethods _commonMethods;
 
-        public RoleRepository(DataContext context, CommonMethods commonMethods)
+        public RoleRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;
             _commonMethods = commonMethods;
