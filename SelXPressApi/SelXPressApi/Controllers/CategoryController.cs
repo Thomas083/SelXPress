@@ -94,9 +94,22 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDTO categoryUpdate)
 		{
-		}
+			if(categoryUpdate == null)
+                throw new BadRequestException("There are missing fields, please try again with some data", "CAT-1102");
+			if(!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CAT-1101");
+			if(!await _categoryRepository.CategoryExists(id))
+                throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
+			if (await _categoryRepository.UpdateCategory(categoryUpdate, id))
+				return Ok();
+            throw new Exception("An error occured while the update of the user");
+        }
 
 		/// <summary>
 		/// DELETE api/<CategoryController>/5
@@ -104,8 +117,19 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> DeleteCategory(int id)
 		{
-		}
+			if (!await _categoryRepository.CategoryExists(id))
+				throw new NotFoundException("The category with the id :" + id + " doesn't exist", "CAT-1402");
+			if(!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong , a bad request occured", "CAT-1101");
+			if(await _categoryRepository.DeleteCategory(id))
+				return Ok();
+            throw new Exception("An error occured while the deleting of the user");
+        }
 	}
 }

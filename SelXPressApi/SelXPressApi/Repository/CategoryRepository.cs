@@ -33,9 +33,14 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        public Task<bool> DeleteCategory(int id)
+        public async Task<bool> DeleteCategory(int id)
         {
-            throw new NotImplementedException();
+            if(await CategoryExists(id))
+            {
+                await _context.Categories.Where(r => r.Id == id).ExecuteDeleteAsync();
+                return await _commonMethods.Save();
+            }
+            return false;
         }
 
         public async Task<List<Category>> GetAllCategories()
@@ -43,14 +48,22 @@ namespace SelXPressApi.Repository
             return await _context.Categories.OrderBy(c => c.Id).ToListAsync();
         }
 
-        public Task<Category?> GetCategoryById(int id)
+        public async Task<Category?> GetCategoryById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.Where(c => c.Id == id).FirstAsync();
         }
 
-        public Task<bool> UpdateCategory(UpdateCategoryDTO updateCategory, int id)
+        public async Task<bool> UpdateCategory(UpdateCategoryDTO updateCategory, int id)
         {
-            throw new NotImplementedException();
+            if(!await CategoryExists(id))
+                return false;
+            Category category = await _context.Categories.Where(c => c.Id == id).FirstAsync();
+
+            if(category != null && updateCategory.Name != null)
+                await _context.Categories.Where(c => c.Id == id)
+                    .ExecuteUpdateAsync(c1 => c1.SetProperty(x => x.Name, updateCategory.Name));
+            return await _commonMethods.Save();
+
         }
     }
 }
