@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.DTO.UserDTO;
@@ -52,10 +53,20 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific category</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+        [ProducesResponseType(200, Type = typeof(List<CategoryDTO>))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetCategory(int id)
 		{
-			return "value";
-		}
+			if(!await _categoryRepository.CategoryExists(id))
+				throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
+			if(!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong , a bad request occured", "CAT-1101");
+
+			var category = _mapper.Map<CategoryDTO>(await _categoryRepository.GetCategoryById(id));
+			return Ok(category);
+        }
 
 		/// <summary>
 		/// POST api/<CategoryController>
