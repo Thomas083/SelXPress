@@ -106,9 +106,9 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occured", "CAT-1101");
 			if(!await _categoryRepository.CategoryExists(id))
                 throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
-			if (await _categoryRepository.UpdateCategory(categoryUpdate, id))
+			if (!await _categoryRepository.UpdateCategory(categoryUpdate, id))
 				return Ok();
-            throw new Exception("An error occured while the update of the user");
+            throw new Exception("An error occured while the update of the categorie");
         }
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace SelXPressApi.Controllers
 				throw new NotFoundException("The category with the id :" + id + " doesn't exist", "CAT-1402");
 			if(!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong , a bad request occured", "CAT-1101");
-			if(await _categoryRepository.DeleteCategory(id))
+			if(!await _categoryRepository.DeleteCategory(id))
 				return Ok();
             throw new Exception("An error occured while the deleting of the user");
         }
