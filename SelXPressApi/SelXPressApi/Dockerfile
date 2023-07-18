@@ -7,14 +7,15 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["SelXPressApi/SelXPressApi.csproj", "SelXPressApi/"]
-RUN dotnet restore "SelXPressApi/SelXPressApi.csproj"
+COPY ["./SelXPressApi.csproj", ""]
+RUN dotnet restore "./SelXPressApi.csproj"
 COPY . .
-WORKDIR "/src/SelXPressApi"
+WORKDIR "/src/."
+
 RUN dotnet build "SelXPressApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SelXPressApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "SelXPressApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

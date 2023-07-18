@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  api:
+    build: 
+      context: ../SelXPressApi/SelXPressApi
+    env_file:
+      - .env
+    ports:
+      - 5288:80
+      - 7094:443
+    restart: on-failure
+    volumes:
+      - ./https:/https/
+    networks:
+      - network
+    depends_on:
+      - db
+
+  front:
+    build: ../sell_x_press_front_office
+    env_file:
+      - .env
+    ports:
+      - 4000:8080
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - db
+      - api
+
+  db:
+    image: mariadb:10.6.14
+    env_file:
+      - .env
+    ports:
+      - 5432
+    restart: on-failure
+    environment:
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mariadb/data
+      - ../SelXPressApi/database-files/database-template.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - network
+
+  back_office:
+    build: ../sell_x_press_back_office
+    env_file:
+      - .env
+    ports:
+      - 4001:8080
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - db
+      - api
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  network:
