@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.UserDTO;
-using SelXPressApi.Exceptions.User;
 using SelXPressApi.Interfaces;
-using SelXPressApi.Models;
-using System.Reflection;
+using SelXPressApi.Exceptions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,13 +32,13 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetUsers()
 		{
-            if (!ModelState.IsValid)
-                throw new GetUsersBadRequestException("The model is wrong, a bad request occured");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1000");
 
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
             if (users.Count == 0)
-                throw new GetUsersNotFoundException("There are no users in the database");
+	            throw new NotFoundException("There is no users in the database, please try again", "USR-1001");
 
             return Ok(users);
         }
@@ -60,10 +58,11 @@ namespace SelXPressApi.Controllers
 		{
             if (!await _userRepository.UserExists(id))
             {
-                throw new GetUserByIdNotFoundException("The user with the id : " + id + "doesn't exist");
+	            throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1002");
             }
+
             if (!ModelState.IsValid)
-                throw new GetUserByIdBadRequestException("The model is wrong, a bad request occured");
+	            throw new BadRequestException("The model is wrong , a bad request occured", "USR-1003");
 
             var user = _mapper.Map<UserDto>(await _userRepository.GetUserById(id));
             return Ok(user);
@@ -83,7 +82,7 @@ namespace SelXPressApi.Controllers
             if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == null
                     || newUser.RoleId == 0)
             {
-                throw new CreateUserBadRequestException("There is a missing field, a bad request occured");
+	            throw new BadRequestException("There are missing fields, please try again with some data", "USR-1004");
             }
 
             if (await _userRepository.CreateUser(newUser))
@@ -106,14 +105,14 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userUpdate)
 		{
-            if (userUpdate == null)
-                throw new UpdateUserBadRequestException("The value of the body is null, please try again with some data");
+			if (userUpdate == null)
+				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1005");
 
-            if (!ModelState.IsValid)
-	            throw new UpdateUserBadRequestException("The model is not valid, a bad request occured");
-            
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1006");
+
 			if (!await _userRepository.UserExists(id))
-                throw new UpdateUserNotFoundException("The user with the id " + id + " doesn't exist");
+				throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1007");
 
             if (await _userRepository.UpdateUser(userUpdate, id))
             {
@@ -134,11 +133,11 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> DeleteUser(int id)
 		{
-            if (!await _userRepository.UserExists(id))
-                throw new DeleteUserNotFoundException("The user with the id " + id + " doesn't exist");
+			if (!await _userRepository.UserExists(id))
+				throw new NotFoundException("The user with the id :" + id + " doesn't exist", "USR-1008");
 
-            if (!ModelState.IsValid)
-	            throw new DeleteUserBadRequestException("The model is not valid, a bad request occured");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong , a bad request occured", "USR-1009");
 
             if (await _userRepository.DeleteUser(id))
             {
