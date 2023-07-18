@@ -33,12 +33,12 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetUsers()
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1000");
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
 
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
             if (users.Count == 0)
-	            throw new NotFoundException("There is no users in the database, please try again", "USR-1001");
+	            throw new NotFoundException("There is no users in the database, please try again", "USR-1401");
 
             return Ok(users);
         }
@@ -58,11 +58,11 @@ namespace SelXPressApi.Controllers
 		{
             if (!await _userRepository.UserExists(id))
             {
-	            throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1002");
+	            throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1402");
             }
 
             if (!ModelState.IsValid)
-	            throw new BadRequestException("The model is wrong , a bad request occured", "USR-1003");
+	            throw new BadRequestException("The model is wrong , a bad request occured", "USR-1101");
 
             var user = _mapper.Map<UserDto>(await _userRepository.GetUserById(id));
             return Ok(user);
@@ -82,7 +82,7 @@ namespace SelXPressApi.Controllers
             if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == null
                     || newUser.RoleId == 0)
             {
-	            throw new BadRequestException("There are missing fields, please try again with some data", "USR-1004");
+	            throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
             }
 
             if (await _userRepository.CreateUser(newUser))
@@ -106,13 +106,13 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userUpdate)
 		{
 			if (userUpdate == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1005");
+				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
 
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1006");
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
 
 			if (!await _userRepository.UserExists(id))
-				throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1007");
+				throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1401");
 
             if (await _userRepository.UpdateUser(userUpdate, id))
             {
@@ -134,10 +134,10 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> DeleteUser(int id)
 		{
 			if (!await _userRepository.UserExists(id))
-				throw new NotFoundException("The user with the id :" + id + " doesn't exist", "USR-1008");
+				throw new NotFoundException("The user with the id :" + id + " doesn't exist", "USR-1401");
 
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong , a bad request occured", "USR-1009");
+				throw new BadRequestException("The model is wrong , a bad request occured", "USR-1101");
 
             if (await _userRepository.DeleteUser(id))
             {

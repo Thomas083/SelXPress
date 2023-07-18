@@ -32,11 +32,11 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetRoles()
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1000");
+				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
 			var roles = await _roleRepository.GetAllRoles();
 
 			if (roles.Count == 0)
-				throw new NotFoundException("There is no roles in the database, please try again", "RLE-1001");
+				throw new NotFoundException("There is no roles in the database, please try again", "RLE-1401");
 			
 			return Ok(roles);
 		}
@@ -55,9 +55,9 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetRole(int id)
 		{
 			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1002");
+				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1003");
+				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
 			var role = await _roleRepository.GetRoleById(id);
 			return Ok(role);
 		}
@@ -74,7 +74,7 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> CreateRole([FromBody] CreateRoleDTO role)
 		{
 			if (role == null || role.RoleName == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1004");
+				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1102");
 			if (await _roleRepository.CreateRole(role))
 			{
 				return StatusCode(201);
@@ -96,11 +96,11 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRole)
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1005");
+				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
 			if (updateRole == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1006");
+				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1102");
 			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1007");
+				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
 			await _roleRepository.UpdateRoleByID(id, updateRole);
 			return Ok();
 		}
@@ -118,9 +118,9 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> DeleteRole(int id)
 		{
 			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1008");
+				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured","RLE-1009");
+				throw new BadRequestException("The model is wrong, a bad request occured","RLE-1101");
 			await _roleRepository.DeleteRole(id);
 			return Ok();
 		}
