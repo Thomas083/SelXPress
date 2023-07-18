@@ -1,7 +1,7 @@
 <template>
-  <header-not-registered v-if="!isIdentificationPage" />
+  <header-identification-page v-if="isIdentificationPage" />
   <header-registered v-else-if="isUserLoggedIn" />
-  <header-identification-page v-else />
+  <header-not-registered v-else />
   <router-view />
   <footer-layout />
 </template>
@@ -13,6 +13,7 @@ import HeaderRegistered from '@/components/Layout/HeaderRegitered.vue';
 import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPage.vue';
 import FooterLayout from '@/components/Layout/FooterLayout.vue';
 import ProductCategories from '@/components/Home/ProductCategories.vue';
+
 export default {
   name: 'Appvue',
   components: {
@@ -24,10 +25,10 @@ export default {
   },
   computed: {
     isIdentificationPage() {
-      return (this.$route.path === '/login' || this.$route.path === '/register')
+      return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
     },
     isUserLoggedIn() {
-      return false;
+      return (localStorage.getItem("email") != null);
     },
   }
 }
