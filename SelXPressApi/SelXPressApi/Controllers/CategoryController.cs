@@ -74,9 +74,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO newCategory)
 		{
-		}
+			if(newCategory.Name == null)
+				throw new BadRequestException("There are missing fields, please try again with some data", "CAT-11102");
+
+			if (await _categoryRepository.CreateCategory(newCategory))
+				return StatusCode(201);
+            throw new Exception("An error occured while the creation of the user");
+        }
 
 		/// <summary>
 		/// PUT api/<CategoryController>/5

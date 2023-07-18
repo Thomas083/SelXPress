@@ -23,9 +23,14 @@ namespace SelXPressApi.Repository
             return await _context.Categories.Where(c => c.Id == id).AnyAsync();
         }
 
-        public Task<bool> CreateCategory(CreateCategoryDTO createCategory)
+        public async Task<bool> CreateCategory(CreateCategoryDTO category)
         {
-            throw new NotImplementedException();
+            Category newCategory = new Category
+            {
+                Name = category.Name
+            };
+            await _context.Categories.AddAsync(newCategory);
+            return await _commonMethods.Save();
         }
 
         public Task<bool> DeleteCategory(int id)
