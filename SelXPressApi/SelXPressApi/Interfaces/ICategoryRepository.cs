@@ -4,6 +4,6 @@ namespace SelXPressApi.Interfaces
 {
     public interface ICategoryRepository
     {
-        ICollection<Category> GetAllCategories();
+        Task<List<Category>> GetAllCategories();
     }
 }

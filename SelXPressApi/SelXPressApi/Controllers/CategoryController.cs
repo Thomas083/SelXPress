@@ -1,23 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.CategoryDTO;
+using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Interfaces;
+using SelXPressApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SelXPressApi.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class CategoryController : ControllerBase
 	{
+		private readonly ICategoryRepository _categoryRepository;
+		private readonly IMapper _mapper;
+		public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
+		{
+			_categoryRepository = categoryRepository;
+			_mapper = mapper;
+		}
 		/// <summary>
 		/// GET: api/<CategoryController>
 		/// Get all categories
 		/// </summary>
 		/// <returns>Return an Array of all categories</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+        [ProducesResponseType(200, Type = typeof(List<CategoryDTO>))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetCategory()
 		{
-			return new string[] { "value1", "value2" };
-		}
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occured", "CAT-1101");
+
+            var categories = _mapper.Map<List<CategoryDTO>>(await _categoryRepository.GetAllCategories());
+
+            if (categories.Count == 0)
+                throw new NotFoundException("There is no categories in the database, please try again", "CAT-1401");
+
+            return Ok(categories);
+        }
 
 		/// <summary>
 		/// GET api/<CategoryController>/5
