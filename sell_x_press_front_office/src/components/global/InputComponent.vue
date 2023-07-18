@@ -1,5 +1,5 @@
 <template>
-    <label :for="name">{{ label }}</label>
+    <label v-if="label!=''" :for="name">{{ label }}</label>
     <input
       :id="id"
       :name="name"
@@ -20,7 +20,10 @@ export default {
     name: String,
     type: String,
     placeholder: String,
-    label: String,
+    label: {
+      type: String,
+      default: "",
+    },
     styleObject: Object,
   },
   data() {

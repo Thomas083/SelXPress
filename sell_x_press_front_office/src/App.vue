@@ -2,7 +2,7 @@
   <header-identification-page v-if="isIdentificationPage" />
   <header-registered v-else-if="isUserLoggedIn" />
   <header-not-registered v-else />
-  <div class="container">
+  <div class="app-container">
     <router-view />
   </div>
   <footer-layout />
@@ -46,7 +46,7 @@ export default {
   background-color: #E5E5E5;
 }
 
-.container {
+.app-container {
   margin-top: 5vh;
   margin-bottom: 5vh;
 }

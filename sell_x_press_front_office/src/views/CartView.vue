@@ -1,12 +1,14 @@
 <template>
     <h1>Your Cart</h1>
-    <div class="container">
-        <div class="card-container">
+    <div class="cart-container">
+        <div class="cart-list-container">
             <cart-card/>
             <cart-card/>
             <cart-card/>
         </div>
-        <cart-summary/>
+        <div class="cart-summary">
+            <cart-summary/>
+        </div>
     </div>
 </template>
 
@@ -50,14 +52,27 @@ import CartSummary from "@/components/cart/Summary.vue";
 </script>
 
 <style scoped>
-.container{
+.cart-container{
     display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
-.card-container {
+.cart-list-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;    
+    align-items: center;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 430px) {
+        .cart-container{
+        flex-direction: column;
+    }
+
+    .cart-summary {
+        order: -1;
+    }
 }
 </style>

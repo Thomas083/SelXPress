@@ -71,3 +71,22 @@ a.link-dark:active{
     width: 90%;
     text-align: center;
 }
+
+.price-input {
+    border-radius: 5px;
+    height: 1.5rem;
+    width: 2rem;
+    text-align: center;
+}
+
+/* Hide scrollbar on number type input */
+/* Chrome, Safari, Edge, Opera */
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.price-input[type=number] {
+  -moz-appearance: textfield;
+}
