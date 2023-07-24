@@ -7,8 +7,8 @@
       :placeholder="placeholder"
       :class="$attrs.class"
       :style="styleObject"
-      v-model="input"
-      @change="$emit('input', input)"
+      :value="value"
+      @change="$emit('input', parseInt($event.target.value))"
     />
 </template>
 
@@ -19,17 +19,13 @@ export default {
     id: String,
     name: String,
     type: String,
+    value: String,
     placeholder: String,
     label: {
       type: String,
       default: "",
     },
     styleObject: Object,
-  },
-  data() {
-    return {
-      input: "",
-    };
   },
 };
 </script>

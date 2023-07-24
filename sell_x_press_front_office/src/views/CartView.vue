@@ -2,9 +2,9 @@
     <h1>Your Cart</h1>
     <div class="cart-container">
         <div class="cart-list-container">
-            <cart-card/>
-            <cart-card/>
-            <cart-card/>
+            <div v-for="(item, key) in cart" :key="key">
+                <cart-card :cart="item" @delete="deleteItem"/>
+            </div>
         </div>
         <div class="cart-summary">
             <cart-summary/>
@@ -23,29 +23,38 @@ import CartSummary from "@/components/cart/Summary.vue";
         },
         data() {
             return {
-                cart: {
-                    0: {
+                // WIP : to be replaced by the cart from the API
+                cart: [
+                    {
                         id: 1,
                         name: "name1",
                         price: 10,
-                        picture: "https://picsum.photos/200/300",
+                        picture: "@/assets/button/minus_button.png",
+                        description: "description1",
                         quantity: 1,
                     },
-                    1: {
+                    {
                         id: 2,
                         name: "name2",
                         price: 20,
-                        picture: "https://picsum.photos/200/300",
+                        picture: "@/assets/button/minus_button.png",
+                        description: "description2",
                         quantity: 2,
                     },
-                    2: {
+                    {
                         id: 3,
                         name: "name3",
                         price: 30,
-                        picture: "https://picsum.photos/200/300",
+                        picture: "@/assets/button/minus_button.png",
+                        description: "description3",
                         quantity: 3,
                     },
-                }
+                ]
+            }
+        },
+        methods: {
+            deleteItem(id) {
+                this.cart.splice(id-1, 1);
             }
         },
     }

@@ -5,22 +5,43 @@
       src="@/assets/categories-product-maquette-1.jpg"
       alt="productproduct productproduct productproduct productproduct productproduct productproduct productpoduct "
     />
-    <p class="title">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
-    </p>
+    <div class="title">
+      <p><b style="font-weight: bold;">{{ name }}</b></p>
+      <p>
+        {{ description }}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </div>
     <div>
-      <img class="button-img" src="@/assets/button/minus_button.png" />
+      <img
+        class="button-img"
+        src="@/assets/button/minus_button.png"
+        @click="subtractQuantity"
+      />
       <input-component
         class="price-input"
+        :value="quantity"
         @input="updateQuantity"
         type="number"
       />
-      <img class="button-img" src="@/assets/button/plus_button.png" />
+      <img
+        class="button-img"
+        src="@/assets/button/plus_button.png"
+        @click="addQuantity"
+      />
     </div>
     <div>
-      <p>{{ quantityPrice }}</p>
-      <img class="button-img" src="@/assets/button/delete.png" />
+      <p>{{ priceQuantity }}</p>
+      <img
+        class="button-img"
+        src="@/assets/button/delete.png"
+        @click="deleteQuantity"
+      />
     </div>
   </div>
 </template>
@@ -32,22 +53,45 @@ export default {
   components: {
     InputComponent,
   },
+  props: {
+    cart: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      img: "",
-      title: "",
-      quantity: 1,
-      price: 5,
+      id: this.cart.id,
+      name: this.cart.name,
+      price: this.cart.price,
+      img: this.cart.img,
+      description: this.cart.description,
+      quantity: this.cart.quantity,
     };
   },
   computed: {
-    quantityPrice() {
-      return this.quantity * this.price;
+    priceQuantity() {
+      return this.price * this.quantity;
+    },
+  },
+  watch: {
+    quantity(newValue) {
+      if (newValue < 0) this.quantity = 0;
     },
   },
   methods: {
     updateQuantity(e) {
       this.quantity = e;
+    },
+    addQuantity() {
+      this.quantity += 1;
+    },
+    subtractQuantity() {
+      this.quantity -= 1;
+    },
+    deleteQuantity() {
+      // this.quantity = 0;
+      this.$emit("delete", this.id);
     },
   },
 };
@@ -71,7 +115,7 @@ export default {
 
 .title {
   max-width: 45%;
-  max-height: 90%;
+  max-height: 70%;
   overflow-y: scroll;
   text-align: start;
   -ms-overflow-style: none; /* IE and Edge */
@@ -88,8 +132,8 @@ export default {
 
 @media screen and (max-width: 430px) {
   .cart-card-container {
-    width: 90vw; 
-    height: 10vh;   
+    width: 90vw;
+    height: 10vh;
   }
 }
 </style>
