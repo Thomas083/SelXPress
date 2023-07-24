@@ -75,22 +75,43 @@ namespace SelXPressApi.Repository
                 }).ToListAsync();
         }
 
-        public async Task<bool> CreateComment(CreateCommentDTO comment)
+        public async Task<bool> CreateComment(CreateCommentDTO commentDto)
         {
-            //todo
+            var user = await _context.Users.Where(u => u.Id == commentDto.UserId).FirstAsync();
+            var product = await _context.Products.Where(p => p.Id == commentDto.ProductId).FirstAsync();
+            Mark mark = new Mark()
+            {
+                rate = commentDto.Rate
+            };
+            await _context.Marks.AddAsync(mark);
+            await _commonMethods.Save();
+            Comment comment = new Comment()
+            {
+                Message = commentDto.Message,
+                CreatedAt = DateTime.Now,
+                Mark = mark,
+                Product = product,
+                User = user
+            };
+            await _context.Comments.AddAsync(comment);
 
             return await _commonMethods.Save();
         }
 
         public async Task<bool> UpdateCommentById(UpdateCommentDTO updateComment, int id)
         {
-            //todo
+            var comment = _context.Comments.Where(c => c.Id == id).FirstAsync();
+            if (updateComment.Message != null)
+            {
+                await _context.Comments.Where(c => c.Id == id)
+                    .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Message, x => updateComment.Message));
+            }
             return await _commonMethods.Save();
         }
 
         public async Task<bool> DeleteCommentById(int id)
         {
-            //todo
+            await _context.Comments.Where(c => c.Id == id).ExecuteDeleteAsync();
             return await _commonMethods.Save();
         }
 

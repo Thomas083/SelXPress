@@ -11,11 +11,6 @@ public class CreateCommentDTO
     public string Message { get; set; }
     
     /// <summary>
-    /// Date of the comment
-    /// </summary>
-    public DateTime CreatedAt { get; set; }
-    
-    /// <summary>
     /// Id of the user
     /// </summary>
     public int UserId { get; set; }
