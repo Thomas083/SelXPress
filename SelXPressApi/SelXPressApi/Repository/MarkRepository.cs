@@ -53,9 +53,13 @@ namespace SelXPressApi.Repository
                 }).ToListAsync();
         }
 
-        public async Task<bool> CreateMark(Mark mark)
+        public async Task<bool> CreateMark(CreateMarkDTO mark)
         {
-            await _context.Marks.AddAsync(mark);
+            Mark newMark = new Mark()
+            {
+                rate = mark.Rate
+            };
+            await _context.Marks.AddAsync(newMark);
             return await _commonMethods.Save();
         }
 
