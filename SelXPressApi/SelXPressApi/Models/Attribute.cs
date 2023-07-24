@@ -37,4 +37,5 @@ public class Attribute
     /// List of ProductAttribute object for the Many to Many relationship
     /// </summary>
     public ICollection<ProductAttribute> ProductAttributes { get; set; }
+    public ICollection<AttributeData> AttributeData { get; set; }
 }

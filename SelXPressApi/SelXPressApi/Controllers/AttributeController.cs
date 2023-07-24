@@ -62,7 +62,7 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<IActionResult> CreateAttribute([FromBody] CreateUserDto newUser)
+        public async Task<IActionResult> CreateAttribute([FromBody] CreateUserDto newAttribute)
         {
 
 		}

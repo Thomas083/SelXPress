@@ -1,48 +1,48 @@
 ﻿using SelXPressApi.Data;
-using SelXPressApi.DTO.AttributeDTO;
+using SelXPressApi.DTO.AttributeDataDTO;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
-using Attribute = SelXPressApi.Models.Attribute;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Repository
 {
-    public class AttributeRepository : IAttributeRepository
+    public class AttributeDataRepository : IAttributeDataRepository
     {
         private readonly DataContext _context;
         private ICommonMethods _commonMethods;
 
-        public AttributeRepository(DataContext context, ICommonMethods commonMethods)
+        public AttributeDataRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;
             _commonMethods = commonMethods;
         }
 
-        public Task<bool> AttributeExists(int id)
+        public Task<bool> AttributeDataExists(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)
+        public Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAttribute(int id)
+        public Task<bool> DeleteAttributeData(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Attribute>> GetAllAttributes()
+        public Task<List<AttributeData>> GetAllAttributesData()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Attribute?> GetAttributeById(int id)
+        public Task<AttributeData?> GetAttributeDataById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAttribute(UpdateAttributeDTO updateAttribute)
+        public Task<bool> UpdateAttributeData(UpdateAttributeDataDTO updateAttribute)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,6 @@
 ﻿using SelXPressApi.DTO.AttributeDTO;
 using Attribute = SelXPressApi.Models.Attribute;
+
 namespace SelXPressApi.Interfaces
 {
     public interface IAttributeRepository
