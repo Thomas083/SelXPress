@@ -54,6 +54,10 @@ export default {
     InputComponent,
   },
   props: {
+    cardId: {
+      type: Number,
+      required: true,
+    },
     cart: {
       type: Object,
       required: true,
@@ -61,7 +65,7 @@ export default {
   },
   data() {
     return {
-      id: this.cart.id,
+      productId: this.cart.id,
       name: this.cart.name,
       price: this.cart.price,
       img: this.cart.img,
@@ -77,6 +81,7 @@ export default {
   watch: {
     quantity(newValue) {
       if (newValue < 0) this.quantity = 0;
+      this.$emit("updateQuantity", [this.cardId, newValue]);
     },
   },
   methods: {
@@ -90,8 +95,7 @@ export default {
       this.quantity -= 1;
     },
     deleteQuantity() {
-      // this.quantity = 0;
-      this.$emit("delete", this.id);
+      this.$emit("delete", this.cardId);
     },
   },
 };

@@ -19,7 +19,7 @@ export default {
     id: String,
     name: String,
     type: String,
-    value: String,
+    value: [String, Number],
     placeholder: String,
     label: {
       type: String,
