@@ -24,8 +24,8 @@
                             </option>
                         </select>
                         <div v-for="(data, index_value) in chooseOption.attribute.values">
-                            <select v-if="chooseOptions[index_attribute].attribute.name === 'Color'" v-model="selectedColors[index_value]" class="form-select"
-                                :style="{ backgroundColor: selectedColors[index_value] }">
+                            <select v-if="chooseOptions[index_attribute].attribute.name === 'Color'" v-model="data.value" @change="setColors($event, index_attribute, index_value)" class="form-select"
+                                :style="{ backgroundColor: data.value }">
                                 <option v-for="option in selectColorData" :key="option.name" :value="option.value"
                                     class="option-color">
                                     {{ option.name }}
@@ -103,6 +103,9 @@ export default {
         },
         addAttributes(index) {
             this.chooseOptions[index].attribute.values.push({name: '', value: ''})
+        },
+        setColors(event, index_attribute, index_value) {
+            this.chooseOptions[index_attribute].attribute.values[index_value].name = this.selectColorData[event.target.selectedIndex].name
         }
     },
 };
