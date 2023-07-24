@@ -15,7 +15,7 @@ services:
     networks:
       - network
     depends_on:
-      - db
+      - sql
 
   front:
     build: ../sell_x_press_front_office
@@ -27,7 +27,7 @@ services:
     networks:
       - network
     depends_on:
-      - db
+      - sql
       - api
 
   db:
@@ -47,6 +47,17 @@ services:
     networks:
       - network
 
+  # sql:
+  #   image: "mcr.microsoft.com/mssql/server:2022-latest"
+  #   container_name: sql_server2022
+  #   ports: 
+  #     - "1433:1433" 
+  #   environment:
+  #     - ACCEPT_EULA=y
+  #     - SA_PASSWORD=${SA_PASSWORD}
+  #   networks:
+  #     - network
+
   back_office:
     build: ../sell_x_press_back_office
     env_file:
@@ -57,7 +68,7 @@ services:
     networks:
       - network
     depends_on:
-      - db
+      - sql
       - api
 
 volumes:
