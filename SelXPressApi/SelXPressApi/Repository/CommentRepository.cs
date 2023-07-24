@@ -21,22 +21,58 @@ namespace SelXPressApi.Repository
 
         public async Task<List<Comment>> GetAllComments()
         {
-            return await _context.Comments.OrderBy(c => c.Id).ToListAsync();
+            return await _context.Comments.Join(_context.Marks, comment => comment.Mark.Id, mark => mark.Id,
+                (comment, mark) => new Comment()
+                {
+                    Id = comment.Id,
+                    Message = comment.Message,
+                    CreatedAt = comment.CreatedAt,
+                    Mark = mark,
+                    User = comment.User,
+                    Product = comment.Product
+                }).ToListAsync();
         }
 
         public async Task<Comment> GetCommentById(int id)
         {
-            return await _context.Comments.Where(c => c.Id == id).FirstAsync();
+            return await _context.Comments.Where(c => c.Id == id).Join(_context.Marks, comment => comment.Mark.Id, mark => mark.Id,
+                (comment, mark) => new Comment()
+                {
+                    Id = comment.Id,
+                    Message = comment.Message,
+                    CreatedAt = comment.CreatedAt,
+                    Mark = mark,
+                    User = comment.User,
+                    Product = comment.Product
+                }).FirstAsync();
         }
 
         public async Task<List<Comment>> GetCommentByProduct(int productId)
         {
-            return await _context.Comments.Where(c => c.Product.Id == productId).ToListAsync();
+            return await _context.Comments.Where(c => c.Product.Id == productId).Join(_context.Marks, comment => comment.Mark.Id, mark => mark.Id,
+                (comment, mark) => new Comment()
+                {
+                    Id = comment.Id,
+                    Message = comment.Message,
+                    CreatedAt = comment.CreatedAt,
+                    Mark = mark,
+                    User = comment.User,
+                    Product = comment.Product
+                }).ToListAsync();
         }
 
         public async Task<List<Comment>> GetCommentByUser(int userId)
         {
-            return await _context.Comments.Where(c => c.User.Id == userId).ToListAsync();
+            return await _context.Comments.Where(c => c.User.Id == userId).Join(_context.Marks, comment => comment.Mark.Id, mark => mark.Id,
+                (comment, mark) => new Comment()
+                {
+                    Id = comment.Id,
+                    Message = comment.Message,
+                    CreatedAt = comment.CreatedAt,
+                    Mark = mark,
+                    User = comment.User,
+                    Product = comment.Product
+                }).ToListAsync();
         }
 
         public async Task<bool> CreateComment(CreateCommentDTO comment)
