@@ -15,20 +15,20 @@
                 required: true,
             },
         },
-        data() {
-            return {
-                totalQuantity: this.cart.reduce((acc, item) => acc + item.quantity, 0),
-                totalPrice: this.cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
-            }
-        },
-        // computed: {
-        //     totalQuantity() {
-        //         return this.cart.reduce((acc, item) => acc + item.quantity, 0); 
-        //     },
-        //     totalPrice() {
-        //         return this.cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        //     },
+        // data() {
+        //     return {
+        //         totalQuantity: this.cart.reduce((acc, item) => acc + item.quantity, 0),
+        //         totalPrice: this.cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
+        //     }
         // },
+        computed: {
+            totalQuantity() {
+                return this.cart.reduce((acc, item) => acc + item.quantity, 0); 
+            },
+            totalPrice() {
+                return this.cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+            },
+        },
         watch: {
             cart(newValue, oldValue) {
                 this.totalQuantity = newValue.reduce((acc, item) => acc + item.quantity, 0);
