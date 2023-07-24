@@ -2,7 +2,7 @@
     <div class="header-container">
         <img @click="goToHome()" class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
-            <button class="header-btn-add">Add Product</button>
+            <button class="header-btn-add" @click="goToAddProduct()">Add Product</button>
             <h3 class="header-name" @click="goToUserProfile()">Elsharion</h3>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
         </div>
@@ -19,6 +19,9 @@ export default {
     },
     goToUserProfile() {
         this.$router.push({ path: '/user' });
+    },
+    goToAddProduct() {
+        this.$router.push({ path: '/add-product' });
     },
   }
 };

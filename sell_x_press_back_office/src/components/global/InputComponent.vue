@@ -32,6 +32,7 @@ export default {
 label {
   align-self: start;
   margin-left: 3vw;
+  font-weight: bold;
 }
 
 input {

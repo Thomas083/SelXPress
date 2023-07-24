@@ -1,13 +1,13 @@
 <template>
     <div class="header-container">
-        <img class="logo" src="../../assets/Header/logo_back_office.png" />
+        <img class="logo" src="../../assets/Header/logo_back_office.png" @click="goToHome()" />
         <div class="header-content-right">
             <div class="header-btns">
                 <button class="header-btn-admin">Admin Panel</button>
-                <button class="header-btn-add">Add Product</button>
+                <button class="header-btn-add" >Add Product</button>
             </div>
             <div class="header-admin">
-                <h3 class="header-name">Elsharion,</h3>
+                <h3 class="header-name" @click="goToUserProfile()">Elsharion,</h3>
                 <h3 class="header-name">Administrator</h3>
             </div>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
@@ -19,6 +19,17 @@
 
 export default {
     name: "HeaderAdmin",
+    methods: {
+        goToHome() {
+        this.$router.push({ path: '/' });
+    },
+    goToUserProfile() {
+        this.$router.push({ path: '/user' });
+    },
+        goToAddProduct() {
+        this.$router.push({ path: '/add-product' });
+    },
+    }
 };
 
 </script>
