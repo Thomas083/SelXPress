@@ -1,4 +1,5 @@
-﻿using SelXPressApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SelXPressApi.Data;
 using SelXPressApi.DTO.AttributeDTO;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
@@ -17,9 +18,9 @@ namespace SelXPressApi.Repository
             _commonMethods = commonMethods;
         }
 
-        public Task<bool> AttributeExists(int id)
+        public async Task<bool> AttributeExists(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Attributes.AnyAsync(a => a.Id == id);
         }
 
         public Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)

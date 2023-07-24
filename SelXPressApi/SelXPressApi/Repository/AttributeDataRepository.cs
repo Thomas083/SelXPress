@@ -1,4 +1,5 @@
-﻿using SelXPressApi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SelXPressApi.Data;
 using SelXPressApi.DTO.AttributeDataDTO;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
@@ -17,34 +18,53 @@ namespace SelXPressApi.Repository
             _commonMethods = commonMethods;
         }
 
-        public Task<bool> AttributeDataExists(int id)
+        public async Task<bool> AttributeDataExists(int id)
         {
-            throw new NotImplementedException();
+            return await _context.AttributesData.AnyAsync(x => x.Id == id);
         }
 
-        public Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
+        public async Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
         {
-            throw new NotImplementedException();
+            AttributeData newAttributeData = new AttributeData
+            {
+                Key = createAttribute.Key,
+                Value = createAttribute.Value,
+            };
+            await _context.AttributesData.AddAsync(newAttributeData);
+            return await _commonMethods.Save();
         }
 
-        public Task<bool> DeleteAttributeData(int id)
+        public async Task<bool> DeleteAttributeData(int id)
         {
-            throw new NotImplementedException();
+            if( await AttributeDataExists(id))
+            {
+                await _context.AttributesData.Where(a => a.Id == id).ExecuteDeleteAsync();
+                return await _commonMethods.Save();
+            }
+            return false;
         }
 
-        public Task<List<AttributeData>> GetAllAttributesData()
+        public async Task<List<AttributeData>> GetAllAttributesData()
         {
-            throw new NotImplementedException();
+            return await _context.AttributesData.OrderBy(a => a.Id).ToListAsync();
         }
 
-        public Task<AttributeData?> GetAttributeDataById(int id)
+        public async Task<AttributeData?> GetAttributeDataById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.AttributesData.Where(r => r.Id == id).FirstAsync();
         }
 
-        public Task<bool> UpdateAttributeData(UpdateAttributeDataDTO updateAttribute)
+        public async Task<bool> UpdateAttributeData(int id, UpdateAttributeDataDTO updateAttribute)
         {
-            throw new NotImplementedException();
+            if(!await AttributeDataExists(id))
+                return false;
+            AttributeData attributeData = await _context.AttributesData.Where(a => a.Id == id).FirstAsync();
+
+            if (attributeData != null && updateAttribute.Key != null && attributeData.Key != updateAttribute.Key)
+                await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Key, x => updateAttribute.Key));
+            if(attributeData != null && updateAttribute.Value != null && attributeData.Value != updateAttribute.Value)
+                await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Value, x => updateAttribute.Value));
+            return await _commonMethods.Save();
         }
     }
 }

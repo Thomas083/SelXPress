@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SelXPressApi.DTO.AttributeDataDTO;
 using SelXPressApi.DTO.AttributeDTO;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Models;
@@ -13,6 +14,7 @@ namespace SelXPressApi.Helper
             CreateMap<User, UserDto>();
             CreateMap<User, CreateUserDto>();
             CreateMap<Attribute, AttributeDTO>();
+            CreateMap<AttributeData, AttributeDataDTO>();
         }
     }
 }
