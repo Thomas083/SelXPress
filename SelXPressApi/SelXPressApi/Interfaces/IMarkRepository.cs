@@ -9,7 +9,7 @@ namespace SelXPressApi.Interfaces
         Task<Mark> GetMarkById(int id);
         Task<List<Mark>> GetMarkByUser(int id);
         Task<List<Mark>> GetMarkByProduct(int id);
-        Task<bool> CreateMark(CreateMarkDTO mark);
+        Task<bool> CreateMark(Mark mark);
         Task<bool> UpdateMarkById(UpdateMarkDTO updateMark, int id);
         Task<bool> DeleteMarkById(int id);
         Task<bool> MarkExists(int id);
