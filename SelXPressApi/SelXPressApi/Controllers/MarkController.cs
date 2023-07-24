@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.MarkDTO;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Interfaces;
+using SelXPressApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,15 +13,29 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class MarkController : ControllerBase
 	{
+		private readonly IMarkRepository _markRepository;
+		public MarkController(IMarkRepository markRepository)
+		{
+			_markRepository = markRepository;
+		}
 		/// <summary>
 		/// GET: api/<MarkController>
 		/// Get all marks
 		/// </summary>
 		/// <returns>Return an Array of all marks</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200, Type = typeof(List<Mark>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetAllMarks()
 		{
-			return new string[] { "value1", "value2" };
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1000");
+			var marks = await _markRepository.GetAllMark();
+			if (marks.Count == 0)
+				throw new NotFoundException("There is no marks in the database, please try again", "MRK-1001");
+			return Ok(marks);
 		}
 
 		/// <summary>
@@ -26,30 +45,107 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific mark</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200,Type = typeof(Mark))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetMarkById(int id)
 		{
-			return "value";
+			if (!await _markRepository.MarkExists(id))
+				throw new NotFoundException("The mark with the id : " + id + " doesn't exist", "MRK-1002");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1003");
+			var mark = await _markRepository.GetMarkById(id);
+			return Ok(mark);
 		}
-
+		
 		/// <summary>
-		/// POST api/<MarkController>
-		/// Create a new mark
-		/// </summary>
-		/// <param name="value"></param>
-		[HttpPost]
-		public void Post([FromBody] string value)
-		{
-		}
-
-		/// <summary>
-		/// PUT api/<MarkController>/5
-		/// Modify a mark
+		/// 
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="value"></param>
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		/// <returns></returns>
+		/// <exception cref="NotFoundException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		[HttpGet("{id}/user")]
+		[ProducesResponseType(200, Type = typeof(List<Mark>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetMarkByUser(int id)
 		{
+			var marks = await _markRepository.GetMarkByUser(id);
+			if (marks.Count == 0)
+				throw new NotFoundException("There is no marks for the user with the id : " + id, "MRK-1004");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1005");
+			return Ok(marks);
+		}
+		
+		/// <summary>
+		/// Get the list of mark of the product
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		/// <exception cref="NotFoundException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		[HttpGet("{id}/product")]
+		[ProducesResponseType(200, Type = typeof(List<Mark>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetMarkByProduct(int id)
+		{
+			var marks = await _markRepository.GetMarkByProduct(id);
+			if (marks.Count == 0)
+				throw new NotFoundException("There is no marks for the product with the id : " + id, "1006");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1007");
+			return Ok(marks);
+		}
+
+		/// <summary>
+		/// Create mark
+		/// </summary>
+		/// <param name="markDto"></param>
+		/// <returns></returns>
+		/// <exception cref="BadRequestException"></exception>
+		[HttpPost]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateMark([FromBody] CreateMarkDTO markDto)
+		{
+			if (markDto == null)
+				throw new BadRequestException("There is missing fields, please try again with some data", "MRK-1008");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1009");
+			await _markRepository.CreateMark(markDto);
+			return Ok();
+		}
+
+		/// <summary>
+		/// Update mark
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="updateMarkDto"></param>
+		/// <returns></returns>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
+		[HttpPut("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateMark(int id, [FromBody] UpdateMarkDTO updateMarkDto)
+		{
+			if (updateMarkDto == null)
+				throw new BadRequestException("There is missing fields, please try again with some data", "MRK-1010");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1011");
+			if (!await _markRepository.MarkExists(id))
+				throw new NotFoundException("The mark with the id : " + id + " doesn't exist", "MRK-1012");
+			await _markRepository.UpdateMarkById(updateMarkDto, id);
+			return Ok();
 		}
 
 		/// <summary>
@@ -58,8 +154,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteMark(int id)
 		{
+			if (!await _markRepository.MarkExists(id))
+				throw new NotFoundException("The mark with the id : " + id + " doesn't exist", "MRK-1013");
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured","MRK-1014");
+			await _markRepository.DeleteMarkById(id);
+			return Ok();
 		}
 	}
 }
