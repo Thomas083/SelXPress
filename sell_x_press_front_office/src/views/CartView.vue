@@ -58,7 +58,6 @@ import CartSummary from "@/components/cart/Summary.vue";
             },
             updateQuantity([id, quantity]) {
                 this.cart[id].quantity = quantity;
-                console.log(this.cart[id]);
             }
         },
     }
