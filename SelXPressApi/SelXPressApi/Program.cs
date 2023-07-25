@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Configurations;
 using SelXPressApi.Data;
+using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Repository;
 
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICommonMethods, CommonMethods>();
 
 //add the automapper service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -34,14 +36,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
 });
+
 var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
+    // Docker part : delete and create database in SQL Server
+    using(var scope = app.Services.CreateScope())
+    {
+        var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+        datasContext.Database.EnsureDeleted();
+        datasContext.Database.EnsureCreated();
+    }
     app.UseSwagger();
     app.UseSwaggerUI();
 }

@@ -8,12 +8,13 @@
         name="input-email"
         type="email"
         placeholder="Enter your email"
+        class="form-input"
         @input="updateData"
       />
       <a class="link-dark" href="/login">You already have an account ?</a>
       <button class="btn btn-primary send-button" @click="forgotPassword()">
         SEND
-        <img class="send-img" src="../../assets/Modal/send.png" />
+        <img class="send-img" src="@/assets/Modal/send.png" />
       </button>
     </div>
   </div>
