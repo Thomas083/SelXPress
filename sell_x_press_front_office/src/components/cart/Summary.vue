@@ -1,8 +1,8 @@
 <template>
   <div class="summary">
     <div>
-        <p>Sous total ({{ totalQuantity }} articles) : <b>{{ totalPrice }}€</b></p>
-        <p><small>Prix avant potentiels taxes et frais de livraison</small></p>
+        <p>Subtotal ({{ totalQuantity }} items) : <b>{{ totalPrice }}€</b></p>
+        <p><small>Tax and delivery free price</small></p>
     </div>
     <button
       class="btn btn-primary go-to-payment-btn"

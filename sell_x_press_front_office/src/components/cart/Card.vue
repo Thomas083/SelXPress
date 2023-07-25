@@ -3,7 +3,7 @@
     <img
       class="img"
       src="@/assets/categories-product-maquette-1.jpg"
-      alt="productproduct productproduct productproduct productproduct productproduct productproduct productpoduct "
+      alt="Product image"
     />
     <div class="title">
       <p><b style="font-weight: bold;">{{ name }}</b></p>
