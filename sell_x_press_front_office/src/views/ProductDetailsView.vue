@@ -22,8 +22,9 @@
                 </div>
                 <div class="attributes-container" v-for="(attribute, index) in attributes">
                     <div class='attribute-name'>{{ attribute.name }}:</div>
-                    <div v-if="attribute.name === 'color'" class='attributes-container' v-for="(data, index) in attribute.data">
-                        <div class="color-attribute" :style="{backgroundColor: data.value}"></div>
+                    <div v-if="attribute.name === 'color'" class='attributes-container'
+                        v-for="(data, index) in attribute.data">
+                        <div class="color-attribute" :style="{ backgroundColor: data.value }"></div>
                     </div>
                     <div v-else class="attributes-container" v-for="(data, index) in attribute.data">
                         <div class="attribute">{{ data.value }}</div>
@@ -45,21 +46,36 @@
                         <div v-for="index  in product_rating" :key="index">
                             <img src="../assets/Product/yellow_star.png" alt="yellow stars" />
                         </div>
-                        <div v-for="index in (5-product_rating)" :key="index">
+                        <div v-for="index in (5 - product_rating)" :key="index">
                             <img src="../assets/Product/star.png" alt="stars" />
                         </div>
                         <span class="rating">{{ product_rating }} out of 5</span>
                     </div>
                     <div class="number-review">{{ number_review }} customer review</div>
                     <div v-for="(value, index) in 5" class="ratings-table">
-                        <span>{{ 5-(index) }} star</span>
+                        <span>{{ 5 - (index) }} star</span>
                         <div class="level-rating">
-                            <div class="level-rating" :style="{backgroundColor: '#F17720', width: Math.floor((star_rating[5-index]/(number_review))*100)+'%'}"></div>
+                            <div class="level-rating"
+                                :style="{ backgroundColor: '#F17720', width: Math.floor((star_rating[5 - index] / (number_review)) * 100) + '%' }">
+                            </div>
                         </div>
-                        <span>{{ Math.floor((star_rating[5-index]/(number_review))*100) }}%</span>
+                        <span>{{ Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
                     </div>
                 </div>
-                <div class="review-container">Commentaire</div>
+                <div class="review-container">
+                    <textarea class="add-review" rows="5" cols="110" id="input-description" name="input-description"
+                        placeholder="Write your review here..."></textarea>
+                    <div class="add-review-container">
+                        <div v-for="index in 5" :key="index">
+                            <img v-if="index <= hoveredStars" src="../assets/Product/yellow_star.png" alt="yellow stars"
+                                @mouseover="hoveredStars = index"
+                                :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)" />
+                            <img v-else src="../assets/Product/star.png" alt="stars" @mouseover="hoveredStars = index"
+                             :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)"/>
+                        </div>
+                        <button class="btn btn-primary add-review-btn">Add your review</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -104,10 +120,16 @@ export default {
                 4: 100,
                 3: 30,
                 2: 0,
-                1: 10
+                1: 30
             },
+            hoveredStars: 0,
         }
     },
+    methods: {
+        setHoveredStars(index) {
+            this.hoveredStars = index;
+        },
+    }
 }
 
 </script>
@@ -262,7 +284,14 @@ export default {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-.add-to-cart-btn img {
+.add-review-btn {
+    margin-left: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+img {
     height: 3rem;
 }
 
@@ -292,7 +321,7 @@ export default {
 .rating-review-container {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: 5rem;
 }
 
 .rating-container {
@@ -334,5 +363,18 @@ export default {
 .rating {
     margin-left: 1rem;
     font-size: 1.5rem;
+}
+
+.add-review-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.add-review {
+    border-radius: 1rem;
+    padding: 1rem;
+    border-color: var(--main-black);
 }
 </style>
