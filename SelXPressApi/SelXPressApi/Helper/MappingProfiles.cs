@@ -1,4 +1,6 @@
 using AutoMapper;
+using SelXPressApi.DTO.CategoryDTO;
+using SelXPressApi.DTO.CommentDTO;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Models;
 
