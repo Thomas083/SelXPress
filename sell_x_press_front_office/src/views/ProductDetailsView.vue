@@ -63,8 +63,10 @@
                     </div>
                 </div>
                 <div class="review-container">
+                    <input-component id="input-title" name="input-title" type="text"
+                        placeholder="Enter your title" @input="updateData($event, 'title')" />
                     <textarea class="add-review" rows="5" cols="110" id="input-description" name="input-description"
-                        placeholder="Write your review here..."></textarea>
+                        placeholder="Write your review here..." @change="updateData($event.target.value, 'message')"></textarea>
                     <div class="add-review-container">
                         <div v-for="index in 5" :key="index">
                             <img v-if="index <= hoveredStars" src="../assets/Product/yellow_star.png" alt="yellow stars"
@@ -100,8 +102,13 @@
 
 <script>
 
+import InputComponent from "@/components/global/InputComponent.vue";
+
 export default {
     name: 'ProductDetailsView',
+    components: {
+        InputComponent,
+    },
     data() {
         return {
             title: 'ARTINABS Ocean Wave Simulation LED Projector Lamp',
@@ -155,12 +162,22 @@ export default {
                     comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
                     publication_date: '22/06/2023',
                 },
-            ]
+            ],
+            sendReviewData: {
+                title: '',
+                message: '',
+                author: '',
+                rating: 0,
+            }
         }
     },
     methods: {
         setHoveredStars(index) {
             this.hoveredStars = index;
+        },
+        updateData(e, key) {
+            this.sendReviewData.key = Object.assign(this.sendReviewData, { [key]: e });
+            console.dir(this.sendReviewData)
         },
     }
 }
@@ -377,7 +394,7 @@ img {
 .star-rating-container {
     display: flex;
     gap: 0.5rem;
-    align-items:flex-end;
+    align-items: flex-end;
 }
 
 .star-rating-container img {
