@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Models;
 
@@ -10,6 +10,8 @@ namespace SelXPressApi.Helper
         {
             CreateMap<User, UserDto>();
             CreateMap<User, CreateUserDto>();
+            CreateMap<Comment, CommentDTO>();
+            CreateMap<Category, CategoryDTO>();
         }
     }
 }
