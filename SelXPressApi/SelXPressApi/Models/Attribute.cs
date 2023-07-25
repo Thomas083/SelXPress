@@ -23,6 +23,7 @@ public class Attribute
     /// </summary>
     public string Type { get; set; }
 
+    public AttributeData AttributeData { get; set; }
     /// <summary>
     /// Date and time of the creation of the attribute
     /// </summary>
@@ -37,5 +38,4 @@ public class Attribute
     /// List of ProductAttribute object for the Many to Many relationship
     /// </summary>
     public ICollection<ProductAttribute> ProductAttributes { get; set; }
-    public ICollection<AttributeData> AttributeData { get; set; }
 }
