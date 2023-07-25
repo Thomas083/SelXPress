@@ -105,7 +105,7 @@ export default {
 .cart-card-container {
   display: flex;
   justify-content: space-around;
-  background-color: white;
+  background-color: var(--main-white);
   border-radius: 10px;
   width: 70vw;
   height: 20vh;

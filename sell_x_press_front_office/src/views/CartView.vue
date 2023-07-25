@@ -79,13 +79,20 @@ import CartSummary from "@/components/cart/Summary.vue";
     gap: 1rem;
 }
 
+.cart-summary {
+    display: flex;
+}
+
+
 @media screen and (max-width: 430px) {
-        .cart-container{
+    .cart-container{
         flex-direction: column;
     }
 
     .cart-summary {
         order: -1;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>
