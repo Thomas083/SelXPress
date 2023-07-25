@@ -42,7 +42,7 @@
             <h1>Customer Review</h1>
             <div class="rating-review-container">
                 <div class="rating-container">
-                    <div class="start-rating-container">
+                    <div class="star-rating-container">
                         <div v-for="index  in product_rating" :key="index">
                             <img src="../assets/Product/yellow_star.png" alt="yellow stars" />
                         </div>
@@ -68,12 +68,29 @@
                     <div class="add-review-container">
                         <div v-for="index in 5" :key="index">
                             <img v-if="index <= hoveredStars" src="../assets/Product/yellow_star.png" alt="yellow stars"
-                                @mouseover="hoveredStars = index"
-                                :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)" />
+                                @mouseover="hoveredStars = index" :style="{ cursor: 'pointer' }"
+                                @click="setHoveredStars(index)" />
                             <img v-else src="../assets/Product/star.png" alt="stars" @mouseover="hoveredStars = index"
-                             :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)"/>
+                                :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)" />
                         </div>
                         <button class="btn btn-primary add-review-btn">Add your review</button>
+                    </div>
+                    <div v-for="(review, index) in reviews">
+                        <div class="review-img-editor-container">
+                            <img src="@/assets/Product/client.png" alt="editor" />
+                            <h3>{{ review.editor }}</h3>
+                        </div>
+                        <div class="star-rating-container review">
+                            <div v-for="index  in review.rating" :key="index">
+                                <img src="../assets/Product/yellow_star.png" alt="yellow stars" />
+                            </div>
+                            <div v-for="index in (5 - review.rating)" :key="index">
+                                <img src="../assets/Product/star.png" alt="stars" />
+                            </div>
+                            <div class="review-title">{{ review.title }}</div>
+                        </div>
+                        <div class="review_publication_date">Published on: {{ review.publication_date }}</div>
+                        <div class="review-comment">{{ review.comment }}</div>
                     </div>
                 </div>
             </div>
@@ -120,9 +137,25 @@ export default {
                 4: 100,
                 3: 30,
                 2: 0,
-                1: 30
+                1: 30,
             },
             hoveredStars: 0,
+            reviews: [
+                {
+                    title: 'Awesome product !',
+                    editor: 'Elsharion',
+                    rating: 4,
+                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
+                    publication_date: '20/06/2023',
+                },
+                {
+                    title: 'Terrible.',
+                    editor: 'Thomas',
+                    rating: 2,
+                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
+                    publication_date: '22/06/2023',
+                },
+            ]
         }
     },
     methods: {
@@ -162,6 +195,11 @@ export default {
     text-align: end;
     margin-right: 0.5rem;
     color: var(--main-grey-separation);
+}
+
+.review_publication_date {
+    color: var(--main-grey-separation);
+    text-align: start;
 }
 
 .separation-line {
@@ -321,7 +359,7 @@ img {
 .rating-review-container {
     display: flex;
     flex-direction: row;
-    gap: 5rem;
+    gap: 3rem;
 }
 
 .rating-container {
@@ -336,13 +374,13 @@ img {
     font-size: 1rem;
 }
 
-.start-rating-container {
+.star-rating-container {
     display: flex;
     gap: 0.5rem;
-    align-items: center;
+    align-items:flex-end;
 }
 
-.start-rating-container img {
+.star-rating-container img {
     height: 2rem;
 }
 
@@ -376,5 +414,34 @@ img {
     border-radius: 1rem;
     padding: 1rem;
     border-color: var(--main-black);
+}
+
+.review-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-img-editor-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.review img {
+    height: 1rem;
+}
+
+.review-title {
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.review-comment {
+    margin-top: 1rem;
+    text-align: justify;
 }
 </style>
