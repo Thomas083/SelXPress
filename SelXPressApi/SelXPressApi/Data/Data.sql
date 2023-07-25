@@ -1,4 +1,6 @@
-﻿INSERT INTO Roles (Name)
+﻿use SelXPressApi;
+
+INSERT INTO Roles (Name)
 VALUES ('Vendeur'),('SuperVendeur'),('Acheteur'),('SuperAcheteur'),('GOAT'),('SuperAdministrateur');
 
 INSERT INTO Users (Username, Password, Email, RoleId)
@@ -8,13 +10,13 @@ VALUES ('LeBirz','MotDePasse','ugo.bertrand@epitech.eu',6),
        ('Maxence-Leroy','MotDePasse','maxence.leroy@epitech.eu',5),
        ('Mockingame','MotDePasse','julien.lamalle@epitech.eu',2);
 
-INSERT INTO Attributes (Name, Type, CreatedAt, UpdatedAt)
+INSERT INTO Attributes (Name, Type, Created_At, Updated_At)
 VALUES
-    ('Attribute1','Type1',GETDATE(),GETDATE()),
-    ('Attribute2','Type2',GETDATE(),GETDATE()),
-    ('Attribute3','Type3',GETDATE(),GETDATE()),
-    ('Attribute4','Type4',GETDATE(),GETDATE()),
-    ('Attribute5','Type5',GETDATE(),GETDATE());
+    ('Attribute1','Type1',CURRENT_DATE(),CURRENT_DATE()),
+    ('Attribute2','Type2',CURRENT_DATE(),CURRENT_DATE()),
+    ('Attribute3','Type3',CURRENT_DATE(),CURRENT_DATE()),
+    ('Attribute4','Type4',CURRENT_DATE(),CURRENT_DATE()),
+    ('Attribute5','Type5',CURRENT_DATE(),CURRENT_DATE());
 
 INSERT INTO Stocks (Quantity)
 VALUES
@@ -72,14 +74,14 @@ VALUES
     (4),
     (3);
 
-INSERT INTO Products (Name,Description,Price,Picture,CreatedAt,CategoryId,StockId)
+INSERT INTO Products (Name,Description,Price,Picture,Created_At,CategoryId,SellPeopleId)
 VALUES
-    ('SuperProduit1','Description du super produit',23,'picture',GETDATE(),1,1),
-    ('Produit pas genial1','Description du produit pas genial',6,'picture',GETDATE(),2,2),
-    ('Produit pas genial2','Description du produit pas genial',8,'picture',GETDATE(),3,3),
-    ('SuperProduit2','Description du super produit',125,'picture',GETDATE(),4,4),
-    ('ProduitIncroyable1','Description du produit incroyable',1056,'picture',GETDATE(),5,5),
-    ('ProduitIncroyable2','Description du produit incroyable',1478,'picture',GETDATE(),6,6);
+    ('SuperProduit1','Description du super produit',23,'picture',CURRENT_DATE(),1,1),
+    ('Produit pas genial1','Description du produit pas genial',6,'picture',CURRENT_DATE(),2,2),
+    ('Produit pas genial2','Description du produit pas genial',8,'picture',CURRENT_DATE(),3,3),
+    ('SuperProduit2','Description du super produit',125,'picture',CURRENT_DATE(),4,4),
+    ('ProduitIncroyable1','Description du produit incroyable',1056,'picture',CURRENT_DATE(),5,5),
+    ('ProduitIncroyable2','Description du produit incroyable',1478,'picture',CURRENT_DATE(),6,5);
 
 INSERT INTO Carts (Id,UserId,ProductId)
 VALUES
@@ -106,33 +108,33 @@ VALUES
     (11,6,5),
     (12,6,4);
 
-INSERT INTO Comments (Message,CreatedAt,UserId,ProductId,MarkId)
+INSERT INTO Comments (Message,Created_At,UserId,ProductId,MarkId)
 VALUES
-    ('Nul publicit� mensong�re',GETDATE(),1,1,1),
-    ('Je suis met la note de 1 parce que je suis tr�s de�u',GETDATE(),2,1,2),
-    ('Produit pas si incroyable que �a',GETDATE(),3,1,3),
-    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',GETDATE(),4,1,4),
-    ('Le produit est bon je met la note de 4',GETDATE(),5,1,5),
-    ('Produit incroyable je le recommande beaucoup',GETDATE(),1,2,6),
-    ('Nul publicit� mensong�re',GETDATE(),2,2,7),
-    ('Je suis met la note de 1 parce que je suis tr�s de�u',GETDATE(),3,2,8),
-    ('Produit pas si incroyable que �a',GETDATE(),4,2,9),
-    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',GETDATE(),5,2,10),
-    ('Le produit est bon je met la note de 4',GETDATE(),1,3,11),
-    ('Produit incroyable je le recommande beaucoup',GETDATE(),2,3,12),
-    ('Nul publicit� mensong�re',GETDATE(),3,3,13),
-    ('Je suis met la note de 1 parce que je suis tr�s de�u',GETDATE(),4,3,14),
-    ('Produit pas si incroyable que �a',GETDATE(),5,3,15),
-    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',GETDATE(),1,4,16),
-    ('Le produit est bon je met la note de 4',GETDATE(),2,4,17),
-    ('Produit incroyable je le recommande beaucoup',GETDATE(),3,4,18),
-    ('Nul publicit� mensong�re',GETDATE(),4,4,19),
-    ('Je suis met la note de 1 parce que je suis tr�s de�u',GETDATE(),5,4,20);
+    ('Nul publicit� mensong�re',CURRENT_DATE(),1,1,1),
+    ('Je suis met la note de 1 parce que je suis tr�s de�u',CURRENT_DATE(),2,1,2),
+    ('Produit pas si incroyable que �a',CURRENT_DATE(),3,1,3),
+    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',CURRENT_DATE(),4,1,4),
+    ('Le produit est bon je met la note de 4',CURRENT_DATE(),5,1,5),
+    ('Produit incroyable je le recommande beaucoup',CURRENT_DATE(),1,2,6),
+    ('Nul publicit� mensong�re',CURRENT_DATE(),2,2,7),
+    ('Je suis met la note de 1 parce que je suis tr�s de�u',CURRENT_DATE(),3,2,8),
+    ('Produit pas si incroyable que �a',CURRENT_DATE(),4,2,9),
+    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',CURRENT_DATE(),5,2,10),
+    ('Le produit est bon je met la note de 4',CURRENT_DATE(),1,3,11),
+    ('Produit incroyable je le recommande beaucoup',CURRENT_DATE(),2,3,12),
+    ('Nul publicit� mensong�re',CURRENT_DATE(),3,3,13),
+    ('Je suis met la note de 1 parce que je suis tr�s de�u',CURRENT_DATE(),4,3,14),
+    ('Produit pas si incroyable que �a',CURRENT_DATE(),5,3,15),
+    ('Je trouve ce produit pas si mal que �a, il m�rite une note moyenne',CURRENT_DATE(),1,4,16),
+    ('Le produit est bon je met la note de 4',CURRENT_DATE(),2,4,17),
+    ('Produit incroyable je le recommande beaucoup',CURRENT_DATE(),3,4,18),
+    ('Nul publicit� mensong�re',CURRENT_DATE(),4,4,19),
+    ('Je suis met la note de 1 parce que je suis tr�s de�u',CURRENT_DATE(),5,4,20);
 
-INSERT INTO Orders (TotalPrice,CreatedAt,UserId)
+INSERT INTO Orders (TotalPrice,Created_At,UserId)
 VALUES
-    (37,GETDATE(),1),
-    (1478,GETDATE(),2);
+    (37,CURRENT_DATE(),1),
+    (1478,CURRENT_DATE(),2);
 
 INSERT INTO OrderProducts (Id,ProductId,OrderId)
 VALUES
