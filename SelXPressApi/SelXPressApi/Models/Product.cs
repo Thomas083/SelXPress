@@ -46,7 +46,7 @@ public class Product
     /// <summary>
     /// Stock of the product
     /// </summary>
-    public Stock Stock { get; set; }
+    public int Stock { get; set; }
 
     /// <summary>
     /// List of the cart where the product is in

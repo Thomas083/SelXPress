@@ -23,6 +23,7 @@ namespace SelXPressApi.Repository
                 Description = product.Description,
                 Price = product.Price,
                 Picture = product.Picture,
+                Stock = product.Stock,
             };
             await _context.Products.AddAsync(newProduct);
             var saved = await _context.SaveChangesAsync();
@@ -39,16 +40,8 @@ namespace SelXPressApi.Repository
                 Description = product.Description,
                 Picture = product.Picture,
                 Category = category,
+                Stock = product.Stock,
 
-            }).Join(_context.Stocks, product => product.Stock.Id, stock => stock.Id, (product, stock) => new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                Description = product.Description,
-                Picture = product.Picture,
-                Category = product.Category,
-                Stock = stock,
             }).ToListAsync();
         }
 
@@ -67,16 +60,7 @@ namespace SelXPressApi.Repository
                 Description = product.Description,
                 Picture = product.Picture,
                 Category = category,
-
-            }).Join(_context.Stocks, product => product.Stock.Id, stock => stock.Id, (product, stock) => new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                Description = product.Description,
-                Picture = product.Picture,
-                Category = product.Category,
-                Stock = stock,
+                Stock= product.Stock,
             }).FirstOrDefault();
         }
 
@@ -96,6 +80,8 @@ namespace SelXPressApi.Repository
                 await _context.Products.Where(p => p.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Picture, x => updateProduct.Picture));
             if (product != null && updateProduct.Category != null && product.Category != updateProduct.Category)
                 await _context.Products.Where(p => p.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Category, x => updateProduct.Category));
+            if (product != null && updateProduct.Stock != null && product.Stock != updateProduct.Stock)
+                await _context.Products.Where(p => p.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Stock, x => updateProduct.Stock));
             
             var saved = await _context.SaveChangesAsync();
             return saved > 0;

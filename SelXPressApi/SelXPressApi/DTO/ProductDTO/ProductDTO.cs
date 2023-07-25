@@ -11,7 +11,7 @@ namespace SelXPressApi.DTO.ProductDTO
         public string Picture { get; set; }
         public DateTime CreatedAt { get; set; }
         public Category Category { get; set; }
-        public Stock Stock { get; set; }
+        public int Stock { get; set; }
         public ICollection<ProductAttribute> ProductAttributes { get; set; }
     }
 }
