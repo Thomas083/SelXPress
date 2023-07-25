@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  mssql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports: 
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    networks:
+      - network
+
   api:
     build: 
       context: ../SelXPressApi/SelXPressApi
@@ -15,7 +25,7 @@ services:
     networks:
       - network
     depends_on:
-      - sql
+      - mssql
 
   front:
     build: ../sell_x_press_front_office
@@ -27,36 +37,7 @@ services:
     networks:
       - network
     depends_on:
-      - sql
       - api
-
-  db:
-    image: mariadb:10.6.14
-    env_file:
-      - .env
-    ports:
-      - 5432
-    restart: on-failure
-    environment:
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-    volumes:
-      - db-data:/var/lib/mariadb/data
-      - ../SelXPressApi/database-files/database-template.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - network
-
-  # sql:
-  #   image: "mcr.microsoft.com/mssql/server:2022-latest"
-  #   container_name: sql_server2022
-  #   ports: 
-  #     - "1433:1433" 
-  #   environment:
-  #     - ACCEPT_EULA=y
-  #     - SA_PASSWORD=${SA_PASSWORD}
-  #   networks:
-  #     - network
 
   back_office:
     build: ../sell_x_press_back_office
@@ -68,8 +49,7 @@ services:
     networks:
       - network
     depends_on:
-      - sql
-      - api
+      - api 
 
 volumes:
   db-data:
