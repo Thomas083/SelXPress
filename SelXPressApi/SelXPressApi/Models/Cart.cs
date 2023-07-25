@@ -29,4 +29,9 @@ public class Cart
     /// Id of the product in the cart
     /// </summary>
     public int ProductId { get; set; }
+    
+    /// <summary>
+    /// Represent the quantity of a product in the cart
+    /// </summary>
+    public int Quantity { get; set; }
 }

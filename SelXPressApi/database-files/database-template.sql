@@ -1,4 +1,6 @@
-drop table if exists Roles, Users, Categories, Tags, Products, Stocks, Orders, OrderProducts, Carts, Comments, Mark cascade ;
+drop database if exists SelXPressApi;
+create database SelXPressApi;
+use SelXPressApi;
 
 CREATE TABLE Roles (
                        id int primary key not null auto_increment,
@@ -12,6 +14,14 @@ CREATE TABLE Users (
                        password varchar(200) not null ,
                        email varchar(200) not null unique ,
                        roleId int references Roles(id)
+);
+
+CREATE TABLE Attributes (
+                       id INT primary key not null auto_increment,
+                       name varchar(200) not null unique,
+                       type varchar(200) not null,
+                       created_at date not null,
+                       updated_at date not null
 );
 
 CREATE TABLE Categories (
@@ -45,6 +55,7 @@ CREATE TABLE Stocks (
 CREATE TABLE Orders (
                         id int primary key not null auto_increment ,
                         userId int references Users(id),
+                        created_at date not null,
                         totalPrice float not null
 );
 
@@ -60,15 +71,16 @@ CREATE TABLE Carts (
                        productId int references Products(id)
 );
 
+CREATE TABLE Marks (
+                      id int primary key not null auto_increment,
+                      rate float not null 
+);
+
 CREATE TABLE Comments (
                           id int primary key not null auto_increment,
                           message varchar(500) not null ,
+                          created_at date not null,
                           userId int references Users(id),
-                          productId int references Products(id)
-);
-
-CREATE TABLE Mark (
-                      id int primary key not null auto_increment,
-                      rate float not null ,
-                      commentId int references Comments(id)
+                          productId int references Products(id),
+                          markId int references Marks(id)
 );

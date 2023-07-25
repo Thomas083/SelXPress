@@ -29,4 +29,10 @@ public class OrderProduct
     /// Id of the Order object of the OrderProduct object
     /// </summary>
     public int OrderId { get; set; }
+    
+    /// <summary>
+    /// Represent the quantity of a product in an order
+    /// </summary>
+    public int Quantity { get; set; }
+    
 }
