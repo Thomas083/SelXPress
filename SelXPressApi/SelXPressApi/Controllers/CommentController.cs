@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.CommentDTO;
-using SelXPressApi.DTO.MarkDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
-using SelXPressApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,9 +40,9 @@ namespace SelXPressApi.Controllers
 		{
 			var comments = _mapper.Map<List<CommentDTO>>(await _commentRepository.GetAllComments());
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1000");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			if (comments.Count == 0)
-				throw new NotFoundException("There is no comments in the database, please try again", "COM-1001");
+				throw new NotFoundException("There is no comments in the database, please try again", "COM-1401");
 			return Ok(comments);
 		}
 
@@ -62,9 +60,9 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetCommentById(int id)
 		{
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1003");
+				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1402");
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1004");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			var comment = _mapper.Map<CommentDTO>(await _commentRepository.GetCommentById(id));
 			return Ok(comment);
 		}
@@ -85,9 +83,9 @@ namespace SelXPressApi.Controllers
 		{
 			var comments = _mapper.Map<List<CommentDTO>>(await _commentRepository.GetCommentByUser(id));
 			if (comments.Count == 0)
-				throw new NotFoundException("There is no comments of the user with the id : " + id, "COM-1005");
+				throw new NotFoundException("There is no comments of the user with the id : " + id, "COM-1403");
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1006");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			return Ok(comments);
 		}
 		
@@ -107,9 +105,9 @@ namespace SelXPressApi.Controllers
 		{
 			var comments = _mapper.Map<List<CommentDTO>>(await _commentRepository.GetCommentByProduct(id));
 			if (comments.Count == 0)
-				throw new NotFoundException("There is no comments of the product with the id : " + id, "COM-1007");
+				throw new NotFoundException("There is no comments of the product with the id : " + id, "COM-1404");
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1008");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			return Ok(comments);
 		}
 
@@ -126,17 +124,16 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> CreateComment([FromBody] CreateCommentDTO createCommentDto)
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1009");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			if (createCommentDto == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "COM-1010");
+				throw new BadRequestException("There are missing fields, please try again with some data", "COM-1102");
 			var user = await _userRepository.GetUserById(createCommentDto.UserId);
-			var product = 1;
-			//var product = await _productRepository.GetProductById(id);
+			var product = await _productRepository.GetProductById(createCommentDto.ProductId);
 			if (user == null)
-				throw new NotFoundException("The user with the id : " + createCommentDto.UserId + "doesn't exist", "COM-1011");
+				throw new NotFoundException("The user with the id : " + createCommentDto.UserId + "doesn't exist", "COM-1405");
 			if (product == null)
 				throw new NotFoundException(
-					"The product with the id : " + createCommentDto.ProductId + " doesn't exist", "COM-1012");
+					"The product with the id : " + createCommentDto.ProductId + " doesn't exist", "COM-1406");
 			await _commentRepository.CreateComment(createCommentDto);
 			return Ok();
 		}
@@ -155,11 +152,11 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> UpdateComment(int id, [FromBody] UpdateCommentDTO updateCommentDto)
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured","COM");
+				throw new BadRequestException("The model is wrong, a bad request occured","COM-1101");
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM");
+				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1402");
 			if (updateCommentDto == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "COM");
+				throw new BadRequestException("There is missing fields, please try again with some data", "COM-1102");
 			await _commentRepository.UpdateCommentById(updateCommentDto, id);
 			return Ok();
 		}
@@ -177,9 +174,9 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> DeleteComment(int id)
 		{
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "COM");
+				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM");
+				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1402");
 			await _commentRepository.DeleteCommentById(id);
 			return Ok();
 		}
