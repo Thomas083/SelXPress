@@ -1,9 +1,17 @@
-﻿using SelXPressApi.Models;
+﻿using SelXPressApi.DTO.MarkDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Interfaces
 {
     public interface IMarkRepository
     {
-        ICollection<Mark> GetAllMarks();
+        Task<List<Mark>> GetAllMark();
+        Task<Mark> GetMarkById(int id);
+        Task<List<Mark>> GetMarkByUser(int id);
+        Task<List<Mark>> GetMarkByProduct(int id);
+        Task<bool> CreateMark(CreateMarkDTO mark);
+        Task<bool> UpdateMarkById(UpdateMarkDTO updateMark, int id);
+        Task<bool> DeleteMarkById(int id);
+        Task<bool> MarkExists(int id);
     }
 }
