@@ -24,10 +24,10 @@
                     <div class='attribute-name'>{{ attribute.name }}:</div>
                     <div v-if="attribute.name === 'color'" class='attributes-container'
                         v-for="(data, index) in attribute.data">
-                        <div class="color-attribute" :style="{ backgroundColor: data.value }"></div>
+                        <div class='color-attribute' :class="{'color-attribute-selected': isAttributeSelected(attribute.name, data.value)}" @click="setAttribute(attribute.name, data.value)" :style="{ backgroundColor: data.value }"></div>
                     </div>
                     <div v-else class="attributes-container" v-for="(data, index) in attribute.data">
-                        <div class="attribute">{{ data.value }}</div>
+                        <div class="attribute" :class="{'attribute-selected': isAttributeSelected(attribute.name, data.value)}" @click="setAttribute(attribute.name, data.value)">{{ data.value }}</div>
                     </div>
                 </div>
             </div>
@@ -111,10 +111,17 @@ export default {
     },
     data() {
         return {
+            addProduct: {
+                attributes: [],
+            },
             title: 'ARTINABS Ocean Wave Simulation LED Projector Lamp',
             seller: 'ARTINABS',
             price: '25,99',
             image: '',
+            attribute_selected: [
+                {name: 'color', selected: false},
+                {name: 'size', selected: false}
+            ],
             attributes: [
                 {
                     name: 'color',
@@ -172,12 +179,30 @@ export default {
         }
     },
     methods: {
+        setAttribute(attribute_name, attribute_value) {
+            if (this.addProduct.attributes.some((data) => data.name === attribute_name)) {
+                this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].value = attribute_value;
+            } 
+            else {
+                this.addProduct.attributes.push({name: attribute_name, value: attribute_value})
+            };
+            this.attribute_selected[this.attribute_selected.findIndex((data) => data.name === attribute_name)].selected = true;
+        },
+        isAttributeSelected(attribute_name, attribute_value) {
+            if (this.addProduct.attributes.length <=0) return false
+            else {
+                console.dir(attribute_name)
+                return (
+                    this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].name === attribute_name &&
+                    this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].value === attribute_value
+                )
+            }
+        },
         setHoveredStars(index) {
             this.hoveredStars = index;
         },
         updateData(e, key) {
-            this.sendReviewData.key = Object.assign(this.sendReviewData, { [key]: e });
-            console.dir(this.sendReviewData)
+            this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
         },
     }
 }
@@ -242,6 +267,10 @@ export default {
     width: 70%;
     word-wrap: break-word;
     text-align: justify;
+}
+
+.attribute:hover, .attribute-selected {
+    background-color: var(--main-blue);
 }
 
 .img-upload {
@@ -358,12 +387,20 @@ img {
     text-transform: uppercase;
 }
 
+.attribute-selected {
+    background-color: var(--main-blue);
+}
+
 .color-attribute {
     cursor: pointer;
     border: 1px solid var(--main-black);
     width: 7vw;
     height: 5vh;
     border-radius: 10px;
+}
+
+.color-attribute-selected {
+    border: 2px solid var(--main-blue);
 }
 
 .customer-review-container {
