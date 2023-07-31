@@ -16,4 +16,10 @@ public class FirebaseAuthManager : IFirebaseAuthManager
         var auth = await _authProvider.SignInWithEmailAndPasswordAsync(email, password);
         return auth.FirebaseToken;
     }
+
+    public async Task<string> CreateWithEmailAndPasswordAsync(string email, string password)
+    {
+        var auth = await _authProvider.CreateUserWithEmailAndPasswordAsync(email, password);
+        return auth.FirebaseToken;
+    }
 }

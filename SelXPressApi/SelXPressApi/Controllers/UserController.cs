@@ -94,6 +94,7 @@ namespace SelXPressApi.Controllers
 
             if (await _userRepository.CreateUser(newUser))
             {
+	            await _authManager.CreateWithEmailAndPasswordAsync(newUser.Email, newUser.Password);
 	            return StatusCode(201);
             }
             throw new Exception("An error occured while the creation of the user");
