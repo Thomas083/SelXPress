@@ -1,9 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using System.Reflection.Metadata;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Exceptions;
+using Firebase.Auth;
+using SelXPressApi.Helper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,10 +19,13 @@ namespace SelXPressApi.Controllers
 	{
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
+		private readonly FirebaseAuthManager _authManager;
+
 		public UserController(IUserRepository userRepository, IMapper mapper)
 		{
 			_userRepository = userRepository;
 			_mapper = mapper;
+			_authManager = new FirebaseAuthManager();
 		}
 
 		/// <summary>
@@ -144,6 +151,35 @@ namespace SelXPressApi.Controllers
 	            return Ok();
             }
             throw new Exception("An error occured while the deleting of the user");
+		}
+
+		/// <summary>
+		/// Method for login the user
+		/// </summary>
+		/// <param name="loginDto"></param>
+		/// <returns></returns>
+		/// <exception cref="BadRequestException"></exception>
+		[HttpPost("auth/login")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> login([FromBody] LoginDto loginDto)
+		{
+			string token = await _authManager.LoginWithEmailAndPasswordAsync(loginDto.Email, loginDto.Password);
+			return Ok(new {Token = token, Email = loginDto.Email});
+		}
+
+		/// <summary>
+		/// Method for logout
+		/// </summary>
+		/// <returns></returns>
+		[HttpDelete("logout")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public IActionResult logout()
+		{
+			HttpContext.Session.Remove("UserToken");
+			return Ok();
 		}
 	}
 }
