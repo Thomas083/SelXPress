@@ -16,7 +16,9 @@ export default {
   props: {
     id: String,
     name: String,
-    type: String,
+    type: {
+      type: String,
+      default: "text",},
     placeholder: String,
     label: String,
   },

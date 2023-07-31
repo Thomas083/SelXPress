@@ -22,7 +22,7 @@
 <script>
 import InputComponent from "@/components/global/InputComponent.vue";
 export default {
-  name: "RegisterForm",
+  name: "LoginForm",
   components: {
     InputComponent,
   },
