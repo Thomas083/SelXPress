@@ -26,6 +26,7 @@ namespace SelXPressApi.Repository
                 {
                     Id = comment.Id,
                     Message = comment.Message,
+                    Title = comment.Title,
                     CreatedAt = comment.CreatedAt,
                     Mark = mark,
                     User = comment.User,
@@ -40,6 +41,7 @@ namespace SelXPressApi.Repository
                 {
                     Id = comment.Id,
                     Message = comment.Message,
+                    Title = comment.Title,
                     CreatedAt = comment.CreatedAt,
                     Mark = mark,
                     User = comment.User,
@@ -54,6 +56,7 @@ namespace SelXPressApi.Repository
                 {
                     Id = comment.Id,
                     Message = comment.Message,
+                    Title = comment.Title,
                     CreatedAt = comment.CreatedAt,
                     Mark = mark,
                     User = comment.User,
@@ -68,6 +71,7 @@ namespace SelXPressApi.Repository
                 {
                     Id = comment.Id,
                     Message = comment.Message,
+                    Title = comment.Title,
                     CreatedAt = comment.CreatedAt,
                     Mark = mark,
                     User = comment.User,
@@ -88,6 +92,7 @@ namespace SelXPressApi.Repository
             Comment comment = new Comment()
             {
                 Message = commentDto.Message,
+                Title = commentDto.Title,
                 CreatedAt = DateTime.Now,
                 Mark = mark,
                 Product = product,
@@ -105,7 +110,10 @@ namespace SelXPressApi.Repository
             {
                 await _context.Comments.Where(c => c.Id == id)
                     .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Message, x => updateComment.Message));
-            }
+            } 
+            if(updateComment.Title != null)
+                await _context.Comments.Where(c => c.Id == id)
+                    .ExecuteUpdateAsync(p2 => p2.SetProperty(x => x.Title, x => updateComment.Title));
             return await _commonMethods.Save();
         }
 
