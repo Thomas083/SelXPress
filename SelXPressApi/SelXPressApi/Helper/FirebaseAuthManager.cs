@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using Microsoft.AspNetCore.Identity;
 
 namespace SelXPressApi.Helper;
 
@@ -21,5 +22,11 @@ public class FirebaseAuthManager : IFirebaseAuthManager
     {
         var auth = await _authProvider.CreateUserWithEmailAndPasswordAsync(email, password);
         return auth.FirebaseToken;
+    }
+
+    public async Task<string> LoginWithEmailAndPasswordRefreshAsync(string email, string password)
+    {
+        var auth = await _authProvider.SignInWithEmailAndPasswordAsync(email, password);
+        return auth.RefreshToken;
     }
 }

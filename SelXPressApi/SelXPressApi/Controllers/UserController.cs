@@ -166,6 +166,8 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> login([FromBody] LoginDto loginDto)
 		{
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
 			string token = await _authManager.LoginWithEmailAndPasswordAsync(loginDto.Email, loginDto.Password);
 			return Ok(new {Token = token, Email = loginDto.Email});
 		}
@@ -182,5 +184,18 @@ namespace SelXPressApi.Controllers
 			HttpContext.Session.Remove("UserToken");
 			return Ok();
 		}
+
+		[HttpPost("refreshToken")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetRefreshToken([FromBody] LoginDto loginDto)
+		{
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
+			string token = await _authManager.LoginWithEmailAndPasswordRefreshAsync(loginDto.Email, loginDto.Password);
+			return Ok(new { Token = token, Email = loginDto.Email });
+		}
+
 	}
 }
