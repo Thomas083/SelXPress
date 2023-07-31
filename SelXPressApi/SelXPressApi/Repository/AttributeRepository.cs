@@ -23,29 +23,50 @@ namespace SelXPressApi.Repository
             return await _context.Attributes.AnyAsync(a => a.Id == id);
         }
 
-        public Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)
+        public async Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)
         {
-            throw new NotImplementedException();
+            Attribute newAttribute = new Attribute
+            {
+                Name = createAttribute.Name,
+                Type = createAttribute.Type,
+            };
+            await _context.Attributes.AddAsync(newAttribute);
+            return await _commonMethods.Save();
         }
 
-        public Task<bool> DeleteAttribute(int id)
+        public async Task<bool> DeleteAttribute(int id)
         {
-            throw new NotImplementedException();
+            if(await AttributeExists(id))
+            {
+                await _context.Attributes.Where(a => a.Id == id).ExecuteDeleteAsync();
+                return await _commonMethods.Save();
+            }
+            return false;
         }
 
-        public Task<List<Attribute>> GetAllAttributes()
+        public async Task<List<Attribute>> GetAllAttributes()
         {
-            throw new NotImplementedException();
+            return await _context.Attributes.OrderBy(a => a.Id).ToListAsync();
         }
 
-        public Task<Attribute?> GetAttributeById(int id)
+        public async Task<Attribute?> GetAttributeById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Attributes.OrderBy(a =>a.Id).FirstAsync();
         }
 
-        public Task<bool> UpdateAttribute(UpdateAttributeDTO updateAttribute)
+        public async Task<bool> UpdateAttribute(int id, UpdateAttributeDTO updateAttribute)
         {
-            throw new NotImplementedException();
+            if(!await AttributeExists(id)) 
+                return false;
+            Attribute attribute = await _context.Attributes.Where(a => a.Id == id).FirstAsync();
+
+            if(attribute != null && updateAttribute.Name != null && attribute.Name != updateAttribute.Name)
+                await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
+            if(attribute != null && updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
+                await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
+            if(attribute != null && updateAttribute.AttributeData != null && attribute.AttributeData != updateAttribute.AttributeData)
+                await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.AttributeData, x => updateAttribute.AttributeData));
+            return await _commonMethods.Save();
         }
     }
 }

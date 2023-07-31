@@ -3,7 +3,10 @@
     "",
     "\\SelXPressApi",
     "\\SelXPressApi\\SelXPressApi",
-    "\\SelXPressApi\\SelXPressApi\\Controllers"
+    "\\SelXPressApi\\SelXPressApi\\Controllers",
+    "\\SelXPressApi\\SelXPressApi\\DTO",
+    "\\SelXPressApi\\SelXPressApi\\DTO\\AttributeDTO",
+    "\\SelXPressApi\\SelXPressApi\\Models"
   ],
   "SelectedNode": "\\SelXPressApi\\SelXPressApi.sln",
   "PreviewInSolutionExplorer": false

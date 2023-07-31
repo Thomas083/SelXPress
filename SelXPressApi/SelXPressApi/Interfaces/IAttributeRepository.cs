@@ -9,7 +9,7 @@ namespace SelXPressApi.Interfaces
         Task<Attribute?> GetAttributeById(int id);
         Task<bool> AttributeExists(int id);
         Task<bool> CreateAttribute(CreateAttributeDTO createAttribute);
-        Task<bool> UpdateAttribute(UpdateAttributeDTO updateAttribute);
+        Task<bool> UpdateAttribute(int id, UpdateAttributeDTO updateAttribute);
         Task<bool> DeleteAttribute(int id);
     }
 }
