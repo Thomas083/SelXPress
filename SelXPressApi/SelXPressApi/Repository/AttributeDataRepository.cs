@@ -25,13 +25,19 @@ namespace SelXPressApi.Repository
 
         public async Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
         {
-            AttributeData newAttributeData = new AttributeData
+            var attribute = _context.Attributes.Where(a => a.Id == createAttribute.AttributeId).FirstOrDefault();
+            if(attribute != null)
             {
-                Key = createAttribute.Key,
-                Value = createAttribute.Value,
-            };
-            await _context.AttributesData.AddAsync(newAttributeData);
-            return await _commonMethods.Save();
+                AttributeData newAttributeData = new AttributeData
+                {
+                    Key = createAttribute.Key,
+                    Value = createAttribute.Value,
+                    Attribute = attribute
+                };
+                await _context.AttributesData.AddAsync(newAttributeData);
+                return await _commonMethods.Save();
+            }
+            return false;
         }
 
         public async Task<bool> DeleteAttributeData(int id)
@@ -64,6 +70,8 @@ namespace SelXPressApi.Repository
                 await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Key, x => updateAttribute.Key));
             if(attributeData != null && updateAttribute.Value != null && attributeData.Value != updateAttribute.Value)
                 await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Value, x => updateAttribute.Value));
+            if (attributeData != null && id != updateAttribute.AttributeId)
+                await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Id, x => updateAttribute.AttributeId));
             return await _commonMethods.Save();
         }
     }
