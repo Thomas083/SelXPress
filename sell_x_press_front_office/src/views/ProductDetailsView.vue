@@ -15,19 +15,25 @@
                         <h2 class="price">{{ price }} €</h2>
                         <div>All prices include VAT</div>
                     </div>
-                    <button class="btn btn-primary add-to-cart-btn">
+                    <button class="btn btn-primary add-to-cart-btn" @click="addToCart()">
                         <span>Add to cart</span>
                         <img src="../assets/Product/add-to-cart.png" alt="Add to cart" />
                     </button>
                 </div>
-                <div class="attributes-container" v-for="(attribute, index) in attributes">
-                    <div class='attribute-name'>{{ attribute.name }}:</div>
-                    <div v-if="attribute.name === 'color'" class='attributes-container'
-                        v-for="(data, index) in attribute.data">
-                        <div class='color-attribute' :class="{'color-attribute-selected': isAttributeSelected(attribute.name, data.value)}" @click="setAttribute(attribute.name, data.value)" :style="{ backgroundColor: data.value }"></div>
+                <div v-for="(attribute, index) in attributes" :key="index" class="attributes-container">
+                    <div class="attribute-name">{{ attribute.name }}:</div>
+                    <div v-if="attribute.name === 'color'" class="attributes-container">
+                        <div class="color-attribute" v-for="(data, index) in attribute.data"
+                            :class="{ 'color-attribute-selected': isAttributeSelected(attribute.name, data.value) }"
+                            @click="setAttribute(attribute.name, data.value)" :style="{ backgroundColor: data.value }">
+                        </div>
                     </div>
-                    <div v-else class="attributes-container" v-for="(data, index) in attribute.data">
-                        <div class="attribute" :class="{'attribute-selected': isAttributeSelected(attribute.name, data.value)}" @click="setAttribute(attribute.name, data.value)">{{ data.value }}</div>
+                    <div v-else class="attributes-container">
+                        <div class="attribute" v-for="(data, index) in attribute.data"
+                            :class="{ 'attribute-selected': isAttributeSelected(attribute.name, data.value) }"
+                            @click="setAttribute(attribute.name, data.value)">
+                            {{ data.value }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,10 +69,11 @@
                     </div>
                 </div>
                 <div class="review-container">
-                    <input-component id="input-title" name="input-title" type="text"
-                        placeholder="Enter your title" @input="updateData($event, 'title')" />
+                    <input-component id="input-title" name="input-title" class="add-review-title" type="text"
+                        placeholder="Enter your title..." @input="updateData($event, 'title')" />
                     <textarea class="add-review" rows="5" cols="110" id="input-description" name="input-description"
-                        placeholder="Write your review here..." @change="updateData($event.target.value, 'message')"></textarea>
+                        placeholder="Write your review here..."
+                        @change="updateData($event.target.value, 'message')"></textarea>
                     <div class="add-review-container">
                         <div v-for="index in 5" :key="index">
                             <img v-if="index <= hoveredStars" src="../assets/Product/yellow_star.png" alt="yellow stars"
@@ -119,8 +126,8 @@ export default {
             price: '25,99',
             image: '',
             attribute_selected: [
-                {name: 'color', selected: false},
-                {name: 'size', selected: false}
+                { name: 'color', selected: false },
+                { name: 'size', selected: false }
             ],
             attributes: [
                 {
@@ -140,7 +147,7 @@ export default {
                         { 'name': 'large', 'value': 'l' },
                         { 'name': 'extra_large', 'value': 'xl' }
                     ]
-                }
+                },
             ],
             description: 'ARTINABS Ocean Wave Simulation LED Projector Lamp, Child Night Light with 8 Color Modes 6 Music Sounds Remote Control Timer Bedside Lamp for Decoration Baby Room (White)',
             publication_date: '20/06/2023',
@@ -180,23 +187,31 @@ export default {
     },
     methods: {
         setAttribute(attribute_name, attribute_value) {
-            if (this.addProduct.attributes.some((data) => data.name === attribute_name)) {
-                this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].value = attribute_value;
-            } 
-            else {
-                this.addProduct.attributes.push({name: attribute_name, value: attribute_value})
-            };
-            this.attribute_selected[this.attribute_selected.findIndex((data) => data.name === attribute_name)].selected = true;
-        },
-        isAttributeSelected(attribute_name, attribute_value) {
-            if (this.addProduct.attributes.length <=0) return false
-            else {
-                console.dir(attribute_name)
-                return (
-                    this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].name === attribute_name &&
-                    this.addProduct.attributes[this.addProduct.attributes.findIndex((data) => data.name === attribute_name)].value === attribute_value
-                )
+            const existingAttributeIndex = this.addProduct.attributes.findIndex(
+                (data) => data.name === attribute_name
+            );
+
+            if (existingAttributeIndex !== -1) {
+                if (this.addProduct.attributes[existingAttributeIndex].value === attribute_value) {
+                    this.addProduct.attributes.splice(existingAttributeIndex, 1);
+                    this.attribute_selected[attribute_name] = false;
+                } else {
+                    this.addProduct.attributes[existingAttributeIndex].value = attribute_value;
+                }
+            } else {
+                this.addProduct.attributes.push({ name: attribute_name, value: attribute_value });
             }
+
+            this.attribute_selected[attribute_name] = true;
+        },
+
+        isAttributeSelected(attribute_name, attribute_value) {
+            return (
+                this.attribute_selected[attribute_name] &&
+                this.addProduct.attributes.some(
+                    (data) => data.name === attribute_name && data.value === attribute_value
+                )
+            );
         },
         setHoveredStars(index) {
             this.hoveredStars = index;
@@ -204,6 +219,9 @@ export default {
         updateData(e, key) {
             this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
         },
+        addToCart() {
+            console.dir(this.addProduct)
+        }
     }
 }
 
@@ -269,7 +287,8 @@ export default {
     text-align: justify;
 }
 
-.attribute:hover, .attribute-selected {
+.attribute:hover,
+.attribute-selected {
     background-color: var(--main-blue);
 }
 
@@ -497,5 +516,10 @@ img {
 .review-comment {
     margin-top: 1rem;
     text-align: justify;
+}
+
+.add-review-title {
+    border-radius: 1rem;
+    padding: 0.5rem;
 }
 </style>
