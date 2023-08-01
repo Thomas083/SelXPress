@@ -69,17 +69,17 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="BadRequestException"></exception>
 		/// <exception cref="NotFoundException"></exception>
 		[HttpGet("{id}/user")]
-		[ProducesResponseType(200, Type = typeof(Cart))]
+		[ProducesResponseType(200, Type = typeof(List<Cart>))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> GetCartByUserId(int userId)
+		public async Task<IActionResult> GetCartByUserId(int id)
 		{
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
-			var carts = await _cartRepository.GetCartsByUserId(userId);
+			var carts = await _cartRepository.GetCartsByUserId(id);
 			if (carts.Count == 0)
-				throw new NotFoundException("There is no carts for the user with the id : " + userId, "CRT-");
+				throw new NotFoundException("There is no carts for the user with the id : " + id, "CRT-");
 			return Ok(carts);
 		}
 
