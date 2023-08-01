@@ -14,7 +14,9 @@ namespace SelXPressApi.Helper
             CreateMap<User, UserDto>();
             CreateMap<User, CreateUserDto>();
             CreateMap<Attribute, AttributeDTO>();
-            CreateMap<AttributeData, AttributeDataDTO>();
+            CreateMap<AttributeData, AttributeDataDTO>()
+                .ForMember(dest => dest.Attribute, opt => opt.MapFrom(src => src.Attribute));
         }
     }
+
 }
