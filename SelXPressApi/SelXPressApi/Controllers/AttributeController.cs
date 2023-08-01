@@ -83,7 +83,6 @@ namespace SelXPressApi.Controllers
                 throw new BadRequestException("There are missing fields, please try again with some data", "ATT-1102");
 			if (!await _attributeRepository.CreateAttribute(attribute))
 				return StatusCode(201);
-            throw new Exception("An error occured while the creating of the Attribute");
         }
 
 		/// <summary>

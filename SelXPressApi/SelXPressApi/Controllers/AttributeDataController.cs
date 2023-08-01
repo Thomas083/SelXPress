@@ -68,7 +68,6 @@ namespace SelXPressApi.Controllers
 
             if (!await _attributeDataRepository.CreateAttributeData(attributeData))
                 return StatusCode(201);
-            throw new Exception("An error occured while the creating of the AttributeData");
         }
 
         // PUT api/<AttributeDataController>/5
