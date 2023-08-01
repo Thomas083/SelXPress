@@ -1,4 +1,6 @@
-﻿namespace SelXPressApi.DTO.AttributeDataDTO
+﻿using Attribute = SelXPressApi.Models.Attribute;
+
+namespace SelXPressApi.DTO.AttributeDataDTO
 {
     public class AttributeDataDTO
     {
