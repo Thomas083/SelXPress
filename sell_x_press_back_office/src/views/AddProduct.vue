@@ -18,13 +18,15 @@
                     @input="updateData($event, 'price')" />
                 <div v-for="(chooseOption, index_attribute) in chooseOptions" :key="index" class="attributes">
                     <div class="attributes-data">
-                        <select class="form-select" v-model="chooseOption.attribute.name">
+                        <select class="form-select" v-model="chooseOption.attribute.name"
+                            @change="setAttributeName($event.target.value)">
                             <option v-for="option in selectOptions" :key="option" :value="option">
                                 {{ option }}
                             </option>
                         </select>
                         <div v-for="(data, index_value) in chooseOption.attribute.values">
-                            <select v-if="chooseOptions[index_attribute].attribute.name === 'Color'" v-model="data.value" @change="setColors($event, index_attribute, index_value)" class="form-select"
+                            <select v-if="chooseOptions[index_attribute].attribute.name === 'Color'" v-model="data.value"
+                                @change="setAttributeData(index_attribute, index_value)" class="form-select"
                                 :style="{ backgroundColor: data.value }">
                                 <option v-for="option in selectColorData" :key="option.name" :value="option.value"
                                     class="option-color">
@@ -44,11 +46,11 @@
             <div :onChange="$emit('inputForm', formData)">
                 <textarea class="product-description" rows="10" cols="100" id="input-description" name="input-description"
                     placeholder="Write the product description here..."
-                    onchange="updateData($event, 'description')"></textarea>
+                    @change="updateData($event.target.value, 'description')"></textarea>
             </div>
         </div>
         <div class="save-btn-container">
-            <button class="btn btn-primary save-btn">Add Product</button>
+            <button class="btn btn-primary save-btn" @click="addProduct">Add Product</button>
         </div>
     </div>
 </template>
@@ -66,9 +68,34 @@ export default {
             formData: {
                 title: "",
                 price: "",
-                descrpition: "",
+                description: "",
                 upload_file: "",
+                attributes: [],
             },
+            // attributes: [
+            //     {
+            //         name: 'color',
+            //         type: 'select',
+            //         data: [
+            //             { name: '--- Select a color ---', value: '' },
+            //             { name: 'blue', value: '#0000FF' },
+            //             { name: 'red', value: '#FF0000' },
+            //             { name: 'green', value: '#00FF00' }
+            //         ]
+            //     },
+            //     {
+            //         name: 'size',
+            //         type: 'select',
+            //         data: [
+            //             { name: '--- Select a size ---', value: '' },
+            //             { 'name': 'extra_small', 'value': 'xs' },
+            //             { 'name': 'small', 'value': 's' },
+            //             { 'name': 'medium', 'value': 'm' },
+            //             { 'name': 'large', 'value': 'l' },
+            //             { 'name': 'extra_large', 'value': 'xl' }
+            //         ]
+            //     }
+            // ],
             selectOptions: ['--- Select a type ---', 'Color', 'Size'],
             selectColorData: [
                 { name: '--- Select a color ---', value: '' },
@@ -99,13 +126,29 @@ export default {
             }
         },
         addSelect() {
-            this.chooseOptions.push({ attribute: {name: '--- Select a type ---', values: [{name: '', value: ''}]}})
+            this.chooseOptions.push({ attribute: { name: '--- Select a type ---', values: [{ name: '', value: '' }] } })
         },
         addAttributes(index) {
-            this.chooseOptions[index].attribute.values.push({name: '', value: ''})
+            this.chooseOptions[index].attribute.values.push({ name: '', value: '' })
         },
-        setColors(event, index_attribute, index_value) {
-            this.chooseOptions[index_attribute].attribute.values[index_value].name = this.selectColorData[event.target.selectedIndex].name
+        setAttributeName(e) {
+            if (e && !this.formData.attributes.some(attr => attr.name === e)) {
+                this.formData.attributes.push({ name: e, data: [] });
+            }
+        },
+        setAttributeData(index_attribute, index_value) {
+            console.dir(this.chooseOptions[index_attribute])
+            const value = this.chooseOptions[index_attribute].attribute.values[index_value].value;
+            if (value) {
+                const attributeName = this.chooseOptions[index_attribute].attribute.name;
+                const attributeIndex = this.formData.attributes.findIndex(attr => attr.name === attributeName);
+                if (attributeIndex !== -1) {
+                    this.formData.attributes[attributeIndex].data.push({name: attributeName, value: value});
+                }
+            }
+        },
+        addProduct() {
+            console.dir(this.formData)
         }
     },
 };

@@ -6,7 +6,7 @@
       :type="type"
       :placeholder="placeholder"
       v-model="input"
-      @change="$emit('input', input)"
+      @change="$emit('input', returnValue($event.target.value))"
     />
 </template>
 
@@ -24,6 +24,12 @@ export default {
     return {
       input: "",
     };
+  },
+  methods: {
+    returnValue(e) {
+      if (e.match(/.*[a-zA-Z].*/)) return e;
+      else return parseInt(e);
+    }
   },
 };
 </script>
