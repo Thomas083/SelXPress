@@ -44,7 +44,8 @@ namespace SelXPressApi.Controllers
 		{
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
-			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckIfTokenExists(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to access at its data", "todo");
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
             if (users.Count == 0)
