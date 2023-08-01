@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.AttributeDTO;
+using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,15 +13,27 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class AttributeController : ControllerBase
 	{
+		private readonly IAttributeRepository _attributeRepository;
+		private readonly IMapper _mapper;
+
+		public AttributeController(IAttributeRepository attributeRepository, IMapper mapper)
+		{
+			_attributeRepository = attributeRepository;
+			_mapper = mapper;
+		}
 		/// <summary>
 		/// GET: api/<AttributeController>
 		/// Get all attributes
 		/// </summary>
 		/// <returns>Return an Array of all attributes</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+        [ProducesResponseType(200, Type = typeof(List<AttributeDTO>))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetAttributes()
 		{
-			return new string[] { "value1", "value2" };
+
 		}
 
 		/// <summary>
@@ -26,9 +43,14 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific attribute</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
-		{
-			return "value";
+
+        [ProducesResponseType(200, Type = typeof(AttributeDTO))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetAttribute(int id)
+        {
+
 		}
 
 		/// <summary>
@@ -37,8 +59,12 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
-		{
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> CreateAttribute([FromBody] CreateUserDto newAttribute)
+        {
+
 		}
 
 		/// <summary>
@@ -48,8 +74,13 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
-		{
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> UpdateAttribute(int id, [FromBody] UpdateAttributeDTO attributeUpdate)
+        {
+
 		}
 
 		/// <summary>
@@ -58,8 +89,13 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> DeleteAttribute(int id)
+        {
+
 		}
 	}
 }
