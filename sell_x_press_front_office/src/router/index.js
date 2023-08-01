@@ -5,6 +5,8 @@ import RegisterView from '../views/identification/RegisterView.vue'
 import ForgotView from '../views/identification/ForgotView.vue'
 import ProductListView from "../views/ProductListView.vue"
 import UserView from '../views/UserView.vue'
+import CartView from '../views/CartView.vue'
+import HistoryView from '../views/HistoryView.vue'
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
     path: '/user',
     name: 'user',
     component: UserView
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: CartView
+  },
+  {
+    path: '/history',
+    name: 'histoty',
+    component: HistoryView
   },
   {
     path: '/products',

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Controllers;
-using SelXPressApi.Exceptions.User;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using Firebase.Auth;
+using SelXPressApi.Exceptions;
 
 namespace SelXPressApi.Configurations
 {
@@ -20,83 +20,65 @@ namespace SelXPressApi.Configurations
             {
                 await _next(context);
             }
-            catch(Exception ex)
+            catch (CommonException ex)
             {
-                await HandleExceptionAsync(context, ex);
+                await HandleCommonExceptionAsync(context, ex);
             }
+            catch (Exception ex)
+            {
+                HttpStatusCode status = HttpStatusCode.InternalServerError;
+                
+                var exceptionResult = JsonSerializer.Serialize(new { error = ex.Message, status = status, code = "SRV-1000" });
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int) status;
+
+                context.Response.WriteAsync(exceptionResult);
+            }
+            
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception ex)
+        private static Task HandleCommonExceptionAsync(HttpContext context, CommonException ex)
         {
             HttpStatusCode status;
             string message = "";
             string code = "";
 
             var exceptionType = ex.GetType();
-            if(exceptionType == typeof(CreateUserBadRequestException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.BadRequest;
-                code = "USR-1000";
-            }
-            else if(exceptionType == typeof(DeleteUserBadRequestException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.BadRequest;
-                code = "USR-1001";
-            }
-            else if(exceptionType == typeof(DeleteUserNotFoundException))
+            //todo check the type of the exception
+            if (exceptionType == typeof(NotFoundException))
             {
                 message = ex.Message;
                 status = HttpStatusCode.NotFound;
-                code = "USR-1002";
+                code = ex.Code;
             }
-            else if(exceptionType == typeof(GetUserByIdBadRequestException))
+            else if (exceptionType == typeof(BadRequestException))
             {
                 message = ex.Message;
                 status = HttpStatusCode.BadRequest;
-                code = "USR-1003";
+                code = ex.Code;
             }
-            else if (exceptionType == typeof(GetUsersNotFoundException))
+            else if (exceptionType == typeof(UnauthorizedException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.Unauthorized;
+                code = ex.Code;
+            }
+            else if (exceptionType == typeof(FirebaseAuthException))
             {
                 message = ex.Message;
                 status = HttpStatusCode.NotFound;
-                code = "USR-1004";
-            }
-            else if (exceptionType == typeof(GetUsersBadRequestException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.BadRequest;
-                code = "USR-1005";
-            }
-            else if (exceptionType == typeof(GetUsersNotFoundException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.NotFound;
-                code = "USR-1006";
-            }
-            else if (exceptionType == typeof(UpdateUserBadRequestException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.BadRequest;
-                code = "USR-1007";
-            }
-            else if (exceptionType == typeof(UpdateUserNotFoundException))
-            {
-                message = ex.Message;
-                status = HttpStatusCode.NotFound;
-                code = "USR-1008";
+                code = "FRB-1000"; // erreur de firebase au niveau de l'authentification
             }
             else
             {
                 message = ex.Message;
                 status = HttpStatusCode.InternalServerError;
-                code = "SRV-1000";
+                code = ex.Code;
             }
 
             var exceptionResult = JsonSerializer.Serialize(new { error = message, status = status, code = code });
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)status;
+            context.Response.StatusCode = (int) status;
 
             return context.Response.WriteAsync(exceptionResult);
         }

@@ -10,6 +10,10 @@
                 <button class="btn btn-secondary save-information-btn">Save</button>
             </div>
         </div>
+        <div class="user-history-container">
+            <h3 class="history-title">Order History</h3>
+            <button class="btn btn-primary history-btn" @click="goToHistory()">See my Order</button>
+        </div>
     </div>
 </template>
 
@@ -40,7 +44,10 @@ export default {
             .then(() => {
                 createToast("An Email was sent to reset your password", {type: 'success', position: 'bottom-right'});
             });
-        }
+        },
+        goToHistory() {
+            this.$router.push({ path: '/history' });
+        },
     },
 }
 
@@ -49,8 +56,8 @@ export default {
 <style scoped>
 .user-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
@@ -68,7 +75,8 @@ export default {
     width: 50vw;
 }
 
-.user-title {
+.user-title,
+.history-title {
     text-align: center;
     font-weight: bold;
 }
@@ -103,5 +111,26 @@ export default {
     padding: 0.5rem 4rem;
     border: none;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.history-btn {
+    border: 9px;
+    padding: 0.5rem 4rem;
+    border: none;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.user-history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-white);
+    height: 20vh;
+    width: 20vw;
+    border-radius: 10px;
+    margin-top: 1rem;
+    margin-left: 1rem;
 }
 </style>
