@@ -33,7 +33,7 @@ namespace SelXPressApi.Controllers
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATD-1101");
 
-            var attributesDatas = await _attributeDataRepository.GetAllAttributesData();
+            var attributesDatas = _mapper.Map<List<AttributeDataDTO>>(await _attributeDataRepository.GetAllAttributesData());
 
             if(attributesDatas.Count == 0)
                 throw new NotFoundException("There is no AttributeData in the database, please try again", "ATD-1401");
