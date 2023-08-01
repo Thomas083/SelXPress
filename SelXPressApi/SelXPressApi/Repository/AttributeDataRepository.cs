@@ -52,23 +52,23 @@ namespace SelXPressApi.Repository
 
         public async Task<List<AttributeData>> GetAllAttributesData()
         {
-            return await _context.AttributesData.Join(_context.Attributes, a => a.Attribute.Id, b => b.Id, (a, b) => new AttributeData
+            return await _context.AttributesData.Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeData
             {
-                Id = a.Id,
-                Key = a.Key,
-                Value = a.Value,
-                Attribute = b
+                Id = attributeData.Id,
+                Key = attributeData.Key,
+                Value = attributeData.Value,
+                Attribute = attribute
             }).ToListAsync();
         }
 
         public async Task<AttributeData?> GetAttributeDataById(int id)
         {
-            return _context.AttributesData.Where(a => a.Id == id).Join(_context.Attributes, a => a.Attribute.Id, b => b.Id, (a, b) => new AttributeData
+            return _context.AttributesData.Where(a => a.Id == id).Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeData
             {
-                Id = a.Id,
-                Key = a.Key,
-                Value = a.Value,
-                Attribute = b
+                Id = attributeData.Id,
+                Key = attributeData.Key,
+                Value = attributeData.Value,
+                Attribute = attribute
             }).FirstOrDefault();
         }
 

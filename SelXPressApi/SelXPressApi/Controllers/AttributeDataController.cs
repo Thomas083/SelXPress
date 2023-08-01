@@ -24,7 +24,7 @@ namespace SelXPressApi.Controllers
         }
         // GET: api/<AttributeDataController>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(List<AttributeDataController>))]
+        [ProducesResponseType(200, Type = typeof(List<AttributeDataDTO>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -37,6 +37,7 @@ namespace SelXPressApi.Controllers
 
             if(attributesDatas.Count == 0)
                 throw new NotFoundException("There is no AttributeData in the database, please try again", "ATD-1401");
+
             return Ok(attributesDatas);
         }
 
