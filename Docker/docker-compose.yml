@@ -20,8 +20,8 @@ services:
       - 5288:80
       - 7094:443
     restart: on-failure
-    volumes:
-      - ./https:/https/
+    # volumes:
+    #   - ./https:/https/
     networks:
       - network
     depends_on:
