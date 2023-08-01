@@ -36,7 +36,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
             if (TryDecodeJwt(jwtToken, out decodedToken))
             {
                 var claims = decodedToken.Claims;
-                string? email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                string? email = claims.FirstOrDefault(c => c.Type == "email")?.Value;
                 // check if the user exist in the database
                 if (await _context.Users.AnyAsync(u => u.Email == email))
                 {
@@ -57,7 +57,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
-            if (user.Role.Name == "admin")
+            if (user.Role.Name == "operator")
                 return true;
             return false;
         }

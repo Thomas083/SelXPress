@@ -63,6 +63,12 @@ namespace SelXPressApi.Configurations
                 status = HttpStatusCode.Unauthorized;
                 code = ex.Code;
             }
+            else if (exceptionType == typeof(ForbiddenRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.Forbidden;
+                code = ex.Code;
+            }
             else if (exceptionType == typeof(FirebaseAuthException))
             {
                 message = ex.Message;
