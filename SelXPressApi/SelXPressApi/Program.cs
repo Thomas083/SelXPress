@@ -26,7 +26,9 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommonMethods, CommonMethods>();
-
+builder.Services.AddScoped<IFirebaseAuthManager, FirebaseAuthManager>();
+builder.Services.AddResponseCaching();
+builder.Services.AddDistributedMemoryCache();
 //add the automapper service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -38,6 +40,14 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// add the session for the login of the user
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 
@@ -45,12 +55,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Docker part : delete and create database in SQL Server
-    using(var scope = app.Services.CreateScope())
-    {
-        var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-        datasContext.Database.EnsureDeleted();
-        datasContext.Database.EnsureCreated();
-    }
+    // using(var scope = app.Services.CreateScope())
+    // {
+    //     var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    //     datasContext.Database.EnsureDeleted();
+    //     datasContext.Database.EnsureCreated();
+    // }
+    app.UseHsts();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -60,7 +71,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseHttpLogging();
+app.UseSession();
+app.UseAuthentication();
 app.AddGlobalErrorHandler();
 
 app.Run();
