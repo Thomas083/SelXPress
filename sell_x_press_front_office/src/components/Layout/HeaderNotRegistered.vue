@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="header-order">
-            <button class="order-logo-btn">
+            <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
             <p class="circle-number">0</p>
@@ -35,13 +35,15 @@ export default {
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
-            window.location.reload();
         },
         goToSignIn() {
             this.$router.push({ path: '/login'});
         },
         goToSignUp() {
             this.$router.push({ path: '/register'});
+        },
+        goToCart() {
+            this.$router.push({ path: '/cart'});
         }
     }
 };
