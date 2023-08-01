@@ -82,7 +82,7 @@
                             <img v-else src="../assets/Product/star.png" alt="stars" @mouseover="hoveredStars = index"
                                 :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)" />
                         </div>
-                        <button class="btn btn-primary add-review-btn">Add your review</button>
+                        <button class="btn btn-primary add-review-btn" @click="addReview()">Add your review</button>
                     </div>
                     <div v-for="(review, index) in reviews">
                         <div class="review-img-editor-container">
@@ -221,6 +221,9 @@ export default {
         },
         addToCart() {
             console.dir(this.addProduct)
+        },
+        addReview() {
+            this.sendReviewData.rating = this.hoveredStars;
         }
     }
 }
