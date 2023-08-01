@@ -64,8 +64,6 @@ namespace SelXPressApi.Repository
                 await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
             if(attribute != null && updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
                 await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
-            if(attribute != null && updateAttribute.AttributeData != null && attribute.AttributeData != updateAttribute.AttributeData)
-                await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.AttributeData, x => updateAttribute.AttributeData));
             return await _commonMethods.Save();
         }
     }

@@ -23,7 +23,6 @@ public class Attribute
     /// </summary>
     public string Type { get; set; }
 
-    public AttributeData AttributeData { get; set; }
     /// <summary>
     /// Date and time of the creation of the attribute
     /// </summary>
