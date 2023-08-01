@@ -8,6 +8,7 @@ using SelXPressApi.Interfaces;
 using SelXPressApi.Exceptions;
 using Firebase.Auth;
 using SelXPressApi.Helper;
+using SelXPressApi.Middleware;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,12 +21,14 @@ namespace SelXPressApi.Controllers
 		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
 		private readonly FirebaseAuthManager _authManager;
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
 
-		public UserController(IUserRepository userRepository, IMapper mapper)
+		public UserController(IUserRepository userRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_userRepository = userRepository;
 			_mapper = mapper;
 			_authManager = new FirebaseAuthManager();
+			_authorizationMiddleware = authorizationMiddleware;
 		}
 
 		/// <summary>
@@ -41,7 +44,7 @@ namespace SelXPressApi.Controllers
 		{
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
-
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
 
             if (users.Count == 0)
@@ -171,20 +174,7 @@ namespace SelXPressApi.Controllers
 			string token = await _authManager.LoginWithEmailAndPasswordAsync(loginDto.Email, loginDto.Password);
 			return Ok(new {Token = token, Email = loginDto.Email});
 		}
-
-		/// <summary>
-		/// Method for logout
-		/// </summary>
-		/// <returns></returns>
-		[HttpDelete("logout")]
-		[ProducesResponseType(200)]
-		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public IActionResult logout()
-		{
-			HttpContext.Session.Remove("UserToken");
-			return Ok();
-		}
-
+		
 		[HttpPost("refreshToken")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
