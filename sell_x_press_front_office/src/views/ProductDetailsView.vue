@@ -71,7 +71,7 @@
                 <div class="review-container">
                     <input-component id="input-title" name="input-title" class="add-review-title" type="text"
                         placeholder="Enter your title..." @input="updateData($event, 'title')" />
-                    <textarea class="add-review" rows="5" cols="110" id="input-description" name="input-description"
+                    <textarea class="add-review" rows="5" id="input-description" name="input-description"
                         placeholder="Write your review here..."
                         @change="updateData($event.target.value, 'message')"></textarea>
                     <div class="add-review-container">
@@ -225,7 +225,7 @@ export default {
         addReview() {
             this.sendReviewData.rating = this.hoveredStars;
         }
-    }
+    },
 }
 
 </script>
@@ -244,8 +244,17 @@ export default {
 .img-details-container {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
     gap: 1rem;
+}
+
+@media screen and (max-width: 1023px) {
+    .img-details-container {
+        flex-wrap: wrap;
+  }
+
+  .rating-review-container {
+    flex-wrap: wrap;
+  }
 }
 
 .img-publication-container {
@@ -452,6 +461,7 @@ img {
 
 .star-rating-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     align-items: flex-end;
 }
