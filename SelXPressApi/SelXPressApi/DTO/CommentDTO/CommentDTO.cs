@@ -18,6 +18,11 @@ public class CommentDTO
     public string Message { get; set; }
     
     /// <summary>
+    /// Title of the comment
+    /// </summary>
+    public string Title { get; set; }
+    
+    /// <summary>
     /// Date and time of the creation of the comment
     /// </summary>
     public DateTime CreatedAt { get; set; }

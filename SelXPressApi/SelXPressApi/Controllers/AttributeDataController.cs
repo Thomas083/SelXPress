@@ -49,7 +49,7 @@ namespace SelXPressApi.Controllers
         public async Task<IActionResult> GetAttributeData(int id)
         {
             if(!await _attributeDataRepository.AttributeDataExists(id))
-                throw new NotFoundException("The role with the id : " + id + " doesn't exist", "ATD-1402");
+                throw new NotFoundException("The AttributeData with the id : " + id + " doesn't exist", "ATD-1402");
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATD-1101");
             var attributeData = await _attributeDataRepository.GetAttributeDataById(id);
@@ -68,7 +68,7 @@ namespace SelXPressApi.Controllers
 
             if (!await _attributeDataRepository.CreateAttributeData(attributeData))
                 return StatusCode(201);
-            throw new Exception("An error occured while the creating of the role");
+            throw new Exception("An error occured while the creating of the AttributeData");
         }
 
         // PUT api/<AttributeDataController>/5

@@ -19,6 +19,11 @@ public class Comment
     /// Date and time of the creation of the comment
     /// </summary>
     public DateTime CreatedAt { get; set; }
+    
+    /// <summary>
+    /// Title of the comment
+    /// </summary>
+    public string Title { get; set; }
 
     /// <summary>
     /// User object of the user's comment
