@@ -50,9 +50,9 @@ namespace SelXPressApi.Repository
             return false;
         }
 
-        public async Task<List<AttributeData>> GetAllAttributesData()
+        public async Task<List<AttributeDataDTO>> GetAllAttributesData()
         {
-            return await _context.AttributesData.Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeData
+            return await _context.AttributesData.Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeDataDTO
             {
                 Id = attributeData.Id,
                 Key = attributeData.Key,
@@ -61,9 +61,9 @@ namespace SelXPressApi.Repository
             }).ToListAsync();
         }
 
-        public async Task<AttributeData?> GetAttributeDataById(int id)
+        public async Task<AttributeDataDTO?> GetAttributeDataById(int id)
         {
-            return _context.AttributesData.Where(a => a.Id == id).Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeData
+            return _context.AttributesData.Where(a => a.Id == id).Join(_context.Attributes, attributeData => attributeData.Attribute.Id, attribute => attribute.Id, (attributeData, attribute) => new AttributeDataDTO
             {
                 Id = attributeData.Id,
                 Key = attributeData.Key,
