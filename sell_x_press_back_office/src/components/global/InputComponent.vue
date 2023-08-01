@@ -1,45 +1,38 @@
 <template>
-    <label :for="name">{{ label }}</label>
-    <input
-      :id="id"
-      :name="name"
-      :type="type"
-      :placeholder="placeholder"
-      v-model="input"
-      @change="$emit('input', input)"
-    />
+  <label v-if="label!=''" :for="name">{{ label }}</label>
+  <input
+    :id="id"
+    :name="name"
+    :type="type"
+    :placeholder="placeholder"
+    :class="$attrs.class"
+    :style="styleObject"
+    :value="value"
+    @change="$emit('input', parseInt($event.target.value))"
+  />
 </template>
 
 <script>
 export default {
-  name: "InputComponent",
-  props: {
-    id: String,
-    name: String,
-    type: {
-      type: String,
-      default: "text",},
-    placeholder: String,
-    label: String,
+name: "InputComponent",
+props: {
+  id: String,
+  name: String,
+  type: String,
+  value: [String, Number],
+  placeholder: String,
+  label: {
+    type: String,
+    default: "",
   },
-  data() {
-    return {
-      input: "",
-    };
-  },
+  styleObject: Object,
+},
 };
 </script>
 
 <style scoped>
 label {
-  align-self: start;
-  margin-left: 3vw;
-}
-
-input {
-  border-radius: 15px;
-  height: 53px;
-  width: 90%;
-  text-align: center;
+align-self: start;
+margin-left: 3vw;
 }
 </style>

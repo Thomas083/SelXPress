@@ -5,6 +5,7 @@
       id="input-mail"
       name="input-mail"
       type="text"
+      class="form-input"
       placeholder="Enter your email"
       @input="updateData($event, 'email')"
     />
@@ -13,6 +14,7 @@
       id="input-pwd"
       name="input-pwd"
       type="password"
+      class="form-input"
       placeholder="Enter your password"
       @input="updateData($event, 'password')"
     />
