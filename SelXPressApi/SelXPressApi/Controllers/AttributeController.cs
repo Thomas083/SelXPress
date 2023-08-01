@@ -81,8 +81,8 @@ namespace SelXPressApi.Controllers
         {
 			if(attribute == null || attribute.Name == null || attribute.Type == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "ATT-1102");
-			if (!await _attributeRepository.CreateAttribute(attribute))
-				return StatusCode(201);
+            await _attributeRepository.CreateAttribute(attribute);
+			return StatusCode(201);
         }
 
 		/// <summary>
