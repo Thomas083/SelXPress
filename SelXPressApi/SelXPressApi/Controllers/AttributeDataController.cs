@@ -43,7 +43,7 @@ namespace SelXPressApi.Controllers
 
         // GET api/<AttributeDataController>/5
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(AttributeData))]
+        [ProducesResponseType(200, Type = typeof(AttributeDataDTO))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
