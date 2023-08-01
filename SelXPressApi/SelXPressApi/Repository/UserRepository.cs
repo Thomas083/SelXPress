@@ -37,6 +37,18 @@ namespace SelXPressApi.Repository
             return false;
         }
 
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email).Join(_context.Roles, user => user.Role.Id, role => role.Id, (user, role) => new User
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Password = user.Password,
+                Role = role,
+            }).FirstAsync();
+        }
+
         public async Task<bool> DeleteUser(int id)
         {
             if(await UserExists(id))
