@@ -66,8 +66,8 @@ namespace SelXPressApi.Controllers
             if (attributeData == null || attributeData.Value == null || attributeData.Key == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "ATD-1102");
 
-            if (!await _attributeDataRepository.CreateAttributeData(attributeData))
-                return StatusCode(201);
+            await _attributeDataRepository.CreateAttributeData(attributeData);
+            return StatusCode(201);
         }
 
         // PUT api/<AttributeDataController>/5
