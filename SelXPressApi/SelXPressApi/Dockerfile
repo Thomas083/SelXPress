@@ -13,7 +13,7 @@ RUN dotnet restore "./SelXPressApi.csproj"
 COPY . .
 WORKDIR "/src/."
 
-RUN dotnet dev-certs https -ep \https\aspnetapp.pfx -p SelXPress
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p SelXPress
 RUN dotnet dev-certs https --trust
 
 RUN dotnet build "SelXPressApi.csproj" -c Release -o /app/build
@@ -24,4 +24,5 @@ RUN dotnet publish "SelXPressApi.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=build /https/aspnetapp.pfx /https/aspnetapp.pfx
 ENTRYPOINT ["dotnet", "SelXPressApi.dll"]
