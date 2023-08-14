@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.CategoryDTO;
-using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
-using SelXPressApi.Repository;
+using SelXPressApi.Middleware;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,16 +16,20 @@ namespace SelXPressApi.Controllers
 	{
 		private readonly ICategoryRepository _categoryRepository;
 		private readonly IMapper _mapper;
-		public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+		public CategoryController(ICategoryRepository categoryRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_categoryRepository = categoryRepository;
 			_mapper = mapper;
+			_authorizationMiddleware = authorizationMiddleware;
 		}
+		
 		/// <summary>
-		/// GET: api/<CategoryController>
-		/// Get all categories
+		/// Method to get all the categories of the database
 		/// </summary>
-		/// <returns>Return an Array of all categories</returns>
+		/// <returns></returns>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
 		[HttpGet]
         [ProducesResponseType(200, Type = typeof(List<CategoryDTO>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
@@ -47,13 +49,14 @@ namespace SelXPressApi.Controllers
         }
 
 		/// <summary>
-		/// GET api/<CategoryController>/5
-		/// Get a category by id
+		/// Method to get the category based on the id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>Return a specific category</returns>
+		/// <returns></returns>
+		/// <exception cref="NotFoundException"></exception>
+		/// <exception cref="BadRequestException"></exception>
 		[HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(List<CategoryDTO>))]
+        [ProducesResponseType(200, Type = typeof(CategoryDTO))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -69,67 +72,96 @@ namespace SelXPressApi.Controllers
         }
 
 		/// <summary>
-		/// POST api/<CategoryController>
-		/// Create a new category
+		/// Method to create a new category
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="newCategory"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
 		[HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO newCategory)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			
 			if(newCategory.Name == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "CAT-11102");
-
-			if (await _categoryRepository.CreateCategory(newCategory))
-				return StatusCode(201);
-            throw new Exception("An error occured while the creation of the user");
-        }
+            
+			await _categoryRepository.CreateCategory(newCategory);
+			return StatusCode(201);
+		}
 
 		/// <summary>
-		/// PUT api/<CategoryController>/5
-		/// Modify a category
+		/// Method to update a category based on the id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="value"></param>
+		/// <param name="categoryUpdate"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
 		[HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDTO categoryUpdate)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			
 			if(categoryUpdate == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "CAT-1102");
+			
 			if(!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "CAT-1101");
+			
 			if(!await _categoryRepository.CategoryExists(id))
                 throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
-			if (!await _categoryRepository.UpdateCategory(categoryUpdate, id))
-				return Ok();
-            throw new Exception("An error occured while the update of the categorie");
-        }
+            
+			await _categoryRepository.UpdateCategory(categoryUpdate, id);
+			return Ok();
+		}
 
 		/// <summary>
-		/// DELETE api/<CategoryController>/5
-		/// Delete a category
+		/// Method to delete a cateogry based on the id
 		/// </summary>
 		/// <param name="id"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
+		/// <exception cref="BadRequestException"></exception>
 		[HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> DeleteCategory(int id)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			
 			if (!await _categoryRepository.CategoryExists(id))
 				throw new NotFoundException("The category with the id :" + id + " doesn't exist", "CAT-1402");
+			
 			if(!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong , a bad request occured", "CAT-1101");
-			if(!await _categoryRepository.DeleteCategory(id))
-				return Ok();
-            throw new Exception("An error occured while the deleting of the user");
-        }
+            
+			await _categoryRepository.DeleteCategory(id);
+			return Ok();
+		}
 	}
 }
