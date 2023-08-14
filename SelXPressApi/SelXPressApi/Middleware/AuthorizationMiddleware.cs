@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.Exceptions;
@@ -44,11 +43,11 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
                     context.Response.Headers.Add(emailHeader,email);
                     return true;
                 }
-                return false;
+                throw new NotFoundException("The email address is not in the database", "todo");
             }
-            throw new BadRequestException("An error occured while the decoding of the jwt token", "SRV-1403");
+            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "todo");
         }
-        throw new BadRequestException("The token is not valid, please try again with another token", "SRV-1402");
+        throw new UnauthorizedException("The token is not valid, please try again with another token", "todo");
     }
 
     public async Task<bool> CheckRoleIfAdmin(HttpContext context)
@@ -57,7 +56,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
-            if (user.Role.Name == "operator")
+            if (user.Role.Name == RoleType.Operator.ToString())
                 return true;
             return false;
         }
@@ -70,7 +69,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
-            if (user.Role.Name == "customer")
+            if (user.Role.Name == RoleType.Customer.ToString())
                 return true;
             return false;
         }
@@ -83,7 +82,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
-            if (user.Role.Name == "seller")
+            if (user.Role.Name == RoleType.Seller.ToString())
                 return true;
             return false;
         }
@@ -107,7 +106,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         }
         catch (Exception ex)
         {
-            throw new BadRequestException("An error occured while the decoding of the jwt token", "SRV-1403");
+            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1403");
         }
     }
 }
