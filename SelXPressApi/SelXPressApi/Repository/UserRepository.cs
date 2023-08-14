@@ -49,6 +49,11 @@ namespace SelXPressApi.Repository
             }).FirstAsync();
         }
 
+        public async Task<bool> UserExistsEmail(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email).AnyAsync();
+        }
+
         public async Task<bool> DeleteUser(int id)
         {
             if(await UserExists(id))
@@ -82,20 +87,17 @@ namespace SelXPressApi.Repository
                 Role = role,
             }).FirstOrDefaultAsync();
         }
-        public async Task<bool> UpdateUser(UpdateUserDTO updateUser, int id)
+        public async Task<bool> UpdateUser(UpdateUserDTO updateUser, string email)
         {
-            if (!await UserExists(id))
+            if (!await UserExistsEmail(email))
                 return false;
-            User? user =  _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            User? user =  _context.Users.Where(u => u.Email == email).FirstOrDefault();
 
             if (user != null && updateUser.Username != null && user.Username != updateUser.Username)
-                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Username, x => updateUser.Username));
-
-            if (user != null && updateUser.Email != null && user.Email != updateUser.Email)
-                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p2 => p2.SetProperty(x => x.Email, x => updateUser.Email));
-
+                await _context.Users.Where(u => u.Email == email).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Username, x => updateUser.Username));
+            
             if (user != null && updateUser.Password != null && user.Password != updateUser.Password)
-                await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p3 => p3.SetProperty(x => x.Password, x => updateUser.Password));
+                await _context.Users.Where(u => u.Email == email).ExecuteUpdateAsync(p3 => p3.SetProperty(x => x.Password, x => updateUser.Password));
 
             return await _commonMethods.Save();
         }
