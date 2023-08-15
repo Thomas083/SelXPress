@@ -1,6 +1,7 @@
 using AutoMapper;
 using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.DTO.CommentDTO;
+using SelXPressApi.DTO.TagDTO;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Models;
 
@@ -14,6 +15,7 @@ namespace SelXPressApi.Helper
             CreateMap<User, CreateUserDto>();
             CreateMap<Comment, CommentDTO>();
             CreateMap<Category, CategoryDTO>();
+            CreateMap<Tag, TagDTO>();
         }
     }
 }
