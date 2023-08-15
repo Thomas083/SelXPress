@@ -23,7 +23,6 @@ namespace SelXPressApi.Controllers
 			_mapper = mapper;
 		}
 		/// <summary>
-		/// GET: api/<AttributeController>
 		/// Get all attributes
 		/// </summary>
 		/// <returns>Return an Array of all attributes</returns>
@@ -44,7 +43,6 @@ namespace SelXPressApi.Controllers
         }
 
 		/// <summary>
-		/// GET api/<AttributeController>/5
 		/// Get an attribute by id
 		/// </summary>
 		/// <param name="id"></param>
@@ -69,7 +67,6 @@ namespace SelXPressApi.Controllers
         }
 
 		/// <summary>
-		/// POST api/<AttributeController>
 		/// Create new attribute
 		/// </summary>
 		/// <param name="value"></param>
@@ -86,7 +83,6 @@ namespace SelXPressApi.Controllers
         }
 
 		/// <summary>
-		/// PUT api/<AttributeController>/5
 		/// Modify an attribute
 		/// </summary>
 		/// <param name="id"></param>
@@ -109,7 +105,6 @@ namespace SelXPressApi.Controllers
         }
 
         /// <summary>
-        /// DELETE api/<AttributeController>/5
         /// Delete an attribute
         /// </summary>
         /// <param name="id"></param>
