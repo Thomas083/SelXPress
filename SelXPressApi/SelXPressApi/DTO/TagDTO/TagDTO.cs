@@ -3,7 +3,7 @@
     /// <summary>
     /// Data transfer object for a tag.
     /// </summary>
-    public class TagDTO
+    public class TagDto
     {
         /// <summary>
         /// Gets or sets the unique identifier of the tag.

@@ -24,7 +24,7 @@ namespace SelXPressApi.Controllers
         /// Get all tags.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(List<TagDTO>))]
+        [ProducesResponseType(200, Type = typeof(List<TagDto>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -33,7 +33,7 @@ namespace SelXPressApi.Controllers
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is invalid, a bad request occurred", "TAG-1101");
 
-            var tags = _mapper.Map<List<TagDTO>>(await _tagRepository.GetAllTags());
+            var tags = _mapper.Map<List<TagDto>>(await _tagRepository.GetAllTags());
 
             if (tags.Count == 0)
                 throw new NotFoundException("No tags found in the database", "TAG-1401");
@@ -45,7 +45,7 @@ namespace SelXPressApi.Controllers
         /// Get a specific tag by ID.
         /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(TagDTO))]
+        [ProducesResponseType(200, Type = typeof(TagDto))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -57,7 +57,7 @@ namespace SelXPressApi.Controllers
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is invalid, a bad request occurred", "TAG-1101");
 
-            var tag = _mapper.Map<TagDTO>(await _tagRepository.GetTagById(id));
+            var tag = _mapper.Map<TagDto>(await _tagRepository.GetTagById(id));
             return Ok(tag);
         }
 
