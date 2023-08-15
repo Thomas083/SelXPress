@@ -23,7 +23,7 @@ builder.Services.AddScoped<IProductAttributeRepository, ProductAttributeReposito
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
-//builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommonMethods, CommonMethods>();
 builder.Services.AddScoped<IFirebaseAuthManager, FirebaseAuthManager>();
