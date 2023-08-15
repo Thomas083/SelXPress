@@ -1,81 +1,105 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SelXPressApi.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.TagDTO;
-using SelXPressApi.Helper;
+using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
-using SelXPressApi.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SelXPressApi.Repository
+namespace SelXPressApi.Controllers
 {
-    public class TagRepository : ITagRepository
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TagController : ControllerBase
     {
-        private readonly DataContext _context;
-        private ICommonMethods _commonMethods;
+        private readonly ITagRepository _tagRepository;
+        private readonly IMapper _mapper;
 
-        public TagRepository(DataContext context, ICommonMethods commonMethods)
+        public TagController(ITagRepository tagRepository, IMapper mapper)
         {
-            _context = context;
-            _commonMethods = commonMethods;
+            _tagRepository = tagRepository;
+            _mapper = mapper;
         }
 
-        public async Task<bool> TagExists(int id)
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(List<TagDTO>))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetTags()
         {
-            return await _context.Tags.AnyAsync(t => t.Id == id);
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "TAG-1101");
+
+            var tags = _mapper.Map<List<TagDTO>>(await _tagRepository.GetAllTags());
+
+            if (tags.Count == 0)
+                throw new NotFoundException("There are no tags in the database, please try again", "TAG-1401");
+
+            return Ok(tags);
         }
 
-        public async Task<List<Tag>> GetAllTags()
+        [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(TagDTO))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> GetTag(int id)
         {
-            return await _context.Tags.Include(t => t.Category).ToListAsync();
+            if (!await _tagRepository.TagExists(id))
+                throw new NotFoundException("The tag with the id: " + id + " doesn't exist", "TAG-1402");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "TAG-1101");
+
+            var tag = _mapper.Map<TagDTO>(await _tagRepository.GetTagById(id));
+            return Ok(tag);
         }
 
-        public async Task<Tag?> GetTagById(int id)
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> CreateTag([FromBody] CreateTagDTO newTag)
         {
-            return await _context.Tags.Include(t => t.Category).FirstOrDefaultAsync(t => t.Id == id);
+            if (newTag.Name == null)
+                throw new BadRequestException("There are missing fields, please try again with some data", "TAG-1102");
+
+            if (await _tagRepository.CreateTag(newTag))
+                return StatusCode(201);
+            throw new Exception("An error occurred while creating the tag");
         }
 
-        public async Task<bool> CreateTag(CreateTagDTO createTag)
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> UpdateTag(int id, [FromBody] UpdateTagDTO tagUpdate)
         {
-            Category category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == createTag.CategoryId);
-            if (category == null)
-            {
-                // Gérer le cas où la catégorie n'existe pas
-                return false;
-            }
-
-            Tag newTag = new Tag
-            {
-                Name = createTag.Name,
-                Category = category
-            };
-            await _context.Tags.AddAsync(newTag);
-            return await _commonMethods.Save();
+            if (tagUpdate == null)
+                throw new BadRequestException("There are missing fields, please try again with some data", "TAG-1102");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "TAG-1101");
+            if (!await _tagRepository.TagExists(id))
+                throw new NotFoundException("The tag with the id: " + id + " doesn't exist", "TAG-1402");
+            if (!await _tagRepository.UpdateTag(id, tagUpdate))
+                return Ok();
+            throw new Exception("An error occurred while updating the tag");
         }
 
-        public async Task<bool> UpdateTag(int id, UpdateTagDTO updateTag)
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> DeleteTag(int id)
         {
-            if (!await TagExists(id))
-                return false;
-
-            Tag tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tag != null && updateTag.Name != null && tag.Name != updateTag.Name)
-                tag.Name = updateTag.Name;
-
-            return await _commonMethods.Save();
-        }
-
-        public async Task<bool> DeleteTag(int id)
-        {
-            if (!await TagExists(id))
-                return false;
-
-            Tag tagToDelete = await _context.Tags.FirstOrDefaultAsync(t => t.Id == id);
-            _context.Tags.Remove(tagToDelete);
-
-            return await _commonMethods.Save();
+            if (!await _tagRepository.TagExists(id))
+                throw new NotFoundException("The tag with the id: " + id + " doesn't exist", "TAG-1402");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "TAG-1101");
+            if (!await _tagRepository.DeleteTag(id))
+                return Ok();
+            throw new Exception("An error occurred while deleting the tag");
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.CategoryDTO;
-using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
-using SelXPressApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
