@@ -14,7 +14,8 @@ namespace SelXPressApi.Helper
             CreateMap<User, UserDto>();
             CreateMap<User, CreateUserDto>();
             CreateMap<Comment, CommentDTO>();
-            CreateMap<Category, CategoryDTO>();
+            CreateMap<Category, CategoryDTO>()
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
             CreateMap<Tag, TagDTO>();
         }
     }

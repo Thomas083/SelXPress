@@ -45,12 +45,18 @@ namespace SelXPressApi.Repository
 
         public async Task<List<Category>> GetAllCategories()
         {
-            return await _context.Categories.OrderBy(c => c.Id).ToListAsync();
+            return await _context.Categories
+                .Include(c => c.Tags) // Eager loading of associated tags
+                .OrderBy(c => c.Id)
+                .ToListAsync();
         }
 
         public async Task<Category?> GetCategoryById(int id)
         {
-            return await _context.Categories.Where(c => c.Id == id).FirstAsync();
+            return await _context.Categories
+                .Include(c => c.Tags) // Eager loading of associated tags
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> UpdateCategory(UpdateCategoryDTO updateCategory, int id)
