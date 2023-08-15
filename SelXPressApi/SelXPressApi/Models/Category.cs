@@ -14,5 +14,7 @@ public class Category
     /// Name of the category
     /// </summary>
     public string Name { get; set; }
-    
+
+    public ICollection<Tag> Tags { get; set; }
+
 }
