@@ -3,7 +3,7 @@
         <ul class="pagination justify-content-center">
             <!-- Bouton "Précédent" -->
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
+                <a class="page-link previous" href="#" tabindex="-1" aria-disabled="true"
                     @click="gotoPage(currentPage - 1)">Previous</a>
             </li>
             <!-- Afficher les premières pages (1 à 3) -->
@@ -20,7 +20,7 @@
             </li>
             <!-- Bouton "Suivant" -->
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a class="page-link" href="#products" @click="gotoPage(currentPage + 1)">Next</a>
+                <a class="page-link next" href="#products" @click="gotoPage(currentPage + 1)">Next</a>
             </li>
         </ul>
     </nav>
@@ -92,4 +92,16 @@ export default {
 };
 </script> 
 
-<style scoped></style>
+<style scoped>
+
+.page-item:first-child .page-link {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: 1rem !important;
+    border-bottom-right-radius: 1rem !important;
+}
+
+</style>
