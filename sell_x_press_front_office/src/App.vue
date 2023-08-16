@@ -2,7 +2,9 @@
   <header-identification-page v-if="isIdentificationPage" />
   <header-registered v-else-if="isUserLoggedIn" />
   <header-not-registered v-else />
-  <router-view />
+  <div class="app-container">
+    <router-view />
+  </div>
   <footer-layout />
 </template>
 
@@ -44,16 +46,8 @@ export default {
   background-color: #E5E5E5;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.app-container {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 </style>
