@@ -1,24 +1,19 @@
 <template>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <!-- Bouton "Précédent" -->
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link previous" href="#" tabindex="-1" aria-disabled="true"
                     @click="gotoPage(currentPage - 1)">Previous</a>
             </li>
-            <!-- Afficher les premières pages (1 à 3) -->
             <li class="page-item" v-for="page in displayedPages" :key="page">
                 <a class="page-link" href="#products" @click="gotoPage(page)">{{ page }}</a>
             </li>
-            <!-- Afficher des points de suspension (...) -->
             <li v-if="showEllipsisBefore">
                 <span class="page-link">...</span>
             </li>
-            <!-- Afficher la dernière page -->
             <li class="page-item" v-if="showLastPage">
                 <a class="page-link" href="#products" @click="gotoPage(totalPages)">{{ totalPages }}</a>
             </li>
-            <!-- Bouton "Suivant" -->
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
                 <a class="page-link next" href="#products" @click="gotoPage(currentPage + 1)">Next</a>
             </li>
