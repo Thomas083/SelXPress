@@ -137,13 +137,12 @@ export default {
             }
         },
         setAttributeData(index_attribute, index_value) {
-            console.dir(this.chooseOptions[index_attribute])
             const value = this.chooseOptions[index_attribute].attribute.values[index_value].value;
             if (value) {
                 const attributeName = this.chooseOptions[index_attribute].attribute.name;
                 const attributeIndex = this.formData.attributes.findIndex(attr => attr.name === attributeName);
                 if (attributeIndex !== -1) {
-                    this.formData.attributes[attributeIndex].data.push({name: attributeName, value: value});
+                    this.formData.attributes[attributeIndex].data.push({name: this.selectColorData.find(color => color.value === value).name, value: value});
                 }
             }
         },
