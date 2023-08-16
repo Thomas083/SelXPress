@@ -4,7 +4,7 @@
     <div class="products-cards-container">
       <div class="search-product">
         <h1 class="products-category" id="category">Category: All</h1>
-        <h1 class="products-category" id="category">Category: All</h1>
+        <filter-product />
       </div>
       <div class="products-cards">
         <product-card v-for="product in displayedProducts" :key="product.id" :product="product" />
@@ -19,13 +19,15 @@
 import CategoriesList from "@/components/categories/CategoriesList.vue"
 import ProductCard from "@/components/products/ProductsCard.vue"
 import Pagination from "@/components/pagination/Pagination.vue"
+import FilterProduct from "@/components/filter/FilterProduct.vue"
 
 export default {
   name: 'HomeView',
   components: {
     ProductCard,
     CategoriesList,
-    Pagination
+    Pagination,
+    FilterProduct
   },
   data() {
     return {
@@ -121,7 +123,6 @@ export default {
     displayedProducts() {
       const startIndex = (this.currentPage - 1) * this.productsPerPage;
       const endIndex = startIndex + this.productsPerPage;
-      console.dir(this.products.slice(startIndex, endIndex))
       return this.products.slice(startIndex, endIndex);
     },
   },
