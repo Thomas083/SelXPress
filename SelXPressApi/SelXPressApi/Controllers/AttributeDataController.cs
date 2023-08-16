@@ -10,6 +10,9 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.Controllers
 {
+    /// <summary>
+    /// Controller for managing AttributeData.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AttributeDataController : ControllerBase
@@ -22,9 +25,12 @@ namespace SelXPressApi.Controllers
             _attributeDataRepository = attributeDataRepository;
             _mapper = mapper;
         }
-        // GET: api/<AttributeDataController>
+
+        /// <summary>
+        /// Get all AttributeData items.
+        /// </summary>
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(List<AttributeDataDTO>))]
+        [ProducesResponseType(200, Type = typeof(List<AttributeDataDto>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -33,7 +39,7 @@ namespace SelXPressApi.Controllers
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATD-1101");
 
-            var attributesDatas = _mapper.Map<List<AttributeDataDTO>>(await _attributeDataRepository.GetAllAttributesData());
+            var attributesDatas = _mapper.Map<List<AttributeDataDto>>(await _attributeDataRepository.GetAllAttributesData());
 
             if(attributesDatas.Count == 0)
                 throw new NotFoundException("There is no AttributeData in the database, please try again", "ATD-1401");
@@ -41,9 +47,11 @@ namespace SelXPressApi.Controllers
             return Ok(attributesDatas);
         }
 
-        // GET api/<AttributeDataController>/5
+        /// <summary>
+        /// Get an AttributeData item by ID.
+        /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(AttributeDataDTO))]
+        [ProducesResponseType(200, Type = typeof(AttributeDataDto))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
@@ -57,7 +65,9 @@ namespace SelXPressApi.Controllers
             return Ok(attributeData);
         }
 
-        // POST api/<AttributeDataController>
+        /// <summary>
+        /// Create a new AttributeData item.
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -71,7 +81,9 @@ namespace SelXPressApi.Controllers
             return StatusCode(201);
         }
 
-        // PUT api/<AttributeDataController>/5
+        /// <summary>
+        /// Update an existing AttributeData item.
+        /// </summary>
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -89,7 +101,9 @@ namespace SelXPressApi.Controllers
             return Ok();
         }
 
-        // DELETE api/<AttributeDataController>/5
+        /// <summary>
+        /// Delete an AttributeData item by ID.
+        /// </summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
