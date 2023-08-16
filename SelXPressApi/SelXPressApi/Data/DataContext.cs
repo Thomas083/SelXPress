@@ -16,6 +16,7 @@ public class DataContext : DbContext
     }
 
     public DbSet<Attribute> Attributes { get; set; }
+    public DbSet<AttributeData> AttributesData { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Comment> Comments { get; set; }
