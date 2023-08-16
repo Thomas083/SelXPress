@@ -4,12 +4,12 @@
                 <div class="product-img-container">
                     <img class="product-img" src="@/assets/categories-product-maquette-1.jpg" alt="..."/>
                 </div>
-                <div class="product-date">20/06/2023</div>
-                <div class="product-title">SAMODA, Child, Baleine, T-Shirt</div>
-                <div class="product-description">T-Shirt for youngest with small whale, Available in sizes 6 to 1...</div>
-                <div class="product-price">16,99 €</div>
+                <div class="product-date">{{ publication_date }}</div>
+                <div class="product-title">{{ name }}</div>
+                <div class="product-description">{{ description }}</div>
+                <div class="product-price">{{ price }} €</div>
                 <div class="product-footer-container">
-                    <div class="product-author">SAMODA</div>
+                    <div class="product-author">{{ author }}</div>
                     <button class="btn btn-primary show-more-btn">Show more</button>
                 </div>
             </div>
@@ -20,6 +20,21 @@
 
 export default {
   name: 'ProductCard',
+  props: {
+    product: {
+        type: Object,
+        required: true,
+    },
+  },
+  data() {
+    return {
+        publication_date: this.product.publication_date,
+        name: this.product.name,
+        description: this.product.description,
+        price: this.product.price,
+        author: this.product.author
+    }
+  },
 }
 
 </script>
