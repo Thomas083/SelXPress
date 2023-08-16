@@ -5,14 +5,13 @@ using SelXPressApi.DTO.TagDTO;
 using SelXPressApi.DTO.AttributeDataDTO;
 using SelXPressApi.DTO.AttributeDTO;
 using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.DTO.CommentDTO;
+using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.Models;
 using Attribute = SelXPressApi.Models.Attribute;
 
 namespace SelXPressApi.Helper
 {
-    /// <summary>
-    /// AutoMapper configuration class for mappings between entities and DTOs.
-    /// </summary>
     public class MappingProfiles : Profile
     {
         public MappingProfiles()
