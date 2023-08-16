@@ -23,7 +23,7 @@ namespace SelXPressApi.Helper
                 .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags)); // Map Category model to CategoryDTO and include Tags
             CreateMap<Tag, TagDto>(); // Map Tag model to TagDto
             CreateMap<Attribute, AttributeDTO>();
-            CreateMap<AttributeData, AttributeDataDTO>();
+            CreateMap<AttributeData, AttributeDataDto>();
         }
     }
 

@@ -74,5 +74,10 @@ public class DataContext : DbContext
             .HasOne(pa => pa.Product)
             .WithMany(p => p.ProductAttributes)
             .HasForeignKey(pa => pa.ProductId);
+
+        modelBuilder.Entity<Attribute>()
+        .HasMany(a => a.AttributeData)
+        .WithOne(ad => ad.Attribute)
+        .HasForeignKey(ad => ad.AttributeId);
     }
 }
