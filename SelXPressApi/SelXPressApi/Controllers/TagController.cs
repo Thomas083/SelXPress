@@ -4,6 +4,7 @@ using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.TagDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
+using SelXPressApi.Middleware;
 
 namespace SelXPressApi.Controllers
 {
@@ -13,16 +14,21 @@ namespace SelXPressApi.Controllers
     {
         private readonly ITagRepository _tagRepository;
         private readonly IMapper _mapper;
+        private readonly IAuthorizationMiddleware _authorizationMiddleware;
 
-        public TagController(ITagRepository tagRepository, IMapper mapper)
+        public TagController(ITagRepository tagRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
         {
             _tagRepository = tagRepository;
             _mapper = mapper;
+            _authorizationMiddleware = authorizationMiddleware;
         }
 
         /// <summary>
-        /// Get all tags.
+        /// Method to get all the tags on the database
         /// </summary>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
+        /// <exception cref="NotFoundException"></exception>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<TagDto>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
@@ -42,8 +48,12 @@ namespace SelXPressApi.Controllers
         }
 
         /// <summary>
-        /// Get a specific tag by ID.
+        /// Method to get a tag based on the id
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
+        /// <exception cref="BadRequestException"></exception>
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(TagDto))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
@@ -62,33 +72,54 @@ namespace SelXPressApi.Controllers
         }
 
         /// <summary>
-        /// Create a new tag.
+        /// Method to create a tag
         /// </summary>
+        /// <param name="newTag"></param>
+        /// <returns></returns>
+        /// <exception cref="ForbiddenRequestException"></exception>
+        /// <exception cref="BadRequestException"></exception>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+        [ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> CreateTag([FromBody] CreateTagDTO newTag)
         {
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+            
             if (newTag.Name == null)
                 throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
-
-            if (await _tagRepository.CreateTag(newTag))
-                return StatusCode(201);
-
-            throw new Exception("An error occurred while creating the tag");
+            
+            await _tagRepository.CreateTag(newTag);
+            return StatusCode(201);
         }
 
         /// <summary>
-        /// Update a tag by ID.
+        /// Method to update a tag based on the id
         /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tagUpdate"></param>
+        /// <returns></returns>
+        /// <exception cref="ForbiddenRequestException"></exception>
+        /// <exception cref="BadRequestException"></exception>
+        /// <exception cref="NotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+        [ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> UpdateTag(int id, [FromBody] UpdateTagDTO tagUpdate)
         {
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+            
             if (tagUpdate == null)
                 throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
 
@@ -105,15 +136,27 @@ namespace SelXPressApi.Controllers
         }
 
         /// <summary>
-        /// Delete a tag by ID.
+        /// Method to delete a tag based on the id
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ForbiddenRequestException"></exception>
+        /// <exception cref="NotFoundException"></exception>
+        /// <exception cref="BadRequestException"></exception>
+        /// <exception cref="Exception"></exception>
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+        [ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> DeleteTag(int id)
         {
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+            
             if (!await _tagRepository.TagExists(id))
                 throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
 
