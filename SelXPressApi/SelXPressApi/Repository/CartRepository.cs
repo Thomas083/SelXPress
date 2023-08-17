@@ -60,7 +60,7 @@ namespace SelXPressApi.Repository
                 }).ToListAsync();
         }
 
-        public async Task<bool> CreateCart(CreateCartDto cartDto)
+        public async Task<bool> CreateCartByAdmin(CreateCartByAdminDto cartDto)
         {
             var product = await _context.Products.Where(p => p.Id == cartDto.ProductId).FirstAsync();
             var user = await _context.Users.Where(u => u.Id == cartDto.UserId).FirstAsync();
@@ -70,6 +70,22 @@ namespace SelXPressApi.Repository
                 ProductId = cartDto.ProductId,
                 User = user,
                 UserId = cartDto.UserId,
+                Quantity = cartDto.Quantity
+            };
+            await _context.Carts.AddAsync(cart);
+            return await _commonMethods.Save();
+        }
+
+        public async Task<bool> CreateCartByUser(CreateCartDto cartDto, string email)
+        {
+            var product = await _context.Products.Where(p => p.Id == cartDto.ProductId).FirstAsync();
+            var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+            Cart cart = new Cart()
+            {
+                Product = product,
+                ProductId = cartDto.ProductId,
+                User = user,
+                UserId = user.Id,
                 Quantity = cartDto.Quantity
             };
             await _context.Carts.AddAsync(cart);
