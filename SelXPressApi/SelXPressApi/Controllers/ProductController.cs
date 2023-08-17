@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Middleware;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,15 +14,30 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+
+		public ProductController(IAuthorizationMiddleware authorizationMiddleware)
+		{
+			_authorizationMiddleware = authorizationMiddleware;
+		}
 		/// <summary>
 		/// GET: api/<ProductController>
 		/// Get all products
 		/// </summary>
 		/// <returns>Return an Array of all product</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProducts()
 		{
-			return new string[] { "value1", "value2" };
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this
+			return Ok();
 		}
 
 		/// <summary>
@@ -29,9 +47,59 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>information of a specific product</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProduct(int id)
 		{
-			return "product";
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this and set the parameter
+			return Ok();
+		}
+
+		/// <summary>
+		/// Methode qui retourne tous les produits appertennant à un utilisateur (méthode pour les sellers)
+		/// Retourner les produits avec l'adresse mail de l'utilisateur qui les a créé
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("me")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductsBySeller()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			string? email = HttpContext.Request.Headers["EmailHeader"];
+			//todo put the code logic after this
+			return Ok();
+		}
+		
+		
+		/// <summary>
+		/// Methode qui retourne le produit par rapport à son id appertennant à un utilisateur (méthode pour les sellers)
+		/// Retourner le produit avec l'adresse mail de l'utilisateur qui les a créé et l'id du produit
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("me/{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductBySeller(int id)
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			string? email = HttpContext.Request.Headers["EmailHeader"];
+			//todo put the code logic after this
+			return Ok();
 		}
 
 		/// <summary>
@@ -39,10 +107,19 @@ namespace SelXPressApi.Controllers
 		/// Create a new product
 		/// </summary>
 		/// <param name="value"></param>
-		[HttpPost("addProduct")]
-		public void Post([FromBody] string value)
+		[HttpPost]
+		[ProducesResponseType(201)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateProduct([FromBody] string value)
 		{
-
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this and set the parameter
+			return StatusCode(201);
 		}
 
 		/// <summary>
@@ -51,10 +128,19 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="value"></param>
-		[HttpPut("updateProduct/{id}")]
-		public void Put(int id, [FromBody] string value)
+		[HttpPut("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateProduct(int id, [FromBody] string value)
 		{
-
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this and set the parameters
+			return Ok();
 		}
 
 		/// <summary>
@@ -63,8 +149,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("deleteProduct/{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteProduct(int id)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this and set the parameter
+			return Ok();
 		}
 	}
 }
