@@ -38,7 +38,7 @@ namespace SelXPressApi.Controllers
 
 		/// <summary>
 		/// Methode qui va récupérer toutes les commandes et produits associés de l'utilisateur courant
-		/// en gros il faut récupérer les orderProduct en fonction de l'adresse mail contenu dans un header
+		/// il faut récupérer les orderProduct en fonction de l'adresse mail contenu dans un header
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("me")]
