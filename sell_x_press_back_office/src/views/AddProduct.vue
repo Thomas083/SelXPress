@@ -16,7 +16,8 @@
                     placeholder="Enter your product title..." @input="updateData($event, 'title')" />
                 <input-component label="Price :" id="input-price" name="input-price" type="text" placeholder="...€"
                     @input="updateData($event, 'price')" />
-                <div v-for="(chooseOption, index_attribute) in chooseOptions" :key="index" class="attributes">
+                    <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" />
+                <!-- <div v-for="(chooseOption, index_attribute) in chooseOptions" :key="index" class="attributes">
                     <div class="attributes-data">
                         <select class="form-select" v-model="chooseOption.attribute.name"
                             @change="setAttributeName($event.target.value)">
@@ -37,7 +38,7 @@
                         <div class="add-attributes" @click="addAttributes(index_attribute)">+ Add Data</div>
                     </div>
                 </div>
-                <div class="add-attributes" @click="addSelect()">+ Add Attributes</div>
+                <div class="add-attributes" @click="addSelect()">+ Add Attributes</div> -->
             </div>
         </div>
         <div class="separation-line"></div>
@@ -58,10 +59,13 @@
 <script>
 
 import InputComponent from "@/components/global/InputComponent.vue";
+import SelectComponent from "@/components/global/SelectComponent.vue";
+
 export default {
     name: "AddProduct",
     components: {
         InputComponent,
+        SelectComponent
     },
     data() {
         return {
@@ -72,30 +76,30 @@ export default {
                 upload_file: "",
                 attributes: [],
             },
-            // attributes: [
-            //     {
-            //         name: 'color',
-            //         type: 'select',
-            //         data: [
-            //             { name: '--- Select a color ---', value: '' },
-            //             { name: 'blue', value: '#0000FF' },
-            //             { name: 'red', value: '#FF0000' },
-            //             { name: 'green', value: '#00FF00' }
-            //         ]
-            //     },
-            //     {
-            //         name: 'size',
-            //         type: 'select',
-            //         data: [
-            //             { name: '--- Select a size ---', value: '' },
-            //             { 'name': 'extra_small', 'value': 'xs' },
-            //             { 'name': 'small', 'value': 's' },
-            //             { 'name': 'medium', 'value': 'm' },
-            //             { 'name': 'large', 'value': 'l' },
-            //             { 'name': 'extra_large', 'value': 'xl' }
-            //         ]
-            //     }
-            // ],
+            attributes: [
+                {
+                    name: 'color',
+                    type: 'select',
+                    data: [
+                        { name: '--- Select a color ---', value: '' },
+                        { name: 'blue', value: '#0000FF' },
+                        { name: 'red', value: '#FF0000' },
+                        { name: 'green', value: '#00FF00' }
+                    ]
+                },
+                {
+                    name: 'size',
+                    type: 'select',
+                    data: [
+                        { name: '--- Select a size ---', value: '' },
+                        { 'name': 'extra_small', 'value': 'xs' },
+                        { 'name': 'small', 'value': 's' },
+                        { 'name': 'medium', 'value': 'm' },
+                        { 'name': 'large', 'value': 'l' },
+                        { 'name': 'extra_large', 'value': 'xl' }
+                    ]
+                }
+            ],
             selectOptions: ['--- Select a type ---', 'Color', 'Size'],
             selectColorData: [
                 { name: '--- Select a color ---', value: '' },
@@ -125,27 +129,39 @@ export default {
                 reader.readAsDataURL(selectedFile);
             }
         },
-        addSelect() {
-            this.chooseOptions.push({ attribute: { name: '--- Select a type ---', values: [{ name: '', value: '' }] } })
-        },
-        addAttributes(index) {
-            this.chooseOptions[index].attribute.values.push({ name: '', value: '' })
-        },
-        setAttributeName(e) {
-            if (e && !this.formData.attributes.some(attr => attr.name === e)) {
-                this.formData.attributes.push({ name: e, data: [] });
+        handleSelectedAttribute(attribute) {
+            // Find the index of the attribute in formData.attributes
+            const index = this.formData.attributes.findIndex(attr => attr.name === attribute.name);
+            
+            if (index !== -1) {
+                // Update the data of the selected attribute
+                this.formData.attributes[index] = attribute;
+            } else {
+                // If attribute is not found, add it to formData.attributes
+                this.formData.attributes.push(attribute);
             }
         },
-        setAttributeData(index_attribute, index_value) {
-            const value = this.chooseOptions[index_attribute].attribute.values[index_value].value;
-            if (value) {
-                const attributeName = this.chooseOptions[index_attribute].attribute.name;
-                const attributeIndex = this.formData.attributes.findIndex(attr => attr.name === attributeName);
-                if (attributeIndex !== -1) {
-                    this.formData.attributes[attributeIndex].data.push({name: this.selectColorData.find(color => color.value === value).name, value: value});
-                }
-            }
-        },
+        // addSelect() {
+        //     this.chooseOptions.push({ attribute: { name: '--- Select a type ---', values: [{ name: '', value: '' }] } })
+        // },
+        // addAttributes(index) {
+        //     this.chooseOptions[index].attribute.values.push({ name: '', value: '' })
+        // },
+        // setAttributeName(e) {
+        //     if (e && !this.formData.attributes.some(attr => attr.name === e)) {
+        //         this.formData.attributes.push({ name: e, data: [] });
+        //     }
+        // },
+        // setAttributeData(index_attribute, index_value) {
+        //     const value = this.chooseOptions[index_attribute].attribute.values[index_value].value;
+        //     if (value) {
+        //         const attributeName = this.chooseOptions[index_attribute].attribute.name;
+        //         const attributeIndex = this.formData.attributes.findIndex(attr => attr.name === attributeName);
+        //         if (attributeIndex !== -1) {
+        //             this.formData.attributes[attributeIndex].data.push({name: this.selectColorData.find(color => color.value === value).name, value: value});
+        //         }
+        //     }
+        // },
         addProduct() {
             console.dir(this.formData)
         }
