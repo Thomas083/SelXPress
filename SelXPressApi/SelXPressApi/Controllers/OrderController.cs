@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,15 +13,29 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+		public OrderController(IAuthorizationMiddleware authorizationMiddleware)
+		{
+			_authorizationMiddleware = authorizationMiddleware;
+		}
 		/// <summary>
 		/// GET: api/<OrderController>
 		/// Get all orders
 		/// </summary>
 		/// <returns>Return an Array of all orders</returns>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200, Type = typeof(List<Order>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetOrders()
 		{
-			return new string[] { "value1", "value2" };
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this
+			
+			return Ok();
 		}
 
 		/// <summary>
@@ -26,9 +45,17 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>Return a specific order</returns>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200, Type = typeof(Order))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetOrder(int id)
 		{
-			return "value";
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this
+			return Ok();
 		}
 
 		/// <summary>
@@ -37,8 +64,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		[ProducesResponseType(201)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateOrder([FromBody] string value)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo  put the code login after this and set the parameter
+			return StatusCode(201);
 		}
 
 		/// <summary>
@@ -48,8 +85,17 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateOrder(int id, [FromBody] string value)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this an set the parameters
+			return Ok();
 		}
 
 		/// <summary>
@@ -58,8 +104,17 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteOrder(int id)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+			//todo put the code logic after this
+			return Ok();
 		}
 	}
 }
