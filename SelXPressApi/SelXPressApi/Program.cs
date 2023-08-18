@@ -93,7 +93,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 app.UseHttpsRedirection();
 
 //app.UseAuthorization();
-
+app.UseCors("AllowOrigin");
 app.MapControllers();
 app.UseHttpLogging();
 app.UseSession();
