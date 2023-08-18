@@ -74,6 +74,15 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     //     datasContext.Database.EnsureDeleted();
     //     datasContext.Database.EnsureCreated();
     // }
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
     app.UseHsts();
     app.UseSwagger();
     app.UseSwaggerUI();
