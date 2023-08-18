@@ -14,12 +14,12 @@
       <tbody>
         <tr>
           <th scope="row">-</th>
-          <td><input-component /></td>
-          <td><input-component /></td>
-          <td><input-component /></td>
-          <td><input-component type="number" /></td>
+          <td><input-component @input="CreateData('username', $event)" /></td>
+          <td><input-component @input="CreateData('email', $event)" /></td>
+          <td><input-component @input="CreateData('password', $event)" /></td>
+          <td><input-component type="number" @input="CreateData('roleId', $event)" /></td>
           <td>
-            <button class="btn btn-add btn-admin">
+            <button class="btn btn-add btn-admin" v-on:click="createUser">
               Create
               <img src="../../assets/Admin/add-user.png" alt="create" />
             </button>
@@ -27,10 +27,10 @@
         </tr>
         <tr v-for="user in users">
           <th scope="row">{{ user.id }}</th>
-          <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event )" /></td>
-          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event )" /></td>
-          <td><input-component :value="user.password" @input="updateData(user.id, 'password', $event )" /></td>
-          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event )" /></td>
+          <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
+          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" /></td>
+          <td><input-component :value="user.password" @input="updateData(user.id, 'password', $event)" /></td>
+          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" /></td>
           <td>
             <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id)">
               Update
@@ -71,6 +71,13 @@ export default {
   },
   data() {
     return {
+      formData: {
+        id: null,
+        username: '',
+        email: '',
+        password: '',
+        roleId: ''
+      },
       users: [
         {
           id: 1,
@@ -90,11 +97,18 @@ export default {
     };
   },
   methods: {
+    CreateData(key, value) {
+      this.formData = Object.assign(this.formData, {[key]: value});
+    },
     updateData(index, key, value) {
-      this.users[index-1][key] = value;
+      this.users[index - 1][key] = value;
     },
     sendUpdateData(index) {
-      console.dir(this.users[index-1])
+      console.dir(this.users[index - 1])
+    },
+    createUser() {
+      this.formData.id = this.users.length + 1
+      console.dir(this.formData)
     }
   },
 };
