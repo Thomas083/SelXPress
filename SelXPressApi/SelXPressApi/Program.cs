@@ -61,11 +61,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
 
-builder.Services.AddCors(options =>
+builder.Services.AddCors(opt =>
 {
-    options.AddDefaultPolicy(policy =>
+    opt.AddPolicy(name: "CorsPolicy", builder =>
     {
-        policy.AllowAnyOrigin()
+        builder.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -93,7 +93,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 app.UseHttpsRedirection();
 
 //app.UseAuthorization();
-app.UseCors("AllowOrigin");
+app.UseCors("CorsPolicy");
 app.MapControllers();
 app.UseHttpLogging();
 app.UseSession();
