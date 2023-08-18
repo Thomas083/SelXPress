@@ -3,6 +3,7 @@ using SelXPressApi.Configurations;
 using SelXPressApi.Data;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
+using SelXPressApi.Middleware;
 using SelXPressApi.Repository;
 using System.Text.Json.Serialization;
 
@@ -24,11 +25,11 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductAttributeRepository, ProductAttributeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommonMethods, CommonMethods>();
 builder.Services.AddScoped<IFirebaseAuthManager, FirebaseAuthManager>();
+builder.Services.AddScoped<IAuthorizationMiddleware, AuthorizationMiddleware>();
 builder.Services.AddResponseCaching();
 builder.Services.AddDistributedMemoryCache();
 //add the automapper service
@@ -67,12 +68,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Docker part : delete and create database in SQL Server
-    using(var scope = app.Services.CreateScope())
-    {
-        var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-        datasContext.Database.EnsureDeleted();
-        datasContext.Database.EnsureCreated();
-    }
+    // using(var scope = app.Services.CreateScope())
+    // {
+    //     var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    //     datasContext.Database.EnsureDeleted();
+    //     datasContext.Database.EnsureCreated();
+    // }
     app.UseHsts();
     app.UseSwagger();
     app.UseSwaggerUI();
