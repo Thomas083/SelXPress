@@ -89,7 +89,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CAT-2001");
 			
 			if(newCategory.Name == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "CAT-11102");
@@ -118,7 +118,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CAT-2001");
 			
 			if(categoryUpdate == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "CAT-1102");
@@ -152,7 +152,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CAT-2001");
 			
 			if (!await _categoryRepository.CategoryExists(id))
 				throw new NotFoundException("The category with the id :" + id + " doesn't exist", "CAT-1402");

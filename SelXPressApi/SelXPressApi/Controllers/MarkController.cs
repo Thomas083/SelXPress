@@ -39,7 +39,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
@@ -69,7 +69,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			if (!await _markRepository.MarkExists(id))
 				throw new NotFoundException("The mark with the id : " + id + " doesn't exist", "MRK-1002");
@@ -100,7 +100,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			var marks = await _markRepository.GetMarkByUser(id);
 			if (marks.Count == 0)
@@ -152,7 +152,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			if (markDto == null)
 				throw new BadRequestException("There is missing fields, please try again with some data", "MRK-1102");
@@ -184,7 +184,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			if (updateMarkDto == null)
 				throw new BadRequestException("There is missing fields, please try again with some data", "MRK-1102");
@@ -218,7 +218,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "MRK-2001");
 			
 			if (!await _markRepository.MarkExists(id))
 				throw new NotFoundException("The mark with the id : " + id + " doesn't exist", "MRK-1402");

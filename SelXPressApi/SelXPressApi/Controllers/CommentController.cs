@@ -47,7 +47,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "COM-2001");
 			
 			var comments = _mapper.Map<List<CommentDTO>>(await _commentRepository.GetAllComments());
 			
@@ -102,7 +102,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "COM-2001");
 			
 			var comments = _mapper.Map<List<CommentDTO>>(await _commentRepository.GetCommentByUser(id));
 			
@@ -160,7 +160,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "COM-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
@@ -202,7 +202,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "COM-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured","COM-1101");
@@ -236,7 +236,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this opeartion", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "COM-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");

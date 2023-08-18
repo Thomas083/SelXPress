@@ -88,7 +88,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "TAG-2001");
             
             if (newTag.Name == null)
                 throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
@@ -118,7 +118,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "TAG-2001");
             
             if (tagUpdate == null)
                 throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
@@ -155,7 +155,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "TAG-2001");
             
             if (!await _tagRepository.TagExists(id))
                 throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");

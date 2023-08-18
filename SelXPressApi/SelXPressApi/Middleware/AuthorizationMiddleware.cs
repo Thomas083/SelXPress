@@ -43,11 +43,11 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
                     context.Response.Headers.Add(emailHeader,email);
                     return true;
                 }
-                throw new NotFoundException("The email address is not in the database", "todo");
+                throw new NotFoundException("The email address is not in the database", "SRV-1401");
             }
-            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "todo");
+            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701");
         }
-        throw new UnauthorizedException("The token is not valid, please try again with another token", "todo");
+        throw new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702");
     }
 
     public async Task<bool> CheckRoleIfAdmin(HttpContext context)
@@ -106,7 +106,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
         }
         catch (Exception ex)
         {
-            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1403");
+            throw new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701");
         }
     }
 }

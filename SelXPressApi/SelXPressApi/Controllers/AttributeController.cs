@@ -90,7 +90,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "ATT-2001");
 			
 			if(attribute == null || attribute.Name == null || attribute.Type == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "ATT-1102");
@@ -119,7 +119,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "ATT-2001");
 			
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATT-1101");
@@ -153,7 +153,7 @@ namespace SelXPressApi.Controllers
         {
 	        await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 	        if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-		        throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+		        throw new ForbiddenRequestException("You are not authorized to do this operation", "ATT-2001");
 	        
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATT-1101");

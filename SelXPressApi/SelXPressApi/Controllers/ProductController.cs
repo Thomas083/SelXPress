@@ -35,7 +35,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this
 			return Ok();
 		}
@@ -56,7 +56,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this and set the parameter
 			return Ok();
 		}
@@ -75,7 +75,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			string? email = HttpContext.Request.Headers["EmailHeader"];
 			//todo put the code logic after this
 			return Ok();
@@ -96,7 +96,7 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			string? email = HttpContext.Request.Headers["EmailHeader"];
 			//todo put the code logic after this
 			return Ok();
@@ -117,7 +117,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this and set the parameter
 			return StatusCode(201);
 		}
@@ -138,7 +138,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this and set the parameters
 			return Ok();
 		}
@@ -158,7 +158,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this and set the parameter
 			return Ok();
 		}

@@ -51,7 +51,7 @@ namespace SelXPressApi.Controllers
 			
 			//check the role of the connected user
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to access at this data", "todo");
+				throw new ForbiddenRequestException("You are not authorized to access at this data", "USR-2001");
 			
 			// get the data
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());
@@ -82,7 +82,7 @@ namespace SelXPressApi.Controllers
 			string? email = HttpContext.Request.Headers["EmailHeader"];
             if (!await _userRepository.UserExistsEmail(email))
             {
-	            throw new NotFoundException("The user with the email : " + email + " doesn't exist", "todo");
+	            throw new NotFoundException("The user with the email : " + email + " doesn't exist", "USR-1403");
             }
 
             if (!ModelState.IsValid)
@@ -141,7 +141,7 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
 
 			if (!await _userRepository.UserExistsEmail(email))
-				throw new NotFoundException("The user with the email : " + email + " doesn't exist", "todo");
+				throw new NotFoundException("The user with the email : " + email + " doesn't exist", "USR-1403");
             
             await _userRepository.UpdateUser(userUpdate, email);
             return Ok();
@@ -167,10 +167,10 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not allowed to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not allowed to do this operation", "USR-2001");
 			
 			if (!await _userRepository.UserExists(id))
-				throw new NotFoundException("The user with the id :" + id + " doesn't exist", "USR-1401");
+				throw new NotFoundException("The user with the id :" + id + " doesn't exist", "USR-1402");
 
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong , a bad request occured", "USR-1101");

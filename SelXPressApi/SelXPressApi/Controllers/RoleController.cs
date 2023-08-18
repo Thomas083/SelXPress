@@ -43,7 +43,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
@@ -76,7 +76,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (!await _roleRepository.RoleExists(id))
 				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
@@ -105,7 +105,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (role == null || role.RoleName == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1102");
@@ -135,7 +135,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
@@ -167,7 +167,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (!await _roleRepository.RoleExists(id))
 				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");

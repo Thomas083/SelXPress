@@ -5,7 +5,6 @@ using SelXPressApi.DTO.AttributeDataDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
-using SelXPressApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -92,7 +91,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "ATD-2001");
             
             if (attributeData == null || attributeData.Value == null || attributeData.Key == null)
                 throw new BadRequestException("There are missing fields, please try again with some data", "ATD-1102");
@@ -121,7 +120,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "ATD-2001");
             
             if (!ModelState.IsValid)
                 throw new BadRequestException("The model is wrong, a bad request occured", "ATD-1101");
@@ -155,7 +154,7 @@ namespace SelXPressApi.Controllers
         {
             await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
             if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-                throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+                throw new ForbiddenRequestException("You are not authorized to do this operation", "ATD-2001");
             
             if(!await _attributeDataRepository.AttributeDataExists(id))
                 throw new NotFoundException("The AttributeData with the id : " + id + " doesn't exist", "ATD-1402");

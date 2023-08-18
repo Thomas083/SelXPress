@@ -41,14 +41,14 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			var carts = await _cartRepository.GetAllCarts();
 			if (carts.Count == 0)
-				throw new NotFoundException("There is no carts in the database, please try again", "CRT-");
+				throw new NotFoundException("There is no carts in the database, please try again", "CRT-1401");
 			
 			return Ok(carts);
 		}
@@ -70,13 +70,13 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
             
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The cart with the id :" + id + " doesn't exist", "CRT-");
+				throw new NotFoundException("The cart with the id :" + id + " doesn't exist", "CRT-1402");
 			
 			var cart = await _cartRepository.GetCartById(id);
 			return Ok(cart);
@@ -101,14 +101,14 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			var carts = await _cartRepository.GetCartsByUserId(id);
 			if (carts.Count == 0)
-				throw new NotFoundException("There is no carts for the user with the id : " + id, "CRT-");
+				throw new NotFoundException("There is no carts for the user with the id : " + id, "CRT-1403");
 			
 			return Ok(carts);
 		}
@@ -130,13 +130,13 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
             
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			if (cartDto == null)
-				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-");
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
 			
 			await _cartRepository.CreateCartByAdmin(cartDto);
 			return Ok();
@@ -152,14 +152,14 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) && !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			string? email = HttpContext.Request.Headers["EmailHeader"];
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			if (cartDto == null)
-				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-");
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
 			
 			await _cartRepository.CreateCartByUser(cartDto,email);
 			return Ok();
@@ -183,16 +183,16 @@ namespace SelXPressApi.Controllers
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-");
+				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-1402");
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			if (cartDto == null)
-				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-");
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
 			
 			await _cartRepository.UpdateCart(cartDto, id);
 			return Ok();
@@ -218,13 +218,13 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
 			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "todo");
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
 			
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-");
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
 			
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-");
+				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-1402");
 			
 			await _cartRepository.DeleteCart(id);
 			return Ok();
