@@ -78,12 +78,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Docker part : delete and create database in SQL Server
-    // using(var scope = app.Services.CreateScope())
-    // {
-    //     var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-    //     datasContext.Database.EnsureDeleted();
-    //     datasContext.Database.EnsureCreated();
-    // }
+    using(var scope = app.Services.CreateScope())
+    {
+        var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+        datasContext.Database.EnsureDeleted();
+        datasContext.Database.EnsureCreated();
+    }
     
     app.UseHsts();
     app.UseSwagger();
