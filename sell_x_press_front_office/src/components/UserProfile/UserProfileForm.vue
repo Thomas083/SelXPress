@@ -8,6 +8,9 @@
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: 'UserProfileForm',
@@ -18,6 +21,16 @@ export default {
                 email: 'empereurdusale59@yahoo.com',
             },
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem("user")).token)
+        .then((user) => {
+            this.formData.username = user.username;
+            this.formData.email = user.email;
+        })
+        .catch((error) => {
+            console.dir(error)
+        });
     },
 }
 </script>

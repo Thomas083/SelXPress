@@ -2,12 +2,12 @@
     <div class="user-container">
         <div class="user-container-content">
             <h3 class="user-title">Personal Information</h3>
-            <user-profile-form />
+            <user-profile-form @input-form="updateData" />
             <div class="user-btns-container">
                 <button class="btn btn-primary change-password-btn" v-on:click="resetPassword">Change Password</button>
                 <button class="btn btn-primary business-status-btn" v-on:click="setBusinesStatusState">Apply for Business Status</button>
                 <business-status-form v-if="businessStatusState"/>
-                <button class="btn btn-secondary save-information-btn">Save</button>
+                <button class="btn btn-secondary save-information-btn" v-on:click="updateUser">Save</button>
             </div>
         </div>
         <div class="user-history-container">
@@ -23,6 +23,8 @@ import BusinessStatusForm from "@/components/UserProfile/BusinessStatusForm.vue"
 import { auth } from "@/config/firebase-config";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
+import { PUT } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 
 export default {
     name: 'UserView',
@@ -32,10 +34,14 @@ export default {
     },
     data() {
         return {
+            formData: null,
             businessStatusState: false,
         }
     },
     methods: {
+        updateData(e) {
+            this.formData = e;
+        },
         setBusinesStatusState() {
             this.businessStatusState = !this.businessStatusState
         },
@@ -47,6 +53,15 @@ export default {
         },
         goToHistory() {
             this.$router.push({ path: '/history' });
+        },
+        updateUser() {
+            PUT(ENDPOINTS.UPDATE_USER, this.formData, JSON.parse(localStorage.getItem("user")).token)
+            .then((response) => {
+                console.dir(response)
+            })
+            .catch((error) => {
+                console.dir(error)
+            })
         },
     },
 }
