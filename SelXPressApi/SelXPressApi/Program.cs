@@ -61,6 +61,16 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 
@@ -74,15 +84,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     //     datasContext.Database.EnsureDeleted();
     //     datasContext.Database.EnsureCreated();
     // }
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-        {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-    });
+    
     app.UseHsts();
     app.UseSwagger();
     app.UseSwaggerUI();
