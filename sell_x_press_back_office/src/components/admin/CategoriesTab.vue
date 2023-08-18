@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="categories-tags-container">
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
@@ -12,7 +12,7 @@
                 <tr>
                     <th scope="row">-</th>
                     <td><input-component @input="createCatageoriesData('name', $event)" /></td>
-                    <td>
+                    <td class="action-create-btn">
                         <button class="btn btn-add btn-admin" v-on:click="createCategories">
                             Create
                             <img src="../../assets/Admin/add-category.png" alt="create" />
@@ -23,7 +23,7 @@
                     <th scope="row">{{ category.id }}</th>
                     <td><input-component :value='category.name'
                             @input="updateCategoriesData(category.id, 'name', $event)" /></td>
-                    <td>
+                    <td class="action-btns">
                         <button class="btn btn-primary btn-admin" v-on:click="sendUpdateCategoriesData(category.id)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
@@ -50,7 +50,7 @@
                     <th scope="row">-</th>
                     <td><input-component @input="createTagsData('name', $event)" /></td>
                     <td><input-component @input="createTagsData('categoryId', $event)" /></td>
-                    <td>
+                    <td class="action-create-btn">
                         <button class="btn btn-add btn-admin" v-on:click="createTags">
                             Create
                             <img src="../../assets/Admin/add-category.png" alt="create" />
@@ -62,7 +62,7 @@
                     <td><input-component :value='tag.name' @input="updateTagsData(tag.id, 'name', $event)" /></td>
                     <td><input-component :value='tag.categoryId' @input="updateTagsData(tag.id, 'categoryId', $event)" />
                     </td>
-                    <td>
+                    <td class="action-btns">
                         <button class="btn btn-primary btn-admin" v-on:click="sendUpdateTagsData(tag.id)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
@@ -155,8 +155,28 @@ export default {
 </script>
 
 <style scoped>
+
+.categories-tags-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 1rem;
+}
+
 img {
     height: 1rem;
+}
+
+.action-create-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.action-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-admin {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-container">
     <table class="table table-striped table-hover table-bordered">
       <thead class="table-dark">
         <tr>
@@ -18,7 +18,7 @@
           <td><input-component @input="CreateData('email', $event)" /></td>
           <td><input-component @input="CreateData('password', $event)" /></td>
           <td><input-component type="number" @input="CreateData('roleId', $event)" /></td>
-          <td>
+          <td class="action-create-btn">
             <button class="btn btn-add btn-admin" v-on:click="createUser">
               Create
               <img src="../../assets/Admin/add-user.png" alt="create" />
@@ -31,7 +31,7 @@
           <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" /></td>
           <td><input-component :value="user.password" @input="updateData(user.id, 'password', $event)" /></td>
           <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" /></td>
-          <td>
+          <td class="action-btns">
             <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id)">
               Update
               <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
@@ -115,6 +115,11 @@ export default {
 </script>
 
 <style scoped>
+
+.user-container {
+  padding: 1rem;
+}
+
 img {
   height: 1rem;
 }
@@ -122,6 +127,21 @@ img {
 .btn-admin {
   border-radius: 1rem;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.action-create-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.action-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-add {
