@@ -1,6 +1,4 @@
-﻿using SelXPressApi.Models;
-
-namespace SelXPressApi.DTO.ProductDTO
+﻿namespace SelXPressApi.DTO.ProductDTO
 {
     public class ProductDTO
     {
@@ -10,8 +8,12 @@ namespace SelXPressApi.DTO.ProductDTO
         public string Description { get; set; }
         public string Picture { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Category Category { get; set; }
+        public CategoryDTO.CategoryDTO Category { get; set; }
         public int Stock { get; set; }
-        public ICollection<ProductAttribute> ProductAttributes { get; set; }
+
+        public ICollection<ProductAttributeDTO.ProductAttributeDTO> ProductAttributes { get; set; }
+        public ICollection<CommentDTO.CommentDTO> Comments { get; set; }
+        public ICollection<CartDTO.CartDto> Carts { get; set; }
+        public ICollection<OrderProductDTO.OrderProductDTO> OrderProducts { get; set; }
     }
 }

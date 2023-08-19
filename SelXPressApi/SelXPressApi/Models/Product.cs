@@ -36,7 +36,7 @@ public class Product
     /// <summary>
     /// Date and time of the creation of the product
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Initializer sets CreatedAt to current UTC time
 
     /// <summary>
     /// category of the product
