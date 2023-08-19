@@ -26,6 +26,13 @@ namespace SelXPressApi.Controllers
 		private readonly IMapper _mapper;
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductController"/> class.
+        /// </summary>
+        /// <param name="authorizationMiddleware">Authorization middleware.</param>
+        /// <param name="productRepository">Product repository.</param>
+        /// <param name="mapper">Automapper instance.</param>
+        /// <param name="context">Database context.</param>
         public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper, DataContext context)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
@@ -35,9 +42,14 @@ namespace SelXPressApi.Controllers
 		}
 
         /// <summary>
-        /// Get all product attributes
+        /// Get all product attributes.
         /// </summary>
-        /// <returns>An array of all product attributes</returns>
+        /// <param name="categoryName">Name of the category to filter by.</param>
+        /// <param name="tagNames">List of tag names to filter by.</param>
+        /// <param name="pageNumber">Page number.</param>
+        /// <param name="pageSize">Number of items per page.</param>
+        /// <param name="sortBy">Field to sort by.</param>
+        /// <returns>An array of all product attributes.</returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
@@ -45,49 +57,43 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> GetAllProducts(string categoryName, List<string> tagNames, int pageNumber, int pageSize, string sortBy)
         {
-            try
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+
+            var query = _context.Products.Include(p => p.Category).Include(p => p.ProductAttributes)
+                                .Where(p => categoryName == null || p.Category.Name == categoryName)
+                                .Where(p => tagNames == null || tagNames.All(t => p.ProductAttributes.Any(pa => pa.Attribute.Name == t)));
+
+            // Sorting
+            if (!string.IsNullOrEmpty(sortBy))
             {
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
-
-                var query = _context.Products.Include(p => p.Category).Include(p => p.ProductAttributes)
-                                  .Where(p => categoryName == null || p.Category.Name == categoryName)
-                                  .Where(p => tagNames == null || tagNames.All(t => p.ProductAttributes.Any(pa => pa.Attribute.Name == t)));
-
-                // Sorting
-                if (!string.IsNullOrEmpty(sortBy))
+                switch (sortBy.ToLower())
                 {
-                    switch (sortBy.ToLower())
-                    {
-                        case "name":
-                            query = query.OrderBy(p => p.Name);
-                            break;
-                        case "price":
-                            query = query.OrderBy(p => p.Price);
-                            break;
-                        // Add more cases for other sorting options
-                        default:
-                            break;
-                    }
+                    case "name":
+                        query = query.OrderBy(p => p.Name);
+                        break;
+                    case "price":
+                        query = query.OrderBy(p => p.Price);
+                        break;
+                    // Add more cases for other sorting options
+                    default:
+                        break;
                 }
-                else
-                {
-                    query = query.OrderBy(p => p.Id); // Default sorting
-                }
-
-                var totalCount = await query.CountAsync();
-                var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-
-                return Ok(products);
             }
-            catch (Exception ex)
+            else
             {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
+                query = query.OrderBy(p => p.Id); // Default sorting
             }
+
+            var totalCount = await query.CountAsync();
+            var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return Ok(products);
         }
 
-
+        /// <summary>
+        /// Get details of a product by ID.
+        /// </summary>
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(ProductDTO))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
@@ -95,25 +101,20 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
 
-                var product = await _productRepository.GetProductById(id);
+            var product = await _productRepository.GetProductById(id);
 
-                if (product == null)
-                    throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
+            if (product == null)
+                throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
 
-                return Ok(product);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+            return Ok(product);
         }
 
+        /// <summary>
+        /// Create a new product.
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -122,27 +123,21 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO product)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) && 
+                !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) && 
-                    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
-                }
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
+            }
 
-                if (product == null)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
-                await _productRepository.CreateProduct(product);
-                return StatusCode(201);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+            if (product == null)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+            await _productRepository.CreateProduct(product);
+            return StatusCode(201);
         }
-
+        /// <summary>
+        /// Update a product.
+        /// </summary>
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -152,31 +147,26 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDTO product)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+                                    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
-                                       !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
-                }
-
-                if (product == null)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
-
-                if (!await _productRepository.ProductExists(id))
-                    throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
-
-                await _productRepository.UpdateProduct(id, product);
-                return Ok();
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+
+            if (product == null)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+
+            if (!await _productRepository.ProductExists(id))
+                throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
+
+            await _productRepository.UpdateProduct(id, product);
+            return Ok();
         }
 
+        /// <summary>
+        /// Delete a product.
+        /// </summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -186,26 +176,18 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+                                                        !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
-                                                          !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
-                }
-
-                if (!await _productRepository.ProductExists(id))
-                    throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
-
-                await _productRepository.DeleteProduct(id);
-                return Ok();
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+
+            if (!await _productRepository.ProductExists(id))
+                throw new NotFoundException("There are no Product Attributes in the database", "PRO-1401");
+
+            await _productRepository.DeleteProduct(id);
+            return Ok();
         }
     }
 }
