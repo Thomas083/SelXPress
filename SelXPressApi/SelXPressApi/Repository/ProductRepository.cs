@@ -30,6 +30,11 @@ namespace SelXPressApi.Repository
             return saved > 0;
         }
 
+        public ICollection<Product> GetAllProducts()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Product> GetProductById(int id)
         {
             return await _context.Products.Where(p => p.Id == id).FirstAsync();

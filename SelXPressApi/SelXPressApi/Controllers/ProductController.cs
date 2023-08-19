@@ -27,7 +27,7 @@ namespace SelXPressApi.Controllers
 		/// Get all products
 		/// </summary>
 		/// <returns>Return an Array of all product</returns>
-		[HttpGet]
+		/*[HttpGet]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -167,6 +167,6 @@ namespace SelXPressApi.Controllers
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
 			//todo put the code logic after this and set the parameter
 			return Ok();
-		}
+		}*/
 	}
 }

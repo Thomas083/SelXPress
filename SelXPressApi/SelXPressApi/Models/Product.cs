@@ -62,5 +62,8 @@ public class Product
     /// List of the attributes of the product
     /// </summary>
     public ICollection<ProductAttribute> ProductAttributes { get; set; }
-
+    /// <summary>
+    /// List of comments for the product
+    /// </summary>
+    public ICollection<Comment> Comments { get; set; }
 }

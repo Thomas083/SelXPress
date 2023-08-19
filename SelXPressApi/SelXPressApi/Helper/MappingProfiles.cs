@@ -9,6 +9,7 @@ using SelXPressApi.DTO.CommentDTO;
 using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.Models;
 using Attribute = SelXPressApi.Models.Attribute;
+using SelXPressApi.DTO.ProductDTO;
 
 namespace SelXPressApi.Helper
 {
