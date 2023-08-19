@@ -20,11 +20,14 @@ namespace SelXPressApi.Repository
             _commonMethods = commonMethods;
             _mapper = mapper;
         }
+
+        // Check if a product attribute with the given ID exists
         public async Task<bool> ProductAttributeExists(int id)
         {
             return await _context.ProductAttributes.AnyAsync(pa => pa.Id == id);
         }
 
+        // Create a new product attribute with the provided data
         public async Task<bool> CreateProductAttribute(CreateProductAttributeDTO createProductAttribute)
         {
             var productAttributeEntity = _mapper.Map<ProductAttribute>(createProductAttribute);
@@ -33,10 +36,10 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
+        // Delete a product attribute by its ID if it exists
         public async Task<bool> DeleteProductAttribute(int id)
         {
-
-            if(await ProductAttributeExists(id))
+            if (await ProductAttributeExists(id))
             {
                 var productAttribute = await _context.ProductAttributes.FindAsync(id);
                 _context.ProductAttributes.Remove(productAttribute);
@@ -45,12 +48,14 @@ namespace SelXPressApi.Repository
             return false;
         }
 
+        // Get all product attributes
         public async Task<List<ProductAttribute>> GetAllProductAttributes()
         {
             var productAttributes = await _context.ProductAttributes.ToListAsync();
             return productAttributes;
         }
 
+        // Get a product attribute by its ID
         public async Task<ProductAttribute?> GetProductAttributeById(int id)
         {
             var productAttribute = await _context.ProductAttributes
@@ -59,19 +64,21 @@ namespace SelXPressApi.Repository
             return productAttribute;
         }
 
+        // Update an existing product attribute with the provided data
         public async Task<bool> UpdateProductAttribute(int id, UpdateProductAttributeDTO updateProductAttribute)
         {
             if (!await ProductAttributeExists(id))
                 return false;
+
             var productAttribute = await _context.ProductAttributes.FirstOrDefaultAsync(pa => pa.Id == id);
 
             if (productAttribute == null)
                 return false;
 
-            // Utilisez le mapper pour appliquer les modifications depuis le DTO de mise à jour
+            // Use the mapper to apply changes from the update DTO
             _mapper.Map(updateProductAttribute, productAttribute);
 
-            // Mettez à jour d'autres propriétés si nécessaire
+            // Update other properties if necessary
             // productAttribute.SomeProperty = updateProductAttribute.SomeProperty;
 
             _context.ProductAttributes.Update(productAttribute);
