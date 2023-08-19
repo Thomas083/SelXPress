@@ -5,6 +5,8 @@ using SelXPressApi.DTO.ProductAttributeDTO;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SelXPressApi.Repository
 {
@@ -21,13 +23,17 @@ namespace SelXPressApi.Repository
             _mapper = mapper;
         }
 
-        // Check if a product attribute with the given ID exists
+        /// <summary>
+        /// Check if a product attribute with the given ID exists.
+        /// </summary>
         public async Task<bool> ProductAttributeExists(int id)
         {
             return await _context.ProductAttributes.AnyAsync(pa => pa.Id == id);
         }
 
-        // Create a new product attribute with the provided data
+        /// <summary>
+        /// Create a new product attribute with the provided data.
+        /// </summary>
         public async Task<bool> CreateProductAttribute(CreateProductAttributeDTO createProductAttribute)
         {
             var productAttributeEntity = _mapper.Map<ProductAttribute>(createProductAttribute);
@@ -36,7 +42,9 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        // Delete a product attribute by its ID if it exists
+        /// <summary>
+        /// Delete a product attribute by its ID if it exists.
+        /// </summary>
         public async Task<bool> DeleteProductAttribute(int id)
         {
             if (await ProductAttributeExists(id))
@@ -48,14 +56,18 @@ namespace SelXPressApi.Repository
             return false;
         }
 
-        // Get all product attributes
+        /// <summary>
+        /// Get all product attributes.
+        /// </summary>
         public async Task<List<ProductAttribute>> GetAllProductAttributes()
         {
             var productAttributes = await _context.ProductAttributes.ToListAsync();
             return productAttributes;
         }
 
-        // Get a product attribute by its ID
+        /// <summary>
+        /// Get a product attribute by its ID.
+        /// </summary>
         public async Task<ProductAttribute?> GetProductAttributeById(int id)
         {
             var productAttribute = await _context.ProductAttributes
@@ -64,7 +76,9 @@ namespace SelXPressApi.Repository
             return productAttribute;
         }
 
-        // Update an existing product attribute with the provided data
+        /// <summary>
+        /// Update an existing product attribute with the provided data.
+        /// </summary>
         public async Task<bool> UpdateProductAttribute(int id, UpdateProductAttributeDTO updateProductAttribute)
         {
             if (!await ProductAttributeExists(id))

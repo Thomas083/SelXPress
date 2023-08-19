@@ -13,21 +13,40 @@ using SelXPressApi.DTO.ProductDTO;
 
 namespace SelXPressApi.Helper
 {
+    /// <summary>
+    /// AutoMapper profile for mapping between model and DTO classes.
+    /// </summary>
     public class MappingProfiles : Profile
     {
         public MappingProfiles()
         {
+            // Mapping User model to UserDto
             CreateMap<User, UserDto>();
+
+            // Mapping User model to CreateUserDto
             CreateMap<User, CreateUserDto>();
+
+            // Mapping Comment model to CommentDTO
             CreateMap<Comment, CommentDTO>();
+
+            // Mapping Category model to CategoryDTO and including Tags
             CreateMap<Category, CategoryDTO>()
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags)); // Map Category model to CategoryDTO and include Tags
-            CreateMap<Tag, TagDto>(); // Map Tag model to TagDto
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+
+            // Mapping Tag model to TagDto
+            CreateMap<Tag, TagDto>();
+
+            // Mapping Attribute model to AttributeDTO
             CreateMap<Attribute, AttributeDTO>();
+
+            // Mapping AttributeData model to AttributeDataDto
             CreateMap<AttributeData, AttributeDataDto>();
+
+            // Mapping Product model to ProductDTO
             CreateMap<Product, ProductDTO>();
+
+            // Mapping Product model to CreateProductDTO
             CreateMap<Product, CreateProductDTO>();
         }
     }
-
 }
