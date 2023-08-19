@@ -1,12 +1,14 @@
 <template>
-    <label :for="name">{{ label }}</label>
+    <label v-if="label!=''" :for="name">{{ label }}</label>
     <input
       :id="id"
       :name="name"
       :type="type"
       :placeholder="placeholder"
-      v-model="input"
-      @change="$emit('input', input)"
+      :class="$attrs.class"
+      :style="styleObject"
+      :value="value"
+      @change="$emit('input', parseInt($event.target.value))"
     />
 </template>
 
@@ -17,13 +19,13 @@ export default {
     id: String,
     name: String,
     type: String,
+    value: [String, Number],
     placeholder: String,
-    label: String,
-  },
-  data() {
-    return {
-      input: "",
-    };
+    label: {
+      type: String,
+      default: "",
+    },
+    styleObject: Object,
   },
 };
 </script>
@@ -32,12 +34,5 @@ export default {
 label {
   align-self: start;
   margin-left: 3vw;
-}
-
-input {
-  border-radius: 15px;
-  height: 53px;
-  width: 90%;
-  text-align: center;
 }
 </style>

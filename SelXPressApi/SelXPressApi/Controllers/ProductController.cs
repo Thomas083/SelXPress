@@ -2,11 +2,8 @@ using AutoMapper;
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DocumentationErrorTemplate;
-using SelXPressApi.DTO.ProductDTO;
-using SelXPressApi.Exceptions.Product;
-using SelXPressApi.Exceptions.User;
-using SelXPressApi.Interfaces;
-using System.Runtime.InteropServices;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Middleware;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,12 +16,11 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class ProductController : ControllerBase
 	{
-		private readonly IProductRepository _productRepository;
-		private readonly IMapper _mapper;
-		public ProductController(IProductRepository productRepository, IMapper mapper)
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+
+		public ProductController(IAuthorizationMiddleware authorizationMiddleware)
 		{
-			_productRepository = productRepository;
-			_mapper = mapper;
+			_authorizationMiddleware = authorizationMiddleware;
 		}
 		/// <summary>
 		/// GET: api/<ProductController>
@@ -32,21 +28,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <returns>Return an Array of all product</returns>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
-        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
-        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<ActionResult> GetProducts()
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProducts()
 		{
-			if(!ModelState.IsValid)
-				throw new GetProductsBadRequestException("The model is wrong, a bad request occured");
-
-
-            var products = _mapper .Map<List<ProductDTO>>(_productRepository.GetAllProducts());
-
-			if(products.Count == 0)
-				throw new GetProductsNotFoundException("There are no products in the database");
-			return Ok(products);
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			//todo put the code logic after this
+			return Ok();
 		}
 
 		/// <summary>
@@ -56,20 +49,64 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <returns>information of a specific product</returns>
 		[HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(ICollection<ProductDTO>))]
-        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
-        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<ActionResult> GetProductByID(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProduct(int id)
 		{
-            if (!await _productRepository.ProductExists(id))
-				throw new GetProductByIdNotFoundException("The user with the id : " + id + "doesn't exist");
-            if (!ModelState.IsValid)
-                throw new GetProductByIdBadRequestException("The model is wrong, a bad request occured");
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			//todo put the code logic after this and set the parameter
+			return Ok();
+		}
 
             var product = _productRepository.GetProductById(id);
             return Ok(product);
         }
+
+		/// <summary>
+		/// Methode qui retourne tous les produits appertennant à un utilisateur (méthode pour les sellers)
+		/// Retourner les produits avec l'adresse mail de l'utilisateur qui les a créé
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("me")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductsBySeller()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			string? email = HttpContext.Request.Headers["EmailHeader"];
+			//todo put the code logic after this
+			return Ok();
+		}
+		
+		
+		/// <summary>
+		/// Methode qui retourne le produit par rapport à son id appertennant à un utilisateur (méthode pour les sellers)
+		/// Retourner le produit avec l'adresse mail de l'utilisateur qui les a créé et l'id du produit
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("me/{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductBySeller(int id)
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			string? email = HttpContext.Request.Headers["EmailHeader"];
+			//todo put the code logic after this
+			return Ok();
+		}
 
 		/// <summary>
 		/// POST api/<ProductController>
@@ -77,17 +114,18 @@ namespace SelXPressApi.Controllers
 		/// </summary>
 		/// <param name="value"></param>
 		[HttpPost]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO newProduct)
+		[ProducesResponseType(201)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateProduct([FromBody] string value)
 		{
-			if (newProduct.Name == null || newProduct.Description == null || newProduct.Picture == null || newProduct.Price == null || newProduct.ProductAttributes == null || newProduct.Category == null)
-				throw new CreateProductBadRequestException("There is a missing field, a bad request occured");
-
-			if (await _productRepository.CreateProduct(newProduct))
-				return StatusCode(201);
-			throw new Exception("An error occured while the creation of the user");
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			//todo put the code logic after this and set the parameter
+			return StatusCode(201);
 		}
 
 		/// <summary>
@@ -97,41 +135,38 @@ namespace SelXPressApi.Controllers
 		/// <param name="id"></param>
 		/// <param name="value"></param>
 		[HttpPut("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
-        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDTO productUpdate)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateProduct(int id, [FromBody] string value)
 		{
-			if (productUpdate == null)
-				throw new UpdateProductBadRequestException("The value of the body is null, please try again with some data");
-			if(!ModelState.IsValid)
-				throw new UpdateProductBadRequestException("The model is not valid, a bad request occured");
-			if (!await _productRepository.UpdateProduct(productUpdate, id))
-				return Ok();
-            throw new Exception("An error occured while the update of the user");
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			//todo put the code logic after this and set the parameters
+			return Ok();
+		}
 
-        }
-
-        /// <summary>
-        /// DELETE api/<ProductController>/5
-        /// Delete a product
-        /// </summary>
-        /// <param name="id"></param>
-        [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
-        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-        public async Task<IActionResult> DeleteProduct(int id)
+		/// <summary>
+		/// DELETE api/<ProductController>/5
+		/// Delete a product
+		/// </summary>
+		/// <param name="id"></param>
+		[HttpDelete("deleteProduct/{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteProduct(int id)
 		{
-			if (!await _productRepository.ProductExists(id))
-				throw new DeleteProductNotFoundException("The user with the id " + id + " doesn't exist");
-			if (!ModelState.IsValid)
-				throw new DeleteProductBadRequestException("The model is not valid, a bad request occured");
-			if(await _productRepository.DeleteProduct(id))
-				return Ok();
-			throw new Exception("An error occured while the deleting of the user");
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PDT-2001");
+			//todo put the code logic after this and set the parameter
+			return Ok();
 		}
 	}
 }

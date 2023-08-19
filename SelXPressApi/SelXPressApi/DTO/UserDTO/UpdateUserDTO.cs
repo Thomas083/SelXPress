@@ -9,12 +9,7 @@
         /// The new Username of the user
         /// </summary>
         public string Username { get; set; }
-
-        /// <summary>
-        /// The new Email of the user
-        /// </summary>
-        public string Email { get; set; }
-
+        
         /// <summary>
         /// The new Password of the user
         /// </summary>

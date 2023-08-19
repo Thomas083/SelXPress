@@ -1,4 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DocumentationErrorTemplate;
+using SelXPressApi.DTO.CartDTO;
+using SelXPressApi.Exceptions;
+using SelXPressApi.Interfaces;
+using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,58 +14,220 @@ namespace SelXPressApi.Controllers
 	[ApiController]
 	public class CartController : ControllerBase
 	{
+		private readonly ICartRepository _cartRepository;
+		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+
+		public CartController(ICartRepository cartRepository, IAuthorizationMiddleware authorizationMiddleware)
+		{
+			_cartRepository = cartRepository;
+			_authorizationMiddleware = authorizationMiddleware;
+		}
+		
 		/// <summary>
-		/// GET: api/<CartController>
-		/// Get all carts
+		/// Method to get all the carts of the database
 		/// </summary>
-		/// <returns>Return an Array of all cart</returns>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		[ProducesResponseType(200, Type = typeof(List<Cart>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetAllCarts()
 		{
-			return new string[] { "value1", "value2" };
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			var carts = await _cartRepository.GetAllCarts();
+			if (carts.Count == 0)
+				throw new NotFoundException("There is no carts in the database, please try again", "CRT-1401");
+			
+			return Ok(carts);
 		}
 
 		/// <summary>
-		/// GET api/<CartController>/5
-		/// Get a cart by id
+		/// Method to get the cart based on the id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <returns>Return the information of a specific cart</returns>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
 		[HttpGet("{id}")]
-		public string Get(int id)
+		[ProducesResponseType(200, Type = typeof(Cart))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetCartById(int id)
 		{
-			return "value";
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+            
+			if (!await _cartRepository.CartExists(id))
+				throw new NotFoundException("The cart with the id :" + id + " doesn't exist", "CRT-1402");
+			
+			var cart = await _cartRepository.GetCartById(id);
+			return Ok(cart);
+		}
+		
+		/// <summary>
+		/// Method to get all the carts based on the user id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
+		[HttpGet("{id}/user")]
+		[ProducesResponseType(200, Type = typeof(List<Cart>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetCartByUserId(int id)
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			var carts = await _cartRepository.GetCartsByUserId(id);
+			if (carts.Count == 0)
+				throw new NotFoundException("There is no carts for the user with the id : " + id, "CRT-1403");
+			
+			return Ok(carts);
 		}
 
 		/// <summary>
-		/// POST api/<CartController>
-		/// Create new cart
+		/// Method to create a cart	(accessible necessary by admin role)
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="cartDto"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
 		[HttpPost]
-		public void Post([FromBody] string value)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateCartByAdmin([FromBody] CreateCartByAdminDto cartDto)
 		{
-
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+            
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			if (cartDto == null)
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
+			
+			await _cartRepository.CreateCartByAdmin(cartDto);
+			return Ok();
+		}
+		
+		[HttpPost("me")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> CreateCartByUser([FromBody] CreateCartDto cartDto)
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) && !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			string? email = HttpContext.Request.Headers["EmailHeader"];
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			if (cartDto == null)
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
+			
+			await _cartRepository.CreateCartByUser(cartDto,email);
+			return Ok();
 		}
 
 		/// <summary>
-		/// PUT api/<CartController>/5
-		/// Modify a cart
+		/// Method to update the cart based on the id
 		/// </summary>
 		/// <param name="id"></param>
-		/// <param name="value"></param>
+		/// <param name="cartDto"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
+		/// <exception cref="BadRequestException"></exception>
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateCart(int id, [FromBody] UpdateCartDto cartDto)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			
+			if (!await _cartRepository.CartExists(id))
+				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-1402");
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			if (cartDto == null)
+				throw new BadRequestException("There is missing fields, please try again with some data", "CRT-1102");
+			
+			await _cartRepository.UpdateCart(cartDto, id);
+			return Ok();
 		}
+		
 		/// <summary>
-		/// DELETE api/<CartController>/5
-		/// Delete a cart
+		/// Method to delete a cart based on the id
 		/// </summary>
 		/// <param name="id"></param>
+		/// <returns></returns>
+		/// <exception cref="ForbiddenRequestException"></exception>
+		/// <exception cref="BadRequestException"></exception>
+		/// <exception cref="NotFoundException"></exception>
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> DeleteCart(int id)
 		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
+			
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");
+			
+			if (!await _cartRepository.CartExists(id))
+				throw new NotFoundException("The cart with the id : " + id + " doesn't exist", "CRT-1402");
+			
+			await _cartRepository.DeleteCart(id);
+			return Ok();
 		}
 	}
 }

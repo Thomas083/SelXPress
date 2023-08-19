@@ -6,6 +6,7 @@
       name="input-mail"
       type="text"
       placeholder="Enter your email"
+      class="form-input"
       @input="updateData($event, 'email')"
     />
     <input-component
@@ -14,6 +15,7 @@
       name="input-pwd"
       type="password"
       placeholder="Enter your password"
+      class="form-input"
       @input="updateData($event, 'password')"
     />
   </div>
