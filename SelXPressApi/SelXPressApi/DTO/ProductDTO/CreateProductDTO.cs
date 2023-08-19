@@ -8,5 +8,6 @@
         public string Picture { get; set; }
         public int CategoryId { get; set; }
         public int Stock { get; set; }
+        public List<int> AttributeIds { get; set; } // New property for attribute IDs
     }
 }
