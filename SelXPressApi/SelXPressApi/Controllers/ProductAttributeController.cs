@@ -37,23 +37,15 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> GetProductAttributes()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
 
-                var productAttributes = await _productAttributeRepository.GetAllProductAttributes();
+            var productAttributes = await _productAttributeRepository.GetAllProductAttributes();
 
-                if (productAttributes.Count == 0)
-                    throw new NotFoundException("There are no Product Attributes in the database", "PAT-1401");
+            if (productAttributes.Count == 0)
+                throw new NotFoundException("There are no Product Attributes in the database", "PAT-1401");
 
-                return Ok(productAttributes);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+            return Ok(productAttributes);
         }
 
         /// <summary>
@@ -68,23 +60,15 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
 
-                var productAttribute = await _productAttributeRepository.GetProductAttributeById(id);
+            var productAttribute = await _productAttributeRepository.GetProductAttributeById(id);
 
-                if (productAttribute == null)
-                    throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+            if (productAttribute == null)
+                throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
 
-                return Ok(productAttribute);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+            return Ok(productAttribute);
         }
 
         /// <summary>
@@ -99,27 +83,19 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> CreateProductAttribute([FromBody] CreateProductAttributeDTO productAttribute)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+                !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
-                    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
-                }
-
-                if (productAttribute == null)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
-
-                await _productAttributeRepository.CreateProductAttribute(productAttribute);
-                return StatusCode(201);
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
+
+            await _productAttributeRepository.CreateProductAttribute(productAttribute);
+            return StatusCode(201);
         }
 
         /// <summary>
@@ -136,34 +112,23 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> UpdateProductAttribute(int id, [FromBody] UpdateProductAttributeDTO updateProductAttribute)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+                !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
-                    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
-                }
-
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
-
-                if (updateProductAttribute == null)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
-
-                var result = await _productAttributeRepository.UpdateProductAttribute(id, updateProductAttribute);
-
-                if (!result)
-                    throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
-
-                return Ok();
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
+
+            var result = await _productAttributeRepository.UpdateProductAttribute(id, updateProductAttribute);
+
+            if (!result)
+                throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+
+            return Ok();
         }
 
         /// <summary>
@@ -179,30 +144,22 @@ namespace SelXPressApi.Controllers
         [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
         public async Task<IActionResult> DeleteProductAttribute(int id)
         {
-            try
+            await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+            if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+                !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
             {
-                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-
-                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
-                    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
-                {
-                    throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
-                }
-
-                if (!ModelState.IsValid)
-                    throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
-
-                if (!await _productAttributeRepository.ProductAttributeExists(id))
-                    throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
-
-                await _productAttributeRepository.DeleteProductAttribute(id);
-                return Ok();
+                throw new ForbiddenRequestException("You are not authorized to perform this operation", "PAT-2001");
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions and return appropriate error response
-                return StatusCode(500, new InternalServerErrorTemplate());
-            }
+
+            if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "PAT-1101");
+
+            if (!await _productAttributeRepository.ProductAttributeExists(id))
+                throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+
+            await _productAttributeRepository.DeleteProductAttribute(id);
+            return Ok();
         }
     }
 }
