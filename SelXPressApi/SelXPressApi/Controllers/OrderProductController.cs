@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.Exceptions;
+using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,10 +14,14 @@ namespace SelXPressApi.Controllers
 	public class OrderProductController : ControllerBase
 	{
 		private readonly IAuthorizationMiddleware _authorizationMiddleware;
+		private readonly IOrderProductRepository _orderProductRepository;
+		private readonly IMapper _mapper;
 
-		public OrderProductController(IAuthorizationMiddleware authorizationMiddleware)
+		public OrderProductController(IAuthorizationMiddleware authorizationMiddleware, IOrderProductRepository orderProductRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
+			_orderProductRepository = orderProductRepository;
+			_mapper = mapper;
 		}
 		/// <summary>
 		/// GET: api/<OrderProductController>
@@ -26,14 +32,21 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+        [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetOrderProducts()
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "ODP-2001");
-			//todo put the code logic after this
-			return Ok();
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occured", "ODP-1101");
+
+			// Retrieve orders from the repository
+			var orderProducts = await _orderProductRepository.GetAllOrderProducts();
+			if (orderProducts.Count == 0)
+				throw new NotFoundException("There is no order product in the database, please try again", "ODP-1401");
+			return Ok(orderProducts);
 		}
 
 		/// <summary>
