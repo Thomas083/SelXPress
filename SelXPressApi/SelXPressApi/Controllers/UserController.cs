@@ -47,11 +47,11 @@ namespace SelXPressApi.Controllers
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "USR-1101");
             // check of the validity of the token
-			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			//await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
 			//check the role of the connected user
-			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to access at this data", "USR-2001");
+			//if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				//throw new ForbiddenRequestException("You are not authorized to access at this data", "USR-2001");
 			
 			// get the data
             var users = _mapper.Map<List<UserDto>>(await _userRepository.GetAllUsers());

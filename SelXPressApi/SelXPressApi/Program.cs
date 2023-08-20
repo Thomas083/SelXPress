@@ -35,6 +35,9 @@ builder.Services.AddDistributedMemoryCache();
 //add the automapper service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+//add seeding
+builder.Services.AddTransient<Seed>();
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
@@ -73,7 +76,6 @@ builder.Services.AddCors(opt =>
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
@@ -83,7 +85,14 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
         datasContext.Database.EnsureDeleted();
         datasContext.Database.EnsureCreated();
+        
     }
+    /*var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seed>();
+        service.SeedDataContext();
+    }*/
     
     app.UseHsts();
     app.UseSwagger();
