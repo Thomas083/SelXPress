@@ -36,7 +36,7 @@ public class Product
     /// <summary>
     /// Date and time of the creation of the product
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Initializer sets CreatedAt to current UTC time
 
     /// <summary>
     /// category of the product
@@ -46,7 +46,7 @@ public class Product
     /// <summary>
     /// Stock of the product
     /// </summary>
-    //public Stock Stock { get; set; }
+    public int Stock { get; set; }
 
     /// <summary>
     /// List of the cart where the product is in
@@ -62,5 +62,8 @@ public class Product
     /// List of the attributes of the product
     /// </summary>
     public ICollection<ProductAttribute> ProductAttributes { get; set; }
-
+    /// <summary>
+    /// List of comments for the product
+    /// </summary>
+    public ICollection<Comment> Comments { get; set; }
 }
