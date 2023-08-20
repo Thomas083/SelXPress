@@ -91,8 +91,7 @@ namespace SelXPressApi.Controllers
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is invalid, a bad request occurred", "ODP-1101");
 
-			// todo: Implement the logic to retrieve order products associated with the user's email
-			// You can use the email to query the database for order products
+			// Retrieve order products from the repository based on the user's email
 			var orderProducts = await _orderProductRepository.GetOrderProductsByUser(email);
 			if (orderProducts.Count == 0)
 				throw new NotFoundException("There is no order product in the database, please try again", "ODP-1401");
@@ -159,6 +158,7 @@ namespace SelXPressApi.Controllers
 			if (order == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "ODP-1102");
 
+			// Create order product in the repository
 			await _orderProductRepository.CreateOrderProduct(order);
 			return StatusCode(201);
 		}
@@ -193,9 +193,11 @@ namespace SelXPressApi.Controllers
 			if (order == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "ODP-1102");
 
+			// Check if the order product exists
 			if (!await _orderProductRepository.OrderProductExists(id))
 				throw new NotFoundException("The order product with the id : " + id + " doesn't exist ", "ODP-1401");
 
+			// Update order product in the repository
 			await _orderProductRepository.UpdateOrderProduct(id, order);
 			return Ok();
 		}
