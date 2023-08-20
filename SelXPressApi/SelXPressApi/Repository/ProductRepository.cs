@@ -126,11 +126,9 @@ namespace SelXPressApi.Repository
                 return false;
             var product = await _context.Products.FindAsync(id);
 
-            _mapper.Map(updateProductDTO, product);
+            _mapper.Map(updateProductDTO, product);            
 
-            await _commonMethods.Save();
-
-            return true;
+            return await _commonMethods.Save(); ;
         }
     }
 }
