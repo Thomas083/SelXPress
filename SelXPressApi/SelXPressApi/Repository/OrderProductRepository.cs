@@ -50,6 +50,13 @@ namespace SelXPressApi.Repository
 			return await _context.OrderProducts.ToListAsync();
 		}
 
+		public async Task<List<OrderProduct>> GetOrderProductsByUser(string email)
+		{
+			return await _context.OrderProducts
+				.Where(op => op.Order.User.Email == email)
+				.ToListAsync();
+		}
+
 		public async Task<OrderProduct?> GetOrderProductById(int id)
 		{
 			return await _context.OrderProducts.FirstOrDefaultAsync(o => o.Id == id);

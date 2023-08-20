@@ -8,6 +8,7 @@ namespace SelXPressApi.Interfaces
 	public interface IOrderProductRepository
 	{
 		Task<bool> OrderProductExists(int id);
+		Task<List<OrderProduct>> GetOrderProductsByUser(string email);
 		Task<OrderProduct> GetOrderProductById(int id);
 		Task<List<OrderProduct>> GetAllOrderProducts();
 		Task<bool> CreateOrderProduct(CreateOrderProductDTO createOrderProduct);
