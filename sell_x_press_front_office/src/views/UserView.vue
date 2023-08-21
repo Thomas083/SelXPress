@@ -57,10 +57,10 @@ export default {
         updateUser() {
             PUT(ENDPOINTS.UPDATE_USER, this.formData, JSON.parse(localStorage.getItem("user")).token)
             .then((response) => {
-                console.dir(response)
+                createToast({ title: 'Successful Update', description: 'Your profil was sucessfuly updated' }, { type: 'success', position: 'bottom-right' });
             })
             .catch((error) => {
-                console.dir(error)
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
             })
         },
     },
