@@ -1,4 +1,4 @@
-namespace SelXPressApi.DTO.OrderDTO
+namespace SelXPressApi.DTO.OrderDTOProductDTO
 {
 	public class OrderProductDTO
 	{

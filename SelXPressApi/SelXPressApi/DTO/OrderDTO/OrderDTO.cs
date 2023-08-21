@@ -1,4 +1,5 @@
 ﻿using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.DTO.OrderDTOProductDTO;
 
 namespace SelXPressApi.DTO.OrderDTO
 {

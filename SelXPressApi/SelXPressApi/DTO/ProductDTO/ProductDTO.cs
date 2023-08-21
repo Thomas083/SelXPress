@@ -4,7 +4,7 @@ using SelXPressApi.DTO.CategoryDTO; // Add using directive for CategoryDTO
 using SelXPressApi.DTO.ProductAttributeDTO; // Add using directive for ProductAttributeDTO
 using SelXPressApi.DTO.CommentDTO; // Add using directive for CommentDTO
 using SelXPressApi.DTO.CartDTO; // Add using directive for CartDTO
-using SelXPressApi.DTO.OrderProductDTO; // Add using directive for OrderProductDTO
+using SelXPressApi.DTO.OrderDTOProductDTO; // Add using directive for OrderProductDTO
 
 namespace SelXPressApi.DTO.ProductDTO
 {
@@ -66,11 +66,11 @@ namespace SelXPressApi.DTO.ProductDTO
         /// <summary>
         /// Gets or sets the carts containing the product.
         /// </summary>
-        public ICollection<CartDTO.CartDto> Carts { get; set; }
+        public ICollection<CartDto> Carts { get; set; }
 
         /// <summary>
         /// Gets or sets the order products containing the product.
         /// </summary>
-        public ICollection<OrderProductDTO.OrderProductDTO> OrderProducts { get; set; }
+        public ICollection<OrderProductDTO> OrderProducts { get; set; }
     }
 }
