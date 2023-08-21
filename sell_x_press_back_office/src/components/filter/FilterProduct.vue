@@ -1,13 +1,8 @@
 <template>
-    <form class="form-select-input" @submit.prevent="sendsearchdata">
-        <select class="form-select" aria-label="Default select example" v-model="searchFormData.type">
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-            <option value="publication_date">Date</option>
-        </select>
+    <form class="form-select-input" @submit.prevent="SendSearchData">
         <div class="search-input">
-            <input type="text" placeholder="'Search your product...'" v-model="searchFormData.value" />
-            <button class="btn btn-primary" @click="SendSearchData()">Search</button>
+            <input type="text" placeholder="Search your product..." v-model="searchFormData.value" />
+            <button class="btn btn-primary">Search</button>
         </div>
     </form>
 </template>
@@ -23,7 +18,6 @@ export default {
     data() {
         return {
             searchFormData: {
-                type: 'name',
                 value: ''
             }
         }

@@ -1,10 +1,10 @@
 <template>
     <div class="products">
             <div class="product-container">
-                <div class="product-date">{{publication_date}}</div>
-                <div class="product-title">{{name}}</div>
-                <div class="product-ref">Ref : {{ productId }}</div>
-                <div class="product-price">{{ price }} €</div>
+                <div class="product-date">{{product.publication_date}}</div>
+                <div class="product-title">{{product.name}}</div>
+                <div class="product-ref">Ref : {{ product.id }}</div>
+                <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
                     <button class="btn btn-primary update-btn">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
                     <button class="btn btn-primary delete-btn">Delete <img class="delete-img" src="@/assets/Card/bouton-supprimer.png" alt="..." /></button>
@@ -23,14 +23,6 @@ export default {
         required: true,
     },
   },
-  data() {
-    return {
-      productId: this.product.id,
-      name: this.product.name,
-      price: this.product.price,
-      publication_date: this.product.publication_date
-    };
-  }
 }
 
 </script>
