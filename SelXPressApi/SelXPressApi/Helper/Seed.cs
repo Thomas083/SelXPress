@@ -1,5 +1,4 @@
-﻿using Microsoft.OpenApi.Validations.Rules;
-using SelXPressApi.Data;
+﻿using SelXPressApi.Data;
 using SelXPressApi.Models;
 
 namespace SelXPressApi.Helper;
@@ -17,7 +16,6 @@ public class Seed
     {
         if (!_context.Users.Any() && !_context.Roles.Any())
         {
-            List<Role> roles = new List<Role>();
             Role customerRole = new Role()
             {
                 Name = "Customer"
@@ -72,8 +70,8 @@ public class Seed
             };
 
 
-            _context.Roles.Add(customerRole);
-            _context.Users.Add(userCustomer1);
+            _context.Roles.AddRange(customerRole, sellerRole, operatorRole);
+            _context.Users.AddRange(userCustomer1, userCustomer2, userSeller, userOperator, userOperator2);
             _context.SaveChanges();
         }
     }

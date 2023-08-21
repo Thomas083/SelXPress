@@ -40,10 +40,10 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetRoles()
 		{
-			//await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
-			//if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				//throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
