@@ -36,7 +36,7 @@ export default {
         logUser() {
             POST(ENDPOINTS.USER_LOGIN, this.formData)
                 .then((userCredential) => {
-                    createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
+                    createToast({ title: 'Sign IN Success', description: 'You are sucessfuly connected' }, { type: 'success', position: 'bottom-right' });
                     const user = {
                         email: userCredential.data.email,
                         token: userCredential.data.token

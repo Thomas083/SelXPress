@@ -32,8 +32,19 @@ export default {
         createUser() {
             POST(ENDPOINTS.CREATE_USER, this.formData)
                 .then(() => {
-                    createToast({ title: 'Sign UP Success', description: 'You are sucessfuly register you can now log in !' }, { type: 'success', position: 'bottom-right' });
-                    this.$router.push({ path: '/login'});
+                    createToast({ title: 'Sign UP Success', description: 'You are sucessfuly registered !' }, { type: 'success', position: 'bottom-right' });
+                    POST(ENDPOINTS.USER_LOGIN, {email: this.formData.email, password: this.formData.password})
+                        .then((userCredential) => {
+                            const user = {
+                                email: userCredential.data.email,
+                                token: userCredential.data.token
+                            }
+                            localStorage.setItem("user", JSON.stringify(user));
+                            this.$router.push({ path: '/' });
+                        })
+                        .catch(() => {
+                            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                        });
                 })
                 .catch(() => {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
