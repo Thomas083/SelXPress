@@ -6,6 +6,9 @@ using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
 using SelXPressApi.Repository;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,9 @@ builder.Services.AddDistributedMemoryCache();
 //add the automapper service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+//add seeding
+builder.Services.AddTransient<Seed>();
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
@@ -55,11 +61,16 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddMvc();
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+        {
+            NamingStrategy = new CamelCaseNamingStrategy()
+        };
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    });
 
 builder.Services.AddCors(opt =>
 {
@@ -73,7 +84,6 @@ builder.Services.AddCors(opt =>
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
@@ -83,6 +93,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         var datasContext = scope.ServiceProvider.GetRequiredService<DataContext>();
         datasContext.Database.EnsureDeleted();
         datasContext.Database.EnsureCreated();
+        
+    }
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seed>();
+        service.SeedDataContext();
     }
     
     app.UseHsts();
