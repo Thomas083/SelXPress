@@ -5,7 +5,7 @@
             <product-card v-for="product in displayedProducts" :key="product.id" :product="product" />
         </div>
     </div>
-    <pagination v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length"
+    <pagination-component v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length"
         :products="products" :products-per-page="productsPerPage" :currentPage="currentPage"
         @page-changed="updateCurrentPage" />
 </template>
@@ -14,14 +14,14 @@
 
 import ProductCard from "@/components/products/ProductCard.vue";
 import TagsList from "@/components/tags/TagsList.vue";
-import Pagination from "@/components/pagination/Pagination.vue";
+import PaginationComponent from "@/components/pagination/PaginationComponent.vue";
 
 export default {
     name: 'ProductListView',
     components: {
         ProductCard,
         TagsList,
-        Pagination
+        PaginationComponent
     },
     data() {
         return {

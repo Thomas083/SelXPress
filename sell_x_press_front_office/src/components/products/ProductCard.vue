@@ -4,12 +4,12 @@
                 <div class="product-img-container">
                     <img class="product-img" src="@/assets/categories-product-maquette-1.jpg" alt="..."/>
                 </div>
-                <div class="product-date">{{ publication_date }}</div>
-                <div class="product-title">{{ name }}</div>
-                <div class="product-description">{{ description }}</div>
-                <div class="product-price">{{ price }} €</div>
+                <div class="product-date">{{ product.publication_date }}</div>
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-description">{{ product.description }}</div>
+                <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
-                    <div class="product-author">{{ author }}</div>
+                    <div class="product-author">{{ product.author }}</div>
                     <button class="btn btn-primary show-more-btn">Show more</button>
                 </div>
             </div>
@@ -25,15 +25,6 @@ export default {
         type: Object,
         required: true,
     },
-  },
-  data() {
-    return {
-        publication_date: this.product.publication_date,
-        name: this.product.name,
-        description: this.product.description,
-        price: this.product.price,
-        author: this.product.author
-    }
   },
 }
 

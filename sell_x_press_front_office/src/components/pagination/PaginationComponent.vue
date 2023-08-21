@@ -23,7 +23,7 @@
   
 <script>
 export default {
-    name: 'Pagination',
+    name: 'PaginationComponent',
     props: {
         totalProducts: {
             type: Number,
