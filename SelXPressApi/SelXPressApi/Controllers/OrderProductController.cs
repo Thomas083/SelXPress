@@ -83,7 +83,7 @@ namespace SelXPressApi.Controllers
 				throw new ForbiddenRequestException("You are not authorized to perform this operation", "ODP-2001");
 
 			// Retrieve user's email from header
-			string? email = HttpContext.Request.Headers["EmailHeader"]; // Email of the user
+			string? email = HttpContext.Response.Headers["EmailHeader"]; // Email of the user
 
 			if (string.IsNullOrEmpty(email))
 				throw new BadRequestException("The email is missing in the request header", "ODP-1102");

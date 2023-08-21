@@ -153,7 +153,7 @@ namespace SelXPressApi.Controllers
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) && !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "CRT-2001");
-			string? email = HttpContext.Request.Headers["EmailHeader"];
+			string? email = HttpContext.Response.Headers["EmailHeader"];
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "CRT-1101");

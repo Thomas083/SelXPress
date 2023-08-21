@@ -79,7 +79,7 @@ namespace SelXPressApi.Controllers
 			// check if the token exists and create the email header
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
 			
-			string? email = HttpContext.Request.Headers["EmailHeader"];
+			string? email = HttpContext.Response.Headers["EmailHeader"];
             if (!await _userRepository.UserExistsEmail(email))
             {
 	            throw new NotFoundException("The user with the email : " + email + " doesn't exist", "USR-1403");
@@ -133,7 +133,7 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO userUpdate)
 		{
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-			string? email = HttpContext.Request.Headers["EmailHeader"];
+			string? email = HttpContext.Response.Headers["EmailHeader"];
 			if (userUpdate == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
 
