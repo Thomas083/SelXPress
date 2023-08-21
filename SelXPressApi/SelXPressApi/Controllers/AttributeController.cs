@@ -55,7 +55,6 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="NotFoundException"></exception>
 		/// <exception cref="BadRequestException"></exception>
 		[HttpGet("{id}")]
-
         [ProducesResponseType(200, Type = typeof(AttributeDTO))]
         [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
         [ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
