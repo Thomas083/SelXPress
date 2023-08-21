@@ -11,14 +11,14 @@
       </div>
     </div>
   </div>
-  <pagination v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length" :products="products" :products-per-page="productsPerPage" :currentPage="currentPage" @page-changed="updateCurrentPage" />
+  <pagination-component v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length" :products="products" :products-per-page="productsPerPage" :currentPage="currentPage" @page-changed="updateCurrentPage" />
 </template>
 
 <script>
 
 import CategoriesList from "@/components/categories/CategoriesList.vue"
 import ProductCard from "@/components/products/ProductsCard.vue"
-import Pagination from "@/components/pagination/Pagination.vue"
+import PaginationComponent from "@/components/pagination/PaginationComponent.vue"
 import FilterProduct from "@/components/filter/FilterProduct.vue"
 
 export default {
@@ -26,7 +26,7 @@ export default {
   components: {
     ProductCard,
     CategoriesList,
-    Pagination,
+    PaginationComponent,
     FilterProduct
   },
   data() {

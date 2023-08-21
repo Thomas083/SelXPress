@@ -1,24 +1,19 @@
 <template>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <!-- Bouton "Précédent" -->
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
                     @click="gotoPage(currentPage - 1)">Previous</a>
             </li>
-            <!-- Afficher les premières pages (1 à 3) -->
             <li class="page-item" v-for="page in displayedPages" :key="page">
                 <a class="page-link" href="#category" @click="gotoPage(page)">{{ page }}</a>
             </li>
-            <!-- Afficher des points de suspension (...) -->
             <li v-if="showEllipsisBefore">
                 <span class="page-link">...</span>
             </li>
-            <!-- Afficher la dernière page -->
             <li class="page-item" v-if="showLastPage">
                 <a class="page-link" href="#category" @click="gotoPage(totalPages)">{{ totalPages }}</a>
             </li>
-            <!-- Bouton "Suivant" -->
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
                 <a class="page-link" href="#category" @click="gotoPage(currentPage + 1)">Next</a>
             </li>
@@ -28,7 +23,7 @@
   
 <script>
 export default {
-    name: 'Pagination',
+    name: 'PaginationComponent',
     props: {
         totalProducts: {
             type: Number,
@@ -52,26 +47,22 @@ export default {
             return Math.ceil(this.totalProducts / this.productsPerPage)
         },
         displayedPages() {
-            const visiblePages = Math.min(this.totalPages, 10); // Afficher jusqu'à 10 pages
+            const visiblePages = Math.min(this.totalPages, 10);
             const pages = [];
 
             if (this.totalPages <= 10) {
-                // Afficher toutes les pages si moins de 10 pages
                 for (let page = 1; page <= this.totalPages; page++) {
                     pages.push(page);
                 }
             } else if (this.currentPage <= 4) {
-                // Afficher les premières pages (1 à 3)
                 for (let page = 1; page <= 3; page++) {
                     pages.push(page);
                 }
             } else if (this.currentPage >= this.totalPages - 3) {
-                // Afficher les dernières pages (dernières 3 pages)
                 for (let page = this.totalPages - 2; page <= this.totalPages; page++) {
                     pages.push(page);
                 }
             } else {
-                // Afficher les pages entourant la page actuelle
                 for (let offset = -1; offset <= 1; offset++) {
                     pages.push(this.currentPage + offset);
                 }

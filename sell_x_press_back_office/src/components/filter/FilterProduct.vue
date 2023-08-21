@@ -6,7 +6,7 @@
             <option value="publication_date">Date</option>
         </select>
         <div class="search-input">
-            <input :type="text" :placeholder="'Search your product...'" v-model="searchFormData.value" />
+            <input type="text" placeholder="'Search your product...'" v-model="searchFormData.value" />
             <button class="btn btn-primary" @click="SendSearchData()">Search</button>
         </div>
     </form>
