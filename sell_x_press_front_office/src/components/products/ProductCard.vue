@@ -10,7 +10,7 @@
                 <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
                     <div class="product-author">{{ product.author }}</div>
-                    <button class="btn btn-primary show-more-btn">Show more</button>
+                    <button class="btn btn-primary show-more-btn" v-on:click="goToProductDetails(product.id, product.name)">Show more</button>
                 </div>
             </div>
         </div>
@@ -25,6 +25,11 @@ export default {
         type: Object,
         required: true,
     },
+  },
+  methods: {
+    goToProductDetails(id, name) {
+        this.$router.push({ path: `/product/${id}/${name}` });
+    }
   },
 }
 

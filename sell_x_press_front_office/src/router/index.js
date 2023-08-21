@@ -36,9 +36,10 @@ const routes = [
     component: UserView
   },
   {
-    path: '/product',
+    path: '/product/:id/:name',
     name: 'product',
-    component: ProductDetailsView
+    component: ProductDetailsView,
+    props: true,
   },
   {
     path: '/cart',

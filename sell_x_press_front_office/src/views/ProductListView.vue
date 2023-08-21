@@ -37,7 +37,7 @@ export default {
                     author: 'SAMODA'
                 },
                 {
-                    id: 1,
+                    id: 2,
                     publication_date: '20/06/2023',
                     name: 'SAMODA, Child, Baleine, T-Shirt',
                     description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
@@ -45,7 +45,7 @@ export default {
                     author: 'SAMODA'
                 },
                 {
-                    id: 1,
+                    id: 3,
                     publication_date: '20/06/2023',
                     name: 'SAMODA, Child, Baleine, T-Shirt',
                     description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
@@ -53,7 +53,7 @@ export default {
                     author: 'SAMODA'
                 },
                 {
-                    id: 1,
+                    id: 4,
                     publication_date: '20/06/2023',
                     name: 'SAMODA, Child, Baleine, T-Shirt',
                     description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
@@ -61,7 +61,7 @@ export default {
                     author: 'SAMODA'
                 },
                 {
-                    id: 1,
+                    id: 5,
                     publication_date: '20/06/2024',
                     name: 'SAMODA, Child, Baleine, T-Shirt',
                     description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
