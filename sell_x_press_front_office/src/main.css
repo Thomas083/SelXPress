@@ -72,6 +72,12 @@ a.link-dark:active{
     text-align: center;
 }
 
+.add-review-title {
+    border-radius: 15px;
+    width: 50%;
+    padding: 1rem;
+}
+
 .price-input {
     border-radius: 5px;
     height: 1.5rem;
