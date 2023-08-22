@@ -7,7 +7,7 @@
                 <button class="header-btn-add">Add Product</button>
             </div>
             <div class="header-admin">
-                <h3 class="header-name" v-on:click="goToUserProfile">Elsharion,</h3>
+                <h3 class="header-name" v-on:click="goToUserProfile">{{ username }},</h3>
                 <h3 class="header-name" v-on:click="goToUserProfile">Administrator</h3>
             </div>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" v-on:click="logOut" />
@@ -16,9 +16,17 @@
 </template>
 
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: "HeaderAdmin",
+    data() {
+        return {
+            username: ''
+        }
+    },
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
@@ -30,6 +38,16 @@ export default {
             localStorage.clear()
             window.location.reload()
         }
+        
+    },
+    mounted() {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.username = response.data.username;
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
 };
 
