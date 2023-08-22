@@ -1,16 +1,16 @@
 <template>
     <div class="header-container">
-        <img class="logo" src="../../assets/Header/logo_back_office.png" />
+        <img class="logo" src="../../assets/Header/logo_back_office.png" v-on:click="goToHome"/>
         <div class="header-content-right">
             <div class="header-btns">
                 <button class="header-btn-admin">Admin Panel</button>
                 <button class="header-btn-add">Add Product</button>
             </div>
             <div class="header-admin">
-                <h3 class="header-name">Elsharion,</h3>
-                <h3 class="header-name">Administrator</h3>
+                <h3 class="header-name" v-on:click="goToUserProfile">Elsharion,</h3>
+                <h3 class="header-name" v-on:click="goToUserProfile">Administrator</h3>
             </div>
-            <img class="logo-log-out" src="../../assets/Header/log-out.png" />
+            <img class="logo-log-out" src="../../assets/Header/log-out.png" v-on:click="logOut" />
         </div>
     </div>
 </template>
@@ -19,16 +19,27 @@
 
 export default {
     name: "HeaderAdmin",
+    methods: {
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+        goToUserProfile() {
+            this.$router.push({ path: '/user' });
+        },
+        logOut() {
+            localStorage.clear()
+            window.location.reload()
+        }
+    },
 };
 
 </script>
 
 <style scoped>
-
 .header-container {
     display: flex;
     flex-direction: row;
-    align-items: center;    
+    align-items: center;
     width: 100vw;
     background-color: var(--main-red);
 }
@@ -73,13 +84,13 @@ export default {
     font-weight: bold;
     border: none;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    
+
 }
 
 .header-btn-admin {
     background-color: var(--main-green);
     color: var(--main-white);
-    padding: 1rem 1.5rem ;
+    padding: 1rem 1.5rem;
 }
 
 .header-btn-add {
@@ -89,7 +100,7 @@ export default {
     width: fit-content;
 }
 
-.header-btn-admin:hover, 
+.header-btn-admin:hover,
 .header-btn-add:hover {
     opacity: 0.7;
 }
@@ -109,5 +120,4 @@ export default {
 .header-name:hover {
     text-decoration: underline;
 }
-
 </style>

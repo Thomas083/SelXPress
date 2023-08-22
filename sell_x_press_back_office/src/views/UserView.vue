@@ -2,23 +2,47 @@
     <div class="user-container">
         <div class="user-container-content">
             <h3 class="user-title">Personal Information</h3>
-            <user-profil-form />
+            <user-profil-form @input-form="updateData" />
             <div class="user-btns-container">
                 <button class="btn btn-primary change-password-btn">Change Password</button>
-                <button class="btn btn-secondary save-information-btn">Save</button>
+                <button class="btn btn-secondary save-information-btn" v-on:click="updateUser">Save</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { PUT } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import UserProfilForm from "@/components/UserProfil/UserProfilForm.vue";
+import { createToast } from "mosha-vue-toastify";
 
 export default {
     name: 'UserView',
     components: {
         UserProfilForm
-    }
+    },
+    data() {
+        return {
+            formData: null
+        }
+    },
+    methods: {
+        updateData(e) {
+            this.formData = e;
+        },
+        updateUser() {
+            PUT(ENDPOINTS.UPDATE_USER, this.formData, JSON.parse(localStorage.getItem("user")).token)
+            .then((response) => {
+                console.dir(response)
+                createToast({ title: 'Successful Update', description: 'Your profil was sucessfuly updated' }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+                console.dir(error)
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            })
+        },
+    },
 }
 
 </script>

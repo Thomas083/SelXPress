@@ -22,32 +22,31 @@ export default {
         }
     },
     methods: {
-    goToHome() {
-        this.$router.push({ path: '/' });
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+        goToUserProfile() {
+            this.$router.push({ path: '/user' });
+        },
     },
-    goToUserProfile() {
-        this.$router.push({ path: '/user' });
+    mounted() {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.username = response.data.username;
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
-  },
-  mounted () {
-    GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
-    .then((response) => {
-        this.username = response.data.username;
-    })
-    .catch((error) => {
-        console.dir(error)
-    });
-  },
 };
 
 </script>
 
 <style scoped>
-
 .header-container {
     display: flex;
     flex-direction: row;
-    align-items: center;    
+    align-items: center;
     width: 100vw;
     background-color: var(--main-red);
 }
@@ -101,5 +100,4 @@ export default {
 .header-name:hover {
     text-decoration: underline;
 }
-
 </style>
