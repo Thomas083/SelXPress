@@ -4,11 +4,11 @@
             <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
         <div class="header-search">
-            <select class="select-categories">
+            <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
                 <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
-            <input class="search-input" type="text" placeholder="Search in SelXpress...">
-            <button class="loop"><img src="../../assets/Header/loop.png" /></button>
+            <input v-model="formData.search" class="search-input" type="text" placeholder="Search in SelXpress...">
+            <button class="loop" v-on:click="sendSearchData"><img src="../../assets/Header/loop.png" /></button>
         </div>
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
@@ -32,6 +32,11 @@ export default {
     name: "HeaderNotRegistered",
     data() {
         return {
+            selectedOption: 'All',
+            formData: {
+                search: '',
+                categoryId: 0
+            },
             categories: [
                 {
                     id: 1,
@@ -70,6 +75,12 @@ export default {
         },
         goToCart() {
             this.$router.push({ path: '/cart'});
+        },
+        setCatagoryData() {
+            this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
+        },
+        sendSearchData() {
+            console.dir(this.formData)
         }
     },
     computed: {

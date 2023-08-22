@@ -4,7 +4,7 @@
             <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
         <div class="header-search">
-            <select class="select-categories">
+            <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
                 <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
             <input class="search-input" type="text" placeholder="Search in SelXpress...">
@@ -32,6 +32,11 @@ export default {
     name: "HeaderRegistered",
     data() {
         return {
+            selectedOption: 'All',
+            formData: {
+                search: '',
+                categoryId: 0
+            },
             categories: [
                 {
                     id: 1,
@@ -72,6 +77,12 @@ export default {
         },
         goToCart() {
             this.$router.push({ path: '/cart'});
+        },
+        setCatagoryData() {
+            this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
+        },
+        sendSearchData() {
+            console.dir(this.formData)
         }
     },
     computed: {
