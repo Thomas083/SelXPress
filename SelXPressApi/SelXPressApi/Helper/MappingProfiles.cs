@@ -10,6 +10,9 @@ using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.Models;
 using Attribute = SelXPressApi.Models.Attribute;
 using SelXPressApi.DTO.ProductDTO;
+using SelXPressApi.DTO.ProductAttributeDTO;
+using SelXPressApi.DTO.OrderDTO;
+using SelXPressApi.DTO.OrderDTOProductDTO;
 
 namespace SelXPressApi.Helper
 {
@@ -47,6 +50,15 @@ namespace SelXPressApi.Helper
 
             // Mapping Product model to CreateProductDTO
             CreateMap<Product, CreateProductDTO>();
+
+            // Mapping ProductAttribute model to ProductAttributeDTO
+            CreateMap<ProductAttribute, ProductAttributeDTO>();
+
+            // Mapping Order model to OrderDTO
+            CreateMap<Order, OrderDTO>();
+
+            // Mapping OrderProduct model to OrderProductDTO
+            CreateMap<OrderProduct, OrderProductDTO>();
         }
     }
 }
