@@ -89,7 +89,7 @@ namespace SelXPressApi.Controllers
         }
         #endregion
 
-		#region Create Methods
+		#region Post Methods
 		/// <summary>
 		/// Create attribute data.
 		/// </summary>

@@ -145,7 +145,7 @@ namespace SelXPressApi.Controllers
 
 		#endregion
 
-		#region Create Methods
+		#region Post Methods
 
 		/// <summary>
 		/// Create a shopping cart by admin.
@@ -223,7 +223,7 @@ namespace SelXPressApi.Controllers
 
 		#endregion
 
-		#region Update Methods
+		#region Put Methods
 
 		/// <summary>
 		/// Updates a shopping cart based on its ID.

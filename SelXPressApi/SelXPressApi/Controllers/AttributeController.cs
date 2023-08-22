@@ -22,7 +22,7 @@ namespace SelXPressApi.Controllers
 		private readonly IMapper _mapper;
 		private readonly IAuthorizationMiddleware _authorizationMiddleware;
 
-		// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="AttributeController"/> class.
 		/// </summary>
 		/// <param name="attributeRepository">The attribute repository to retrieve and manage attributes.</param>
