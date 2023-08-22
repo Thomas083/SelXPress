@@ -1,9 +1,7 @@
 <template>
-  <header-not-admin />
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav> -->
+  <header-identification-page v-if="isIdentificationPage"  />
+  <header-admin v-else-if="isUserAdmin" />
+  <header-not-admin v-else/>
   <router-view/>
   <footer-layout />
 </template>
@@ -21,6 +19,14 @@ export default {
     HeaderNotAdmin,
     HeaderAdmin,
     FooterLayout
+  },
+  computed: {
+    isIdentificationPage() {
+      return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
+    },
+    isUserAdmin() {
+      return (localStorage.getItem("user").id === 3);
+    },
   }
 }
 </script>
