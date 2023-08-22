@@ -1,10 +1,10 @@
 <template>
     <div class="products">
             <div class="product-container">
-                <div class="product-date">20/06/2023</div>
-                <div class="product-title">SAMODA, Child, Baleine, T-Shirt</div>
-                <div class="product-ref">Ref : xxxxxxxxxxxx</div>
-                <div class="product-price">16,99 €</div>
+                <div class="product-date">{{product.publication_date}}</div>
+                <div class="product-title">{{product.name}}</div>
+                <div class="product-ref">Ref : {{ product.id }}</div>
+                <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
                     <button class="btn btn-primary update-btn">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
                     <button class="btn btn-primary delete-btn">Delete <img class="delete-img" src="@/assets/Card/bouton-supprimer.png" alt="..." /></button>
@@ -17,6 +17,12 @@
 
 export default {
   name: 'ProductCard',
+  props: {
+    product: {
+        type: Object,
+        required: true,
+    },
+  },
 }
 
 </script>
