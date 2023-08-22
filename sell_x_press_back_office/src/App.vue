@@ -12,6 +12,8 @@ import HeaderIdentificationPage from '@/components/Layout/HeaderIdentificationPa
 import HeaderNotAdmin from '@/components/Layout/HeaderNotAdmin.vue';
 import HeaderAdmin from '@/components/Layout/HeaderAdmin.vue';
 import FooterLayout from '@/components/Layout/FooterLayout.vue';
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from './api/endpoints';
 
 export default {
   components: {
@@ -20,14 +22,34 @@ export default {
     HeaderAdmin,
     FooterLayout
   },
+  data() {
+    return {
+      userRole: null
+    }
+  },
+  methods: {
+    fetchUserRole() {
+      const userToken = JSON.parse(localStorage.getItem('user')).token;
+      GET(ENDPOINTS.GET_ONE_USER, userToken)
+        .then((response) => {
+          this.userRole = response.data.role.id;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    },
   computed: {
     isIdentificationPage() {
       return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
     },
     isUserAdmin() {
-      return (localStorage.getItem("user").id === 3);
+      return this.userRole === 3;
     },
-  }
+  },
+  mounted () {
+    this.fetchUserRole();
+  },
 }
 </script>
 

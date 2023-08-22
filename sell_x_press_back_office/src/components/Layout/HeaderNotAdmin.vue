@@ -3,16 +3,24 @@
         <img @click="goToHome()" class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
             <button class="header-btn-add">Add Product</button>
-            <h3 class="header-name" @click="goToUserProfile()">Elsharion</h3>
+            <h3 class="header-name" @click="goToUserProfile()">{{ username }}</h3>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
         </div>
     </div>
 </template>
 
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: "HeaderNotAdmin",
+    data() {
+        return {
+            username: ''
+        }
+    },
     methods: {
     goToHome() {
         this.$router.push({ path: '/' });
@@ -20,7 +28,16 @@ export default {
     goToUserProfile() {
         this.$router.push({ path: '/user' });
     },
-  }
+  },
+  mounted () {
+    GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+    .then((response) => {
+        this.username = response.data.username;
+    })
+    .catch((error) => {
+        console.dir(error)
+    });
+  },
 };
 
 </script>

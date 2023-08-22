@@ -12,8 +12,8 @@
 
 <script>
 import LoginForm from '@/components/identification/LoginForm.vue';
-import { auth } from "@/config/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints'
 import { createToast } from 'mosha-vue-toastify';
 
 export default {
@@ -34,14 +34,19 @@ export default {
             this.$router.push({ path: '/register' });
         },
         logUser() {
-            signInWithEmailAndPassword(auth, this.formData.email, this.formData.password)
-          .then((userCredential) => {
-            console.log(userCredential);
-            createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
-          })
-          .catch(() => {
-            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-          });
+            POST(ENDPOINTS.USER_LOGIN, this.formData)
+                .then((userCredential) => {
+                    createToast({ title: 'Sign IN Success', description: 'You are sucessfuly connected' }, { type: 'success', position: 'bottom-right' });
+                    const user = {
+                        email: userCredential.data.email,
+                        token: userCredential.data.token
+                    }
+                    localStorage.setItem("user", JSON.stringify(user));
+                    this.$router.push({ path: '/' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
     }
 }
