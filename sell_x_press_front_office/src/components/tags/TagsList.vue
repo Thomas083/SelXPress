@@ -1,23 +1,46 @@
 <template>
     <div class="tags-container">
-            <div class="tag">Tags#1</div>
+        <div v-for="tag in tagsList">
+            <div class="tag">{{tag.name}}</div>
             <div class="separation"></div>
-            <div class="tag">Tags#2</div>
-            <div class="separation"></div>
-            
         </div>
+    </div>
 </template>
 
 <script>
 
 export default {
-    name: 'TagsList'
+    name: 'TagsList',
+    data() {
+        return {
+            tags: [
+                {
+                    id: 1,
+                    name: 'Fishing',
+                    categoryId: 1
+                },
+                {
+                    id: 2,
+                    name: 'Football',
+                    categoryId: 10
+                }
+            ],
+        }
+    },
+    computed: {
+        tagsList() {
+            const tagList = []
+            for (let i = 0; i < this.tags.length; i++) {
+                if (this.tags[i].categoryId == this.$route.params.id) tagList.push(this.tags[i])
+            }
+            return tagList
+        }
+    },
 }
 
 </script>
 
 <style scoped>
-
 .tags-container {
     display: flex;
     flex-direction: column;
@@ -43,5 +66,4 @@ export default {
     border: 1px var(--main-grey-product) solid;
     width: 90%;
 }
-
 </style>

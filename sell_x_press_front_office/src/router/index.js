@@ -52,9 +52,10 @@ const routes = [
     component: HistoryView
   },
   {
-    path: '/products',
+    path: '/products/:id/:name',
     name: 'products',
-    component: ProductListView
+    component: ProductListView,
+    props: true,
   }
 
 ]
