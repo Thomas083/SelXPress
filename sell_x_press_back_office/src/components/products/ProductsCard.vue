@@ -1,7 +1,7 @@
 <template>
     <div class="products">
             <div class="product-container">
-                <div class="product-date">{{product.publication_date}}</div>
+                <div class="product-date">{{ formatCreatedAt(product.createdAt) }}</div>
                 <div class="product-title">{{product.name}}</div>
                 <div class="product-ref">Ref : {{ product.id }}</div>
                 <div class="product-price">{{ product.price }} €</div>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
 
 export default {
   name: 'ProductCard',
@@ -23,6 +24,12 @@ export default {
         required: true,
     },
   },
+  methods: {
+    formatCreatedAt(createdAt) {
+      const formattedDate = format(new Date(createdAt), 'dd/MM/yyyy');
+      return formattedDate;
+    }
+  }
 }
 
 </script>
