@@ -10,15 +10,6 @@
         /// </summary>
         public string Username { get; set; }
         
-        /// <summary>
-        /// The new Password of the user
-        /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// Field to check if the password is good (confirm password)
-        /// </summary>
-        public string ConfirmPassword { get; set; }
-
+        
     }
 }
