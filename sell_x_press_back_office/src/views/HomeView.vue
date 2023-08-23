@@ -1,9 +1,9 @@
 <template>
   <div class="home-container">
-    <categories-list />
+    <categories-list @categoryChoose="updateCategory($event)"/>
     <div class="products-cards-container">
       <div class="search-product">
-        <h1 class="products-category" id="category">Category: All</h1>
+        <h1 class="products-category" id="category">Category: {{ category}}</h1>
         <filter-product />
       </div>
       <div class="products-cards">
@@ -31,6 +31,7 @@ export default {
   },
   data() {
     return {
+      category: 'All',
       productsPerPage: 15,
       currentPage: 1,
       products: [
@@ -129,6 +130,9 @@ export default {
   methods: {
     updateCurrentPage(newPage) {
       this.currentPage = newPage;
+    },
+    updateCategory(categoryChoose) {
+      this.category = categoryChoose.name
     },
 }
 }

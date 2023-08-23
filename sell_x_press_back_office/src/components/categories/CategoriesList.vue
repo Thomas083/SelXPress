@@ -1,23 +1,54 @@
 <template>
     <div class="categories-container">
-            <div class="category">Category#1</div>
+        <div v-for="category in categories" v-on:click="sendCategoryChoose(category)">
+            <div class="category">{{ category.name }}</div>
             <div class="separation"></div>
-            <div class="category">Category#2</div>
-            <div class="separation"></div>
-            
         </div>
+    </div>
 </template>
 
 <script>
 
 export default {
-    name: 'CategoriesList'
+    name: 'CategoriesList',
+    data() {
+        return {
+            categories: [
+                {
+                    id: 1,
+                    name: "Ocean",
+                    tags: [
+                        {
+                            id: 1,
+                            name: "Fishing",
+                            categoryId: 1
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Sport",
+                    tags: [
+                        {
+                            id: 2,
+                            name: "Football",
+                            categoryId: 2
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    methods: {
+        sendCategoryChoose(category) {
+            this.$emit('categoryChoose', category)
+        }
+    },
 }
 
 </script>
 
 <style scoped>
-
 .categories-container {
     display: flex;
     flex-direction: column;
@@ -43,5 +74,4 @@ export default {
     border: 1px var(--main-grey-product) solid;
     width: 90%;
 }
-
 </style>
