@@ -5,41 +5,58 @@ using System.Threading.Tasks;
 
 namespace SelXPressApi.Interfaces
 {
+	/// <summary>
+	/// Represents a repository for managing order products.
+	/// </summary>
 	public interface IOrderProductRepository
 	{
 		/// <summary>
-		/// Check if an order product with the specified ID exists.
+		/// Checks if an order product with the specified ID exists.
 		/// </summary>
+		/// <param name="id">The unique identifier of the order product.</param>
+		/// <returns>True if the order product exists, otherwise false.</returns>
 		Task<bool> OrderProductExists(int id);
 
 		/// <summary>
-		/// Get all order products associated with a user's email.
+		/// Retrieves all order products associated with a user's email.
 		/// </summary>
+		/// <param name="email">The email address of the user.</param>
+		/// <returns>A list of order products associated with the user.</returns>
 		Task<List<OrderProduct>> GetOrderProductsByUser(string email);
 
 		/// <summary>
-		/// Get an order product by its ID.
+		/// Retrieves an order product by its unique identifier.
 		/// </summary>
+		/// <param name="id">The unique identifier of the order product.</param>
+		/// <returns>The order product matching the specified ID, or null if not found.</returns>
 		Task<OrderProduct> GetOrderProductById(int id);
 
 		/// <summary>
-		/// Get all order products.
+		/// Retrieves all order products.
 		/// </summary>
+		/// <returns>A list of all order products.</returns>
 		Task<List<OrderProduct>> GetAllOrderProducts();
 
 		/// <summary>
-		/// Create a new order product.
+		/// Creates a new order product.
 		/// </summary>
+		/// <param name="createOrderProduct">The DTO containing order product creation information.</param>
+		/// <returns>True if the order product was successfully created, otherwise false.</returns>
 		Task<bool> CreateOrderProduct(CreateOrderProductDTO createOrderProduct);
 
 		/// <summary>
-		/// Update an existing order product.
+		/// Updates an existing order product.
 		/// </summary>
+		/// <param name="id">The unique identifier of the order product to be updated.</param>
+		/// <param name="updateOrderProduct">The DTO containing updated order product information.</param>
+		/// <returns>True if the order product was successfully updated, otherwise false.</returns>
 		Task<bool> UpdateOrderProduct(int id, UpdateOrderProductDTO updateOrderProduct);
 
 		/// <summary>
-		/// Delete an order product with the specified ID.
+		/// Deletes an order product by its unique identifier.
 		/// </summary>
+		/// <param name="id">The unique identifier of the order product to be deleted.</param>
+		/// <returns>True if the order product was successfully deleted, otherwise false.</returns>
 		Task<bool> DeleteOrderProduct(int id);
 	}
 }

@@ -7,10 +7,11 @@ using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
 using SelXPressApi.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace SelXPressApi.Controllers
 {
+	/// <summary>
+	/// API controller for managing roles.
+	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class RoleController : ControllerBase
@@ -18,19 +19,26 @@ namespace SelXPressApi.Controllers
 		private readonly IRoleRepository _roleRepository;
 		private readonly IAuthorizationMiddleware _authorizationMiddleware;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RoleController"/> class.
+		/// </summary>
+		/// <param name="roleRepository">The role repository to retrieve and manage roles.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
 		public RoleController(IRoleRepository roleRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_roleRepository = roleRepository;
 			_authorizationMiddleware = authorizationMiddleware;
 		}
-		
+
+		#region Get Methods
 		/// <summary>
-		/// Method to get all the roles of the database
+		/// Get all roles.
 		/// </summary>
-		/// <returns></returns>
-		/// <exception cref="ForbiddenRequestException"></exception>
-		/// <exception cref="BadRequestException"></exception>
-		/// <exception cref="NotFoundException"></exception>
+		/// <returns>Returns an array of all roles.</returns>
+		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+		/// <exception cref="UnauthorizedErrorTemplate">Thrown when the user is not authorized to perform this operation.</exception>
+		/// <exception cref="ForbiddenErrorTemplate">Thrown when the user is authorized but doesn't have the required permissions.</exception>
+		/// <exception cref="NotFoundErrorTemplate">Thrown when no roles are found in the database.</exception>
 		[HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<Role>))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -40,89 +48,70 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetRoles()
 		{
+			// Check if a valid token exists in the HttpContext
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-			
+
+			// Check if the user has admin role
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
-			
+
+			// Check if the model state is valid
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
-			
+				throw new BadRequestException("The model is wrong, a bad request occurred", "RLE-1101");
+
+			// Retrieve all roles from the repository
 			var roles = await _roleRepository.GetAllRoles();
 
 			if (roles.Count == 0)
-				throw new NotFoundException("There is no roles in the database, please try again", "RLE-1401");
-			
+				throw new NotFoundException("There are no roles in the database, please try again", "RLE-1401");
+
 			return Ok(roles);
 		}
+		#endregion
 
+		#region Post Methods
 		/// <summary>
-		/// Return the role based on the parameter id
+		/// Create a new role.
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		/// <exception cref="ForbiddenRequestException"></exception>
-		/// <exception cref="NotFoundException"></exception>
-		/// <exception cref="BadRequestException"></exception>
-		[HttpGet("{id}")]
-		[ProducesResponseType(200, Type = typeof(Role))]
-		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
-		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
-		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
-		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> GetRole(int id)
-		{
-			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-
-			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
-			
-			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
-			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
-			var role = await _roleRepository.GetRoleById(id);
-			return Ok(role);
-		}
-
-		/// <summary>
-		/// Method to create a role
-		/// </summary>
-		/// <param name="role"></param>
-		/// <returns></returns>
-		/// <exception cref="ForbiddenRequestException"></exception>
-		/// <exception cref="BadRequestException"></exception>
-		/// <exception cref="Exception"></exception>
+		/// <param name="role">The role to create.</param>
+		/// <returns>Returns a status code indicating the result of the operation.</returns>
+		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+		/// <exception cref="BadRequestException">Thrown when the provided role data is incomplete.</exception>
 		[HttpPost]
 		[ProducesResponseType(201)]
-		[ProducesResponseType(400 , Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> CreateRole([FromBody] CreateRoleDTO role)
 		{
+			// Check if a valid token exists in the HttpContext
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-			
+
+			// Check if the user has admin role
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
-			
+
+			// Check if the provided role data is complete
 			if (role == null || role.RoleName == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1102");
-			
+
+			// Create the role using the repository
 			await _roleRepository.CreateRole(role);
 			return StatusCode(201);
 		}
+		#endregion
 
+		#region Put Methods
 		/// <summary>
-		/// Method to update the role based on an id
+		/// Update an existing role.
 		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="updateRole"></param>
-		/// <returns></returns>
-		/// <exception cref="ForbiddenRequestException"></exception>
-		/// <exception cref="BadRequestException"></exception>
-		/// <exception cref="NotFoundException"></exception>
+		/// <param name="id">The ID of the role to update.</param>
+		/// <param name="updateRole">The updated role data.</param>
+		/// <returns>Returns a status code indicating the result of the operation.</returns>
+		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+		/// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided role update data is incomplete.</exception>
+		/// <exception cref="NotFoundException">Thrown when the role with the specified ID doesn't exist.</exception>
 		[HttpPut("{id}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -132,29 +121,40 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRole)
 		{
+			// Check if a valid token exists in the HttpContext
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-			
+
+			// Check if the user has admin role
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
-			
+
+			// Check if the model state is valid
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured", "RLE-1101");
+				throw new BadRequestException("The model is wrong, a bad request occurred", "RLE-1101");
+
+			// Check if the provided role update data is complete
 			if (updateRole == null)
 				throw new BadRequestException("There are missing fields, please try again with some data", "RLE-1102");
+
+			// Check if the role with the given ID exists
 			if (!await _roleRepository.RoleExists(id))
 				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
+
+			// Update the role using the repository
 			await _roleRepository.UpdateRoleByID(id, updateRole);
 			return Ok();
 		}
+		#endregion
 
+		#region Delete Methods
 		/// <summary>
-		/// Method to delete a role
+		/// Delete an existing role.
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		/// <exception cref="ForbiddenRequestException"></exception>
-		/// <exception cref="NotFoundException"></exception>
-		/// <exception cref="BadRequestException"></exception>
+		/// <param name="id">The ID of the role to delete.</param>
+		/// <returns>Returns a status code indicating the result of the operation.</returns>
+		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+		/// <exception cref="NotFoundException">Thrown when the role with the specified ID doesn't exist.</exception>
 		[HttpDelete("{id}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
@@ -164,19 +164,25 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> DeleteRole(int id)
 		{
+			// Check if a valid token exists in the HttpContext
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-			
+
+			// Check if the user has admin role
 			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
 				throw new ForbiddenRequestException("You are not authorized to do this operation", "RLE-2001");
-			
+
+			// Check if the role with the given ID exists
 			if (!await _roleRepository.RoleExists(id))
 				throw new NotFoundException("The role with the id : " + id + " doesn't exist", "RLE-1402");
-			
+
+			// Check if the model state is valid
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The model is wrong, a bad request occured","RLE-1101");
-			
+				throw new BadRequestException("The model is wrong, a bad request occurred", "RLE-1101");
+
+			// Delete the role using the repository
 			await _roleRepository.DeleteRole(id);
 			return Ok();
 		}
+		#endregion
 	}
 }

@@ -7,10 +7,10 @@ using Attribute = SelXPressApi.Models.Attribute;
 
 namespace SelXPressApi.Repository
 {
-    /// <summary>
-    /// Repository for managing Attribute data.
-    /// </summary>
-    public class AttributeRepository : IAttributeRepository
+	/// <summary>
+	/// Repository class for managing attributes and their data.
+	/// </summary>
+	public class AttributeRepository : IAttributeRepository
     {
         private readonly DataContext _context;
         private ICommonMethods _commonMethods;
@@ -21,18 +21,22 @@ namespace SelXPressApi.Repository
             _commonMethods = commonMethods;
         }
 
-        /// <summary>
-        /// Check if an attribute with the given ID exists.
-        /// </summary>
-        public async Task<bool> AttributeExists(int id)
+		/// <summary>
+		/// Checks if an attribute with the given ID exists.
+		/// </summary>
+		/// <param name="id">The ID of the attribute to check.</param>
+		/// <returns>True if the attribute exists; otherwise, false.</returns>
+		public async Task<bool> AttributeExists(int id)
         {
             return await _context.Attributes.AnyAsync(a => a.Id == id);
         }
 
-        /// <summary>
-        /// Create a new attribute with the provided data.
-        /// </summary>
-        public async Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)
+		/// <summary>
+		/// Creates a new attribute using the provided data.
+		/// </summary>
+		/// <param name="createAttribute">Data to create a new attribute.</param>
+		/// <returns>True if the attribute was created successfully; otherwise, false.</returns>
+		public async Task<bool> CreateAttribute(CreateAttributeDTO createAttribute)
         {
             var newAttribute = new Attribute
             {
@@ -43,10 +47,12 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        /// <summary>
-        /// Delete an attribute by its ID if it exists.
-        /// </summary>
-        public async Task<bool> DeleteAttribute(int id)
+		/// <summary>
+		/// Deletes an attribute by its ID if it exists.
+		/// </summary>
+		/// <param name="id">The ID of the attribute to delete.</param>
+		/// <returns>True if the attribute was deleted successfully; otherwise, false.</returns>
+		public async Task<bool> DeleteAttribute(int id)
         {
             if (await AttributeExists(id))
             {
@@ -56,30 +62,36 @@ namespace SelXPressApi.Repository
             return false;
         }
 
-        /// <summary>
-        /// Get all attributes along with their associated attribute data.
-        /// </summary>
-        public async Task<List<Attribute>> GetAllAttributes()
+		/// <summary>
+		/// Retrieves all attributes along with their associated attribute data.
+		/// </summary>
+		/// <returns>A list of attributes with their data.</returns>
+		public async Task<List<Attribute>> GetAllAttributes()
         {
             return await _context.Attributes
                .Include(a => a.AttributeData) // Include related AttributeData
                .ToListAsync();
         }
 
-        /// <summary>
-        /// Get an attribute by its ID along with its associated attribute data.
-        /// </summary>
-        public async Task<Attribute?> GetAttributeById(int id)
+		/// <summary>
+		/// Retrieves an attribute by its ID along with its associated attribute data.
+		/// </summary>
+		/// <param name="id">The ID of the attribute to retrieve.</param>
+		/// <returns>The attribute and its associated data, or null if not found.</returns>
+		public async Task<Attribute?> GetAttributeById(int id)
         {
             return await _context.Attributes
                 .Include(attribute => attribute.AttributeData) // Include associated attribute data
                 .FirstOrDefaultAsync(attribute => attribute.Id == id);
         }
 
-        /// <summary>
-        /// Update an existing attribute with the provided data.
-        /// </summary>
-        public async Task<bool> UpdateAttribute(int id, UpdateAttributeDTO updateAttribute)
+		/// <summary>
+		/// Updates an existing attribute with the provided data.
+		/// </summary>
+		/// <param name="id">The ID of the attribute to update.</param>
+		/// <param name="updateAttribute">Updated data for the attribute.</param>
+		/// <returns>True if the attribute was updated successfully; otherwise, false.</returns>
+		public async Task<bool> UpdateAttribute(int id, UpdateAttributeDTO updateAttribute)
         {
             if (!await AttributeExists(id))
                 return false;

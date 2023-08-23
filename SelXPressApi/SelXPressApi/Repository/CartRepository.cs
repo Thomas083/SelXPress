@@ -12,13 +12,22 @@ namespace SelXPressApi.Repository
         private readonly DataContext _context;
         private readonly ICommonMethods _commonMethods;
 
-        public CartRepository(DataContext context, ICommonMethods commonMethods)
+		/// <summary>
+		/// Initializes a new instance of the CartRepository class.
+		/// </summary>
+		/// <param name="context">The DataContext.</param>
+		/// <param name="commonMethods">Common methods helper.</param>
+		public CartRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;
             _commonMethods = commonMethods;
         }
 
-        public async Task<List<Cart>> GetAllCarts()
+		/// <summary>
+		/// Retrieves all shopping carts with associated user details.
+		/// </summary>
+		/// <returns>A list of shopping carts with user information.</returns>
+		public async Task<List<Cart>> GetAllCarts()
         {
             return await _context.Carts.Join(_context.Users, cart => cart.UserId, user => user.Id, (cart, user) =>
                 new Cart()
@@ -32,7 +41,12 @@ namespace SelXPressApi.Repository
                 }).ToListAsync();
         }
 
-        public async Task<Cart> GetCartById(int id)
+		/// <summary>
+		/// Retrieves a shopping cart by its ID along with user details.
+		/// </summary>
+		/// <param name="id">The ID of the cart to retrieve.</param>
+		/// <returns>The shopping cart and associated user information.</returns>
+		public async Task<Cart> GetCartById(int id)
         {
             return await _context.Carts.Where(c => c.Id == id).Join(_context.Users, cart => cart.UserId, user => user.Id, (cart, user) =>
                 new Cart()
@@ -46,7 +60,12 @@ namespace SelXPressApi.Repository
                 }).FirstAsync();
         }
 
-        public async Task<List<Cart>> GetCartsByUserId(int userId)
+		/// <summary>
+		/// Retrieves all shopping carts for a specific user.
+		/// </summary>
+		/// <param name="userId">The ID of the user.</param>
+		/// <returns>A list of shopping carts for the user.</returns
+		public async Task<List<Cart>> GetCartsByUserId(int userId)
         {
             return await _context.Carts.Where(c => c.UserId == userId).Join(_context.Users, cart => cart.UserId, user => user.Id, (cart, user) =>
                 new Cart()
@@ -60,7 +79,12 @@ namespace SelXPressApi.Repository
                 }).ToListAsync();
         }
 
-        public async Task<bool> CreateCartByAdmin(CreateCartByAdminDto cartDto)
+		/// <summary>
+		/// Creates a new shopping cart item by an admin.
+		/// </summary>
+		/// <param name="cartDto">Data for creating the cart item.</param>
+		/// <returns>True if the cart item was created successfully; otherwise, false.</returns>
+		public async Task<bool> CreateCartByAdmin(CreateCartByAdminDto cartDto)
         {
             var product = await _context.Products.Where(p => p.Id == cartDto.ProductId).FirstAsync();
             var user = await _context.Users.Where(u => u.Id == cartDto.UserId).FirstAsync();
@@ -76,7 +100,13 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        public async Task<bool> CreateCartByUser(CreateCartDto cartDto, string email)
+		/// <summary>
+		/// Creates a new shopping cart item by a user.
+		/// </summary>
+		/// <param name="cartDto">Data for creating the cart item.</param>
+		/// <param name="email">The email of the user.</param>
+		/// <returns>True if the cart item was created successfully; otherwise, false.</returns>
+		public async Task<bool> CreateCartByUser(CreateCartDto cartDto, string email)
         {
             var product = await _context.Products.Where(p => p.Id == cartDto.ProductId).FirstAsync();
             var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
@@ -92,7 +122,13 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        public async Task<bool> UpdateCart(UpdateCartDto cartDto, int id)
+		/// <summary>
+		/// Updates the quantity of a shopping cart item.
+		/// </summary>
+		/// <param name="cartDto">Data for updating the cart item.</param>
+		/// <param name="id">The ID of the cart item to update.</param>
+		/// <returns>True if the cart item was updated successfully; otherwise, false.</returns>
+		public async Task<bool> UpdateCart(UpdateCartDto cartDto, int id)
         {
             if (cartDto != null && cartDto.Quantity != null)
                 await _context.Carts.Where(c => c.Id == id)
@@ -100,18 +136,32 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        public async Task<bool> DeleteCart(int id)
+		/// <summary>
+		/// Deletes a shopping cart item by its ID.
+		/// </summary>
+		/// <param name="id">The ID of the cart item to delete.</param>
+		/// <returns>True if the cart item was deleted successfully; otherwise, false.</returns>
+		public async Task<bool> DeleteCart(int id)
         {
             await _context.Carts.Where(c => c.Id == id).ExecuteDeleteAsync();
             return await _commonMethods.Save();
         }
 
-        public async Task<bool> ValidateCart()
+		/// <summary>
+		/// Validates the contents of a shopping cart.
+		/// </summary>
+		/// <returns>True if the cart contents are valid; otherwise, false.</returns>
+		public async Task<bool> ValidateCart()
         {
             return await _commonMethods.Save();
         }
 
-        public async Task<bool> CartExists(int id)
+		/// <summary>
+		/// Checks if a cart with the specified ID exists.
+		/// </summary>
+		/// <param name="id">The ID of the cart to check.</param>
+		/// <returns>True if a cart with the specified ID exists; otherwise, false.</returns>
+		public async Task<bool> CartExists(int id)
         {
             return await _context.Carts.AnyAsync(c => c.Id == id);
         }
