@@ -8,6 +8,7 @@
     :class="$attrs.class"
     :style="styleObject"
     :value="value"
+    :disabled="disable"
     @change="$emit('input', returnValue($event.target.value))"
   />
 </template>
@@ -26,6 +27,7 @@ props: {
     default: "",
   },
   styleObject: Object,
+  disable: String
 },
 methods: {
   returnValue(e) {

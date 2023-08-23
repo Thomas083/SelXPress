@@ -88,11 +88,9 @@ export default {
     data() {
         return {
             formCategoriesData: {
-                id: null,
                 name: '',
             },
             formTagsData: {
-                id: null,
                 name: '',
                 categoryId: null
             },
@@ -140,17 +138,12 @@ export default {
             console.dir(this.tags[index - 1])
         },
         createCategories() {
-            this.formCategoriesData.id = this.categories.length + 1
             console.dir(this.formCategoriesData)
         },
         createTags() {
-            this.formTagsData.id = this.tags.length + 1
             console.dir(this.formTagsData)
         }
     },
-    mounted() {
-
-    }
 }
 </script>
 

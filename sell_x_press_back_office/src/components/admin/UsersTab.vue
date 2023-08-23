@@ -28,9 +28,9 @@
         <tr v-for="user in users">
           <th scope="row">{{ user.id }}</th>
           <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
-          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" /></td>
-          <td><input-component :value="user.password" @input="updateData(user.id, 'password', $event)" /></td>
-          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" /></td>
+          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" disable="disable" /></td>
+          <td><input-component :value="user.password" type="password" @input="updateData(user.id, 'password', $event)" disable="disable" /></td>
+          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" disable="disable" /></td>
           <td class="action-btns">
             <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id)">
               Update
@@ -72,11 +72,7 @@ export default {
   data() {
     return {
       formData: {
-        id: null,
         username: '',
-        email: '',
-        password: '',
-        roleId: ''
       },
       users: [
         {
@@ -107,7 +103,6 @@ export default {
       console.dir(this.users[index - 1])
     },
     createUser() {
-      this.formData.id = this.users.length + 1
       console.dir(this.formData)
     }
   },

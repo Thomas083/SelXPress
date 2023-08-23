@@ -99,13 +99,11 @@ export default {
         return {
             selectedAttributeIndex: null,
             formAttributeType: {
-                id: null,
                 name: '',
                 type: '',
                 data: [],
             },
             formAttributeData: {
-                id: null,
                 name: '',
                 value: '',
             },
@@ -176,11 +174,9 @@ export default {
             console.dir(this.attributes[index_attribute])
         },
         createAttribute() {
-            this.formAttributeType.id = this.attributes.length + 1;
             console.dir(this.formAttributeType);
         },
         createAttributeData(index_attribute) {
-            this.formAttributeData.id = this.attributes[index_attribute].data.length + 1;
             console.dir(this.formAttributeData)
         }
     },
