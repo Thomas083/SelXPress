@@ -44,7 +44,6 @@ namespace SelXPressApi.Helper
 				{
 					Username = "LeBirz",
 					Email = "ugo.bertrand@epitech.eu",
-					Password = "password",
 					Role = customerRole
 				};
 
@@ -52,7 +51,6 @@ namespace SelXPressApi.Helper
 				{
 					Username = "Elsharion",
 					Email = "david.vacossin@epitech.eu",
-					Password = "password",
 					Role = customerRole
 				};
 
@@ -60,7 +58,6 @@ namespace SelXPressApi.Helper
 				{
 					Username = "Aliak",
 					Email = "thomas.debray@epitech.eu",
-					Password = "password",
 					Role = sellerRole
 				};
 
@@ -68,7 +65,6 @@ namespace SelXPressApi.Helper
 				{
 					Username = "Maxence_Leroy",
 					Email = "maxence.leroy@epitech.eu",
-					Password = "password",
 					Role = operatorRole
 				};
 
@@ -76,7 +72,6 @@ namespace SelXPressApi.Helper
 				{
 					Username = "Mockingame",
 					Email = "julien.lamalle@epitech.eu",
-					Password = "password",
 					Role = operatorRole
 				};
 				
