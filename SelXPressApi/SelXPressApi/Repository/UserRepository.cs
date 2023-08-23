@@ -43,7 +43,6 @@ namespace SelXPressApi.Repository
 				{
 					Username = user.Username,
 					Email = user.Email,
-					Password = user.Password,
 					Role = role
 				};
 				await _context.Users.AddAsync(newUser);
@@ -66,7 +65,6 @@ namespace SelXPressApi.Repository
 					Id = user.Id,
 					Username = user.Username,
 					Email = user.Email,
-					Password = user.Password,
 					Role = role,
 				}).FirstAsync();
 		}
@@ -108,7 +106,6 @@ namespace SelXPressApi.Repository
 					Id = user.Id,
 					Username = user.Username,
 					Email = user.Email,
-					Password = user.Password,
 					Role = role,
 				}).ToListAsync();
 		}
@@ -127,7 +124,6 @@ namespace SelXPressApi.Repository
 					Id = user.Id,
 					Username = user.Username,
 					Email = user.Email,
-					Password = user.Password,
 					Role = role,
 				}).FirstOrDefaultAsync();
 		}
@@ -146,10 +142,7 @@ namespace SelXPressApi.Repository
 
 			if (user != null && updateUser.Username != null && user.Username != updateUser.Username)
 				await _context.Users.Where(u => u.Email == email).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Username, x => updateUser.Username));
-
-			if (user != null && updateUser.Password != null && user.Password != updateUser.Password)
-				await _context.Users.Where(u => u.Email == email).ExecuteUpdateAsync(p3 => p3.SetProperty(x => x.Password, x => updateUser.Password));
-
+            
 			return await _commonMethods.Save();
 		}
 
