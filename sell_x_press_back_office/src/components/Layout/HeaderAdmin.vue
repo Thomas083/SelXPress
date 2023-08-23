@@ -3,8 +3,8 @@
         <img class="logo" src="../../assets/Header/logo_back_office.png" v-on:click="goToHome"/>
         <div class="header-content-right">
             <div class="header-btns">
-                <button class="header-btn-admin">Admin Panel</button>
-                <button class="header-btn-add">Add Product</button>
+                <button class="btn btn-primary header-btn-admin">Admin Panel</button>
+                <button class="btn btn-secondary header-btn-add">Add Product</button>
             </div>
             <div class="header-admin">
                 <h3 class="header-name" v-on:click="goToUserProfile">{{ username }},</h3>
@@ -30,7 +30,6 @@ export default {
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
-            window.location.reload()
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
@@ -97,31 +96,15 @@ export default {
 .header-btn-admin,
 .header-btn-add {
     border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-weight: bold;
-    border: none;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-
 }
 
 .header-btn-admin {
-    background-color: var(--main-green);
-    color: var(--main-white);
     padding: 1rem 1.5rem;
 }
 
 .header-btn-add {
-    background-color: var(--main-grey-separation);
-    color: var(--main-black);
     padding: 0.5rem;
-    width: fit-content;
-}
-
-.header-btn-admin:hover,
-.header-btn-add:hover {
-    opacity: 0.7;
 }
 
 .header-admin {

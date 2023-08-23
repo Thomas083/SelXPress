@@ -124,7 +124,7 @@ export default {
     font-size: 1rem;
     height: 1vh;
     margin-bottom: 0.5rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
     border: none;
 }
 
