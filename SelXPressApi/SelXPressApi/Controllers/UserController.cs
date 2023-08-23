@@ -117,9 +117,12 @@ namespace SelXPressApi.Controllers
 		/// <param name="newUser">The user information to create.</param>
 		/// <returns>Returns a status code indicating the result of the operation.</returns>
 		/// <exception cref="BadRequestException">Thrown when the provided user data is incomplete.</exception>
+		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to create a seller or operator user</exception>
 		[HttpPost]
 		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
 		{
@@ -127,6 +130,13 @@ namespace SelXPressApi.Controllers
 			if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == 0)
 				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
 
+			//Check if the provided RoleId id equals to 3 or 2 and check if the user is authorized to do this operation
+			if (newUser.RoleId == 3 || newUser.RoleId == 2)
+			{
+				await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+				if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+					throw new ForbiddenRequestException("You are not authorized to do this operation", "USR-2001");
+			}
 			// Create the user using the repository
 			await _userRepository.CreateUser(newUser);
 
