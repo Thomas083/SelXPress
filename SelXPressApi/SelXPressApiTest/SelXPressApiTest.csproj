@@ -28,7 +28,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Folder Include="AttributeDataControllerTest\" />
       <Folder Include="CartControllerTest\" />
       <Folder Include="CategoryControllerTest\" />
       <Folder Include="CommentControllerTest\" />
