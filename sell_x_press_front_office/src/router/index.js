@@ -65,4 +65,15 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  // Check if the route exists
+  if (to.matched.length === 0) {
+    // Route doesn't exist, redirect to home
+    next({ name: 'home' });
+  } else {
+    // Route exists, proceed with navigation
+    next();
+  }
+});
+
 export default router
