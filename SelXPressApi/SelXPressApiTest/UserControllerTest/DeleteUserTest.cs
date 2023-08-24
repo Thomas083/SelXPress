@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
 using FakeItEasy;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.Controllers;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
-using User = SelXPressApi.Models.User;
+
 namespace SelXPressApiTest.UserControllerTest;
 
 /// <summary>
-/// Class to test the /api/User POST route
+/// Class to test the /api/User/{id} route
 /// </summary>
-public class CreateUserTest
+public class DeleteUserTest
 {
     private UserController _userController;
     private IUserRepository _userRepository;
@@ -21,43 +19,43 @@ public class CreateUserTest
     private IAuthorizationMiddleware _authorizationMiddleware;
 
     /// <summary>
-    /// Initialize a new instance of the <see cref="GetUsersTest"/> class.
+    /// Initialize a new instance of the <see cref="DeleteUserTest"/>
     /// </summary>
-    public CreateUserTest()
+    public DeleteUserTest()
     {
-        //inject the dependencies of the UserController
+        //Inject the dependencies of the UserController
         _userRepository = A.Fake<IUserRepository>();
         _mapper = A.Fake<IMapper>();
         _authManager = A.Fake<FirebaseAuthManager>();
         _authorizationMiddleware = A.Fake<IAuthorizationMiddleware>();
         
-        //inject the user controller
+        //Inject the user controller
         _userController = new UserController(_userRepository, _mapper, _authorizationMiddleware);
     }
 
     /// <summary>
-    /// Test to check if the status of the request is equals to 201
+    /// Test to check if the status of the request is equals to 200
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status201()
+    public void UserController_DeleteUser_Status200()
     {
         //todo
     }
 
     /// <summary>
-    /// Test to check if the status of the request is equals to 400 (BadRequest)
+    /// Test to check if the status of the request is equals to 400
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status400()
+    public void UserController_DeleteUser_Status400()
     {
         //todo
     }
 
     /// <summary>
-    /// Test  to check if the status of the request is equals to 401 because the token is missing
+    /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status401_TokenIsMissing()
+    public void UserController_DeleteUser_Status401_TokenIsMissing()
     {
         //todo
     }
@@ -66,7 +64,7 @@ public class CreateUserTest
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status401_TokenIsInvalid()
+    public void UserController_DeleteUser_Status401_TokenIsInvalid()
     {
         //todo
     }
@@ -75,7 +73,7 @@ public class CreateUserTest
     /// Test to check if the status of the request is equals to 401 because the email is not in the database
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status401_EmailIsNotInTheDatabase()
+    public void UserController_DeleteUser_Status401_EmailIsNotInTheDatabase()
     {
         //todo
     }
@@ -84,16 +82,25 @@ public class CreateUserTest
     /// Test to check if the status of the request is equals to 403 because the user is not authorized to do this operation
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status403()
+    public void UserController_DeleteUser_Status403()
     {
         //todo
     }
 
     /// <summary>
-    /// Test to check if the status of the request is equals to 500 due to an internal server errro
+    /// Test to check if the status of the request is equals to 404
     /// </summary>
     [Fact]
-    public void UserController_CreateUser_Status500()
+    public void UserController_DeleteUser_Status404()
+    {
+        //todo
+    }
+
+    /// <summary>
+    /// Test to check if the status of the request is equals to 500 due to an internal server error
+    /// </summary>
+    [Fact]
+    public void UserController_DeleteUser_Status500()
     {
         //todo
     }
