@@ -7,13 +7,12 @@ using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
 using User = SelXPressApi.Models.User;
-
 namespace SelXPressApiTest.UserControllerTest;
 
 /// <summary>
-/// Class to test the /api/User/auth/login POST
+/// Class to test the /api/User/refreshToken POST route
 /// </summary>
-public class LoginTest
+public class GetRefreshTokenTest
 {
     private UserController _userController;
     private IUserRepository _userRepository;
@@ -22,9 +21,9 @@ public class LoginTest
     private IAuthorizationMiddleware _authorizationMiddleware;
 
     /// <summary>
-    /// Initialize a new instance of the <see cref="GetUsersTest"/> class.
+    /// Initialize a new instance of the <see cref="GetRefreshTokenTest"/> class.
     /// </summary>
-    public LoginTest()
+    public GetRefreshTokenTest()
     {
         //inject the dependencies of the UserController
         _userRepository = A.Fake<IUserRepository>();
@@ -40,7 +39,7 @@ public class LoginTest
     /// Test to check if the status of the request is equals to 200
     /// </summary>
     [Fact]
-    public void UserController_Login_Status200()
+    public void UserController_GetRefreshToken_Status200()
     {
         //todo
     }
@@ -49,17 +48,19 @@ public class LoginTest
     /// Test to check if the status of the request is equals to 400 (BadRequest)
     /// </summary>
     [Fact]
-    public void UserController_Login_Status400()
+    public void UserController_GetRefreshToken_Status400()
     {
         //todo
     }
 
     /// <summary>
-    /// Test to check if the status of the request is equals to 500 due to an internal server error
+    /// Test to check if the status of the request is equals to 500 due to internal server error
     /// </summary>
     [Fact]
-    public void UserController_Login_Status500()
+    public void UserController_GetRefreshToken_Status500()
     {
         //todo
     }
+    
+    
 }
