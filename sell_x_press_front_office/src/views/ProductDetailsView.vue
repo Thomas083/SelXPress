@@ -226,6 +226,9 @@ export default {
             this.sendReviewData.rating = this.hoveredStars;
         }
     },
+    mounted() {
+        console.dir(this.$route.params.id)
+    }
 }
 
 </script>
@@ -250,11 +253,11 @@ export default {
 @media screen and (max-width: 1023px) {
     .img-details-container {
         flex-wrap: wrap;
-  }
+    }
 
-  .rating-review-container {
-    flex-wrap: wrap;
-  }
+    .rating-review-container {
+        flex-wrap: wrap;
+    }
 }
 
 .img-publication-container {
