@@ -32,7 +32,7 @@ export default {
         createUser() {
             POST(ENDPOINTS.CREATE_USER, this.formData)
                 .then(() => {
-                    createToast({ title: 'Sign UP Success', description: 'You are sucessfuly registered !' }, { type: 'success', position: 'bottom-right' });
+                    createToast({ title: 'Sign UP Success', description: 'You are sucessfully registered !' }, { type: 'success', position: 'bottom-right' });
                     POST(ENDPOINTS.USER_LOGIN, {email: this.formData.email, password: this.formData.password})
                         .then((userCredential) => {
                             const user = {
