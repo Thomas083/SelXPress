@@ -2,12 +2,12 @@
     <footer class="footer-container">
         <div class="get_to_know_us">
             <p>Get to know us:</p>
-            <a href="#">Carreer</a>
-            <a href="#">About us</a>
+            <a href="#" v-on:click="goToCareer()">Career</a>
+            <a href="#" v-on:click="goToAboutUs()">About us</a>
         </div>
         <div class="make_money_with_us">
             <p>Make Money with us:</p>
-            <a href="#">Sell on SelXPress</a>
+            <a href="http://localhost:4001">Sell on SelXPress</a>
         </div>
         <div class="help_us">
             <button class="btn btn-primary help_us_btn" v-on:click="setModalState">Help Us To Upgrade</button>
@@ -35,6 +35,12 @@ export default {
     methods: {
         setModalState() {
             this.modalState = !this.modalState
+        },
+        goToAboutUs() {
+            this.$router.push({ path: '/about_us'})
+        },
+        goToCareer() {
+            this.$router.push({ path: '/career'})
         }
     },
 };

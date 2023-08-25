@@ -46,7 +46,6 @@ export default {
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
-            window.location.reload();
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
