@@ -86,13 +86,25 @@ export default {
     computed: {
         categoryList() {
             const newList = this.categories
-            newList.unshift({
-                id: 0,
-                name: 'All',
-                tags: []
-            });
-            return newList
+            if (newList !== null) {
+                newList.unshift({
+                    id: 0,
+                    name: 'All',
+                    tags: []
+                });
+                return newList
+            }
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+        .then((response) => {
+            this.categories = response.data
+            console.dir(this.categories)
+        })
+        .catch((error) => {
+        console.dir(error)
+        });
     },
 };
 </script>

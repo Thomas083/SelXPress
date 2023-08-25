@@ -27,6 +27,8 @@
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS} from '@/api/endpoints';
 
 export default {
     name: "HeaderRegistered",
@@ -38,30 +40,7 @@ export default {
                 search: '',
                 categoryId: 0
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean',
-                    tags:[
-                        {
-                            id: 1,
-                            name: 'Fishing',
-                            categoryId: 1
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Sport',
-                    tags: [
-                        {
-                            id: 1,
-                            name: 'Football',
-                            categoryId: 2
-                        },
-                    ],
-                },
-            ],
+            categories: null
         }
     },
     methods: {
@@ -89,13 +68,25 @@ export default {
     computed: {
         categoryList() {
             const newList = this.categories
-            newList.unshift({
-                id: 0,
-                name: 'All',
-                tags: []
-            });
-            return newList
+            if (newList !== null) {
+                newList.unshift({
+                    id: 0,
+                    name: 'All',
+                    tags: []
+                });
+                return newList
+            }
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+        .then((response) => {
+            this.categories = response.data
+            console.dir(this.categories)
+        })
+        .catch((error) => {
+        console.dir(error)
+        });
     },
 };
 </script>
