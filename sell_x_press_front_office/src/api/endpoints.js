@@ -13,5 +13,11 @@ export const ENDPOINTS = {
     // CATEGORIES
     GET_ALL_CATEGORIES: '/api/Category', //(GET)
     GET_ONE_CATEGORY: '/api/Category/:id', //(GET)
-    UPDATE_CATEGORY: '/api/Category/:id' //(PUT)
+    UPDATE_CATEGORY: '/api/Category/:id', //(PUT)
+
+    // PRODUCTS
+    GET_ALL_PRODUCTS: '/api/Product', //(GET)
+    GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
+    GET_ONE_PRODUCT: '/api/Product/:id', //(GET)
+    UPDATE_PRODUCT: '/api/Product/:id', //(PUT)
 }
