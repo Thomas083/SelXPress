@@ -4,6 +4,7 @@ import LoginView from '../views/identification/LoginView.vue'
 import RegisterView from '../views/identification/RegisterView.vue'
 import ForgotView from '../views/identification/ForgotView.vue'
 import ProductListView from "../views/ProductListView.vue"
+import ProductDetailsView from "../views/ProductDetailsView.vue"
 import UserView from '../views/UserView.vue'
 import CartView from '../views/CartView.vue'
 import HistoryView from '../views/HistoryView.vue'
