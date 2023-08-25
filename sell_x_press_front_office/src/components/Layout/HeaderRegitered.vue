@@ -13,7 +13,7 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user" @click="goToUserProfile()">{{ store }}</button>
+                <button class="user" @click="goToUserProfile()">{{ user }}</button>
                 <button class="btn btn-secondary btn-signup" @click="logOut()">Sign Out</button>
             </div>
         </div>
@@ -32,6 +32,7 @@ export default {
     name: "HeaderRegistered",
     data() {
         return {
+            user: JSON.parse(localStorage.getItem('user')).email,
             selectedOption: 'All',
             formData: {
                 search: '',
