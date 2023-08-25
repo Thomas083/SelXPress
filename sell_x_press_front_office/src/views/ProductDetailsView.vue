@@ -3,16 +3,16 @@
         <div class="img-details-container">
             <div class="img-publication-container">
                 <div class="img-upload" id="input-upload-file" name="input-upload-file">
-                    <img :src="image" alt="Product Image" />
+                    <img :src="product.picture" alt="Product Image" />
                 </div>
-                <p class="publication_date">Published on: {{ publication_date }}</p>
+                <p class="publication_date">Published on: {{ formatCreatedAt(product.createdAt) }}</p>
             </div>
             <div class="product-details">
-                <h2 class="product-title">{{ title }}</h2>
+                <h2 class="product-title">{{ product.name }}</h2>
                 <div class="product-seller">Sold by: <span class="product-seller-name">{{ seller }}</span></div>
                 <div class="product-price-cart-container">
                     <div class="product-price">
-                        <h2 class="price">{{ price }} €</h2>
+                        <h2 class="price">{{ product.price }} €</h2>
                         <div>All prices include VAT</div>
                     </div>
                     <button class="btn btn-primary add-to-cart-btn" @click="addToCart()">
@@ -41,7 +41,7 @@
         <div class="separation-line"></div>
         <div class="description-container">
             <h1>Description</h1>
-            <p>{{ description }}</p>
+            <p>{{ product.description }}</p>
         </div>
         <div class="separation-line"></div>
         <div class="customer-review-container">
@@ -109,7 +109,10 @@
 
 <script>
 
+import { GET } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent.vue";
+import { format } from 'date-fns';
 
 export default {
     name: 'ProductDetailsView',
@@ -121,6 +124,7 @@ export default {
             addProduct: {
                 attributes: [],
             },
+            product: null,
             title: 'ARTINABS Ocean Wave Simulation LED Projector Lamp',
             seller: 'ARTINABS',
             price: '25,99',
@@ -186,6 +190,10 @@ export default {
         }
     },
     methods: {
+        formatCreatedAt(createdAt) {
+            if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
+            else return '';
+        },
         setAttribute(attribute_name, attribute_value) {
             const existingAttributeIndex = this.addProduct.attributes.findIndex(
                 (data) => data.name === attribute_name
@@ -226,8 +234,19 @@ export default {
             this.sendReviewData.rating = this.hoveredStars;
         }
     },
+    computed: {
+        product() {
+            return this.product ? this.product : '';
+        }
+    },
     mounted() {
-        console.dir(this.$route.params.id)
+        GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
+            .then((response) => {
+                this.product = response.data;
+            })
+            .catch((error) => {
+                console.dir(error);
+            });
     }
 }
 

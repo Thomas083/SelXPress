@@ -12,12 +12,12 @@ export const ENDPOINTS = {
 
     // CATEGORIES
     GET_ALL_CATEGORIES: '/api/Category', //(GET)
-    GET_ONE_CATEGORY: '/api/Category/:id', //(GET)
-    UPDATE_CATEGORY: '/api/Category/:id', //(PUT)
+    GET_ONE_CATEGORY: '/api/Category/', //(GET) and add + this.$route.params.id
+    UPDATE_CATEGORY: '/api/Category/', //(PUT) and add + this.$route.params.id
 
     // PRODUCTS
     GET_ALL_PRODUCTS: '/api/Product', //(GET)
     GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
-    GET_ONE_PRODUCT: '/api/Product/:id', //(GET)
-    UPDATE_PRODUCT: '/api/Product/:id', //(PUT)
+    GET_ONE_PRODUCT: '/api/Product/', //(GET) and add + this.$route.params.id
+    UPDATE_PRODUCT: '/api/Product/', //(PUT) and add + this.$route.params.id
 }
