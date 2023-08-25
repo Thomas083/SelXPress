@@ -82,7 +82,6 @@ export default {
         GET(ENDPOINTS.GET_ALL_CATEGORIES)
         .then((response) => {
             this.categories = response.data
-            console.dir(this.categories)
         })
         .catch((error) => {
         console.dir(error)
