@@ -5,7 +5,8 @@
         </div>
         <div class="header-search">
             <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
-                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
+                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}
+                </option>
             </select>
             <input v-model="formData.search" class="search-input" type="text" placeholder="Search in SelXpress...">
             <button class="loop" v-on:click="sendSearchData"><img src="../../assets/Header/loop.png" /></button>
@@ -27,6 +28,9 @@
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: "HeaderNotRegistered",
@@ -37,30 +41,7 @@ export default {
                 search: '',
                 categoryId: 0
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean',
-                    tags:[
-                        {
-                            id: 1,
-                            name: 'Fishing',
-                            categoryId: 1
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Sport',
-                    tags: [
-                        {
-                            id: 1,
-                            name: 'Football',
-                            categoryId: 2
-                        },
-                    ],
-                },
-            ],
+            categories: null
         }
     },
     methods: {
@@ -68,13 +49,13 @@ export default {
             this.$router.push({ path: '/' });
         },
         goToSignIn() {
-            this.$router.push({ path: '/login'});
+            this.$router.push({ path: '/login' });
         },
         goToSignUp() {
-            this.$router.push({ path: '/register'});
+            this.$router.push({ path: '/register' });
         },
         goToCart() {
-            this.$router.push({ path: '/cart'});
+            this.$router.push({ path: '/cart' });
         },
         setCatagoryData() {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
@@ -96,15 +77,14 @@ export default {
             }
         }
     },
-    mounted () {
+    mounted() {
         GET(ENDPOINTS.GET_ALL_CATEGORIES)
-        .then((response) => {
-            this.categories = response.data
-            console.dir(this.categories)
-        })
-        .catch((error) => {
-        console.dir(error)
-        });
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
 };
 </script>
