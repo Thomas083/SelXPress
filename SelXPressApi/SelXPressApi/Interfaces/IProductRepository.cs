@@ -24,7 +24,7 @@ namespace SelXPressApi.Interfaces
 		/// Retrieves a list of all products along with their associated data.
 		/// </summary>
 		/// <returns>A list of products with associated data.</returns>
-		Task<List<Product>> GetAllProducts();
+		Task<List<AllProductDTO>> GetAllProducts();
 
 		/// <summary>
 		/// Retrieves a product by its unique identifier.

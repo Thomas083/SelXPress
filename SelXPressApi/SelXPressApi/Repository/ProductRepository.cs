@@ -108,15 +108,19 @@ namespace SelXPressApi.Repository
 		/// Retrieves a list of all products along with their associated data.
 		/// </summary>
 		/// <returns>A list of products with associated data.</returns>
-		public async Task<List<Product>> GetAllProducts()
+		public async Task<List<AllProductDTO>> GetAllProducts()
 		{
-			var query = _context.Products.Include(p => p.Category).Include(p => p.ProductAttributes)
-							  .OrderBy(p => p.Id);
+			var query = _context.Products
+				.Include(p => p.Category)
+				.Include(p => p.ProductAttributes)
+				.OrderBy(p => p.Id);
 
 			var products = await query.ToListAsync();
+			var productDTOs = _mapper.Map<List<AllProductDTO>>(products);
 
-			return products;
+			return productDTOs;
 		}
+
 
 		/// <summary>
 		/// Retrieves a product by its ID.

@@ -52,10 +52,10 @@ namespace SelXPressApi.Controllers
 		/// <returns>Returns an array of products.</returns>
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
 		/// <exception cref="NotFoundErrorTemplate">Thrown when no products are found in the database.</exception>
-		[HttpGet]
+		[HttpGet("filters")]
 		[ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
-		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetAllProductsFilter(string categoryName, List<string> tagNames, int pageNumber, int pageSize, string sortBy)
 		{
@@ -103,7 +103,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
 		/// <exception cref="NotFoundErrorTemplate">Thrown when no products are found in the database.</exception>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
+		[ProducesResponseType(200, Type = typeof(List<AllProductDTO>))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]

@@ -5,6 +5,7 @@ using SelXPressApi.DTO.ProductAttributeDTO; // Add using directive for ProductAt
 using SelXPressApi.DTO.CommentDTO; // Add using directive for CommentDTO
 using SelXPressApi.DTO.CartDTO; // Add using directive for CartDTO
 using SelXPressApi.DTO.OrderDTOProductDTO; // Add using directive for OrderProductDTO
+using Newtonsoft.Json;
 
 namespace SelXPressApi.DTO.ProductDTO
 {
@@ -39,6 +40,11 @@ namespace SelXPressApi.DTO.ProductDTO
         public string Picture { get; set; }
 
         /// <summary>
+        /// Gets or sets the available stock quantity of the product.
+        /// </summary>
+        public int Stock { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation date and time of the product.
         /// </summary>
         public DateTime CreatedAt { get; set; }
@@ -47,11 +53,6 @@ namespace SelXPressApi.DTO.ProductDTO
         /// Gets or sets the category of the product.
         /// </summary>
         public CategoryDTO.CategoryDTO Category { get; set; }
-
-        /// <summary>
-        /// Gets or sets the available stock quantity of the product.
-        /// </summary>
-        public int Stock { get; set; }
 
         /// <summary>
         /// Gets or sets the attributes associated with the product.
@@ -72,5 +73,5 @@ namespace SelXPressApi.DTO.ProductDTO
         /// Gets or sets the order products containing the product.
         /// </summary>
         public ICollection<OrderProductDTO> OrderProducts { get; set; }
-    }
+	}
 }
