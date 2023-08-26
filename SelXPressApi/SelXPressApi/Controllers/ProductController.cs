@@ -42,7 +42,7 @@ namespace SelXPressApi.Controllers
 
 		#region Get Methods
 		/// <summary>
-		/// Get all products.
+		/// Get all products with filter.
 		/// </summary>
 		/// <param name="categoryName">Filter by category name.</param>
 		/// <param name="tagNames">Filter by tag names.</param>
@@ -57,7 +57,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> GetAllProducts(string categoryName, List<string> tagNames, int pageNumber, int pageSize, string sortBy)
+		public async Task<IActionResult> GetAllProductsFilter(string categoryName, List<string> tagNames, int pageNumber, int pageSize, string sortBy)
 		{
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -91,6 +91,34 @@ namespace SelXPressApi.Controllers
 			// Retrieve products based on paging
 			var totalCount = await query.CountAsync();
 			var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+			return Ok(products);
+		}
+
+		/// <summary>
+		/// Get all products.
+		/// </summary>
+		/// <returns></returns>
+		/// <returns>Returns an array of products.</returns>
+		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+		/// <exception cref="NotFoundErrorTemplate">Thrown when no products are found in the database.</exception>
+		[HttpGet]
+		[ProducesResponseType(200, Type = typeof(List<ProductDTO>))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetAllProduct()
+		{
+			// Check if the model state is valid
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+
+			// Retrieve all products from the repository
+			var products = await _productRepository.GetAllProducts();
+
+			// Check if there are products in the database
+			if (products == null)
+				throw new NotFoundException("There are no products in the database, please try again", "PRO-1401");
 
 			return Ok(products);
 		}
