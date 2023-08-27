@@ -4,6 +4,7 @@ import LoginView from '../views/identification/LoginView.vue'
 import RegisterView from '../views/identification/RegisterView.vue'
 import ForgotView from '../views/identification/ForgotView.vue'
 import UserView from "../views/UserView.vue"
+import AdminView from "../views/AdminView.vue"
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
     name: 'user',
     component: UserView
   },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView
+  },
 
 ]
 
@@ -46,5 +52,15 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  if (!localStorage.getItem('user') && to.name !== 'login' && to.name !== 'register' && to.name !== 'forgot'){
+    next({ name: 'login' });
+  } else if (localStorage.getItem('user') && localStorage.getItem('user') && (to.name === 'login' || to.name === 'register' || to.name === 'forgot')) {
+    next({ name: 'home'});
+  } else {
+    next()
+  }
+});
 
 export default router

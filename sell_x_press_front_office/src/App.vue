@@ -2,7 +2,9 @@
   <header-identification-page v-if="isIdentificationPage" />
   <header-registered v-else-if="isUserLoggedIn" />
   <header-not-registered v-else />
-  <router-view />
+  <div class="app-container">
+    <router-view />
+  </div>
   <footer-layout />
 </template>
 
@@ -17,7 +19,7 @@ import ProductCategories from '@/components/Home/ProductCategories.vue';
 export default {
   name: 'Appvue',
   components: {
-    HeaderNotRegistered,
+    HeaderNotRegistered,  
     HeaderRegistered,
     HeaderIdentificationPage,
     FooterLayout,
@@ -28,7 +30,7 @@ export default {
       return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
     },
     isUserLoggedIn() {
-      return (localStorage.getItem("email") != null);
+      return (localStorage.getItem("user") != null);
     },
   }
 }
@@ -44,16 +46,8 @@ export default {
   background-color: #E5E5E5;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.app-container {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 </style>

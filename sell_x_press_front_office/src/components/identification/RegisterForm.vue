@@ -6,6 +6,7 @@
       name="input-uname"
       type="text"
       placeholder="Enter your username"
+      class="form-input"
       @input="updateData($event, 'username')"
     />
     <input-component
@@ -14,6 +15,7 @@
       name="input-mail"
       type="email"
       placeholder="Enter your email"
+      class="form-input"
       @input="updateData($event, 'email')"
     />
     <input-component
@@ -22,6 +24,7 @@
       name="input-pwd"
       type="password"
       placeholder="Enter your password"
+      class="form-input"
       @input="updateData($event, 'password')"
     />
     <input-component
@@ -30,6 +33,7 @@
       name="input-confirm-pwd"
       type="password"
       placeholder="Confirm your password"
+      class="form-input"
       @input="updateData($event, 'cpassword')"
     />
   </div>
@@ -49,6 +53,7 @@ export default {
         email: "",
         password: "",
         cpassword: "",
+        roleId: 1
       },
     };
   },
