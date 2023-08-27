@@ -121,6 +121,19 @@ namespace SelXPressApi.Repository
 			return productDTOs;
 		}
 
+        public async Task<List<AllProductDTO>> GetAllProductsByUser(int userId)
+        {
+			var query = _context.Products
+				.Include(p => p.Category)
+				.Include(p => p.ProductAttributes)
+				.Where(p => p.UserId == userId)
+				.OrderBy(p => p.Id);
+
+			var products = await query.ToListAsync();
+			var productDTOs = _mapper.Map<List<AllProductDTO>>(products);
+
+			return productDTOs;
+		}
 
 		/// <summary>
 		/// Retrieves a product by its ID.

@@ -124,6 +124,44 @@ namespace SelXPressApi.Controllers
 		}
 
 		/// <summary>
+		/// Get all products by seller.
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+		/// <exception cref="NotFoundException">Thrown when no products are found in the database.</exception>
+		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+		[HttpGet("me")]
+		[ProducesResponseType(200, Type = typeof(List<AllProductDTO>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetAllProductByUser()
+		{
+			// Check if a valid token exists in the HttpContext
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+			// Check if the user has admin or seller role
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+				!await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+			{
+				throw new ForbiddenRequestException("You are not authorized to perform this operation", "PRO-2001");
+			}
+			// Check if the model state is valid
+			if (!ModelState.IsValid)
+				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
+
+			// Retrieve all products from the repository
+			var products = await _productRepository.GetAllProductsByUser(_authorizationMiddleware.GetUserId());
+
+			// Check if there are products in the database
+			if (products == null)
+				throw new NotFoundException("There are no products in the database, please try again", "PRO-1401");
+
+			return Ok(products);
+		}
+
+		/// <summary>
 		/// Get a product by ID.
 		/// </summary>
 		/// <param name="id">The ID of the product.</param>
