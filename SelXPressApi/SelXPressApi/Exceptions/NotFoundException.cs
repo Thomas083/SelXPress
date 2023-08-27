@@ -1,4 +1,4 @@
-﻿namespace SelXPressApi.Exceptions
+namespace SelXPressApi.Exceptions
 {
 	/// <summary>
 	/// Exception class for not found resources.

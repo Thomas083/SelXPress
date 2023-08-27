@@ -1,4 +1,4 @@
-﻿using SelXPressApi.DTO.TagDTO;
+using SelXPressApi.DTO.TagDTO;
 using System.Collections.Generic;
 
 namespace SelXPressApi.DTO.CategoryDTO

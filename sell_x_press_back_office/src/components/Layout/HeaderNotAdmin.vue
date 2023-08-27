@@ -2,35 +2,51 @@
     <div class="header-container">
         <img @click="goToHome()" class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
-            <button class="header-btn-add">Add Product</button>
-            <h3 class="header-name" @click="goToUserProfile()">Elsharion</h3>
+            <button class="btn btn-primary header-btn-add">Add Product</button>
+            <h3 class="header-name" @click="goToUserProfile()">{{ username }}</h3>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" />
         </div>
     </div>
 </template>
 
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: "HeaderNotAdmin",
+    data() {
+        return {
+            username: ''
+        }
+    },
     methods: {
-    goToHome() {
-        this.$router.push({ path: '/' });
+        goToHome() {
+            this.$router.push({ path: '/' });
+        },
+        goToUserProfile() {
+            this.$router.push({ path: '/user' });
+        },
     },
-    goToUserProfile() {
-        this.$router.push({ path: '/user' });
+    mounted() {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.username = response.data.username;
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
-  }
 };
 
 </script>
 
 <style scoped>
-
 .header-container {
     display: flex;
     flex-direction: row;
-    align-items: center;    
+    align-items: center;
     width: 100vw;
     background-color: var(--main-red);
 }
@@ -62,18 +78,7 @@ export default {
 .header-btn-add {
     border-radius: 9px;
     padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-weight: bold;
-    color: var(--main-white);
-    border: none;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    background-color: var(--main-green);
-}
-
-.header-btn-add:hover {
-    opacity: 0.7;
 }
 
 .header-name {
@@ -84,5 +89,4 @@ export default {
 .header-name:hover {
     text-decoration: underline;
 }
-
 </style>
