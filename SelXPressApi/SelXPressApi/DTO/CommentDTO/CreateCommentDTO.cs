@@ -11,6 +11,11 @@ public class CreateCommentDTO
     public string Message { get; set; }
     
     /// <summary>
+    /// Title of the comment
+    /// </summary>
+    public string Title { get; set; }
+    
+    /// <summary>
     /// Id of the user
     /// </summary>
     public int UserId { get; set; }

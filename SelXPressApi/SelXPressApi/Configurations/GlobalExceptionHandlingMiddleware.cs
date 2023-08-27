@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Firebase.Auth;
 using SelXPressApi.Exceptions;
 
 namespace SelXPressApi.Configurations
@@ -61,6 +62,18 @@ namespace SelXPressApi.Configurations
                 message = ex.Message;
                 status = HttpStatusCode.Unauthorized;
                 code = ex.Code;
+            }
+            else if (exceptionType == typeof(ForbiddenRequestException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.Forbidden;
+                code = ex.Code;
+            }
+            else if (exceptionType == typeof(FirebaseAuthException))
+            {
+                message = ex.Message;
+                status = HttpStatusCode.NotFound;
+                code = "FRB-1000"; // erreur de firebase au niveau de l'authentification
             }
             else
             {

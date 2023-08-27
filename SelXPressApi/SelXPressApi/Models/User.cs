@@ -15,11 +15,7 @@ public class User
     /// </summary>
     public string Username { get; set; }
 
-    /// <summary>
-    /// password of the user (crypt)
-    /// </summary>
-    public string Password { get; set; }
-
+    
     /// <summary>
     /// Email of the user (unique)
     /// </summary>

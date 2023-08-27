@@ -10,4 +10,9 @@ public class UpdateCommentDTO
     /// </summary>
     public string Message { get; set; }
     
+    /// <summary>
+    /// Tile of the comment
+    /// </summary>
+    public string Title { get; set; }
+    
 }
