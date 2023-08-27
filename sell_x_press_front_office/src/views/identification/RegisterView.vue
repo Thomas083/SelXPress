@@ -11,9 +11,10 @@
 
 <script>
 import RegisterForm from '@/components/identification/RegisterForm.vue';
-import { auth } from "@/config/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
+import {POST} from "@/api/axios";
+import {ENDPOINTS} from "@/api/endpoints";
+
 export default {
     name: 'RegisterView',
     components: {
@@ -29,10 +30,21 @@ export default {
             this.formData = e;
         },
         createUser() {
-            createUserWithEmailAndPassword(auth, this.formData.email, this.formData.password)
-                .then((userCredential) => {
-                    console.dir(userCredential);
-                    createToast({ title: 'Sign UP Success', description: 'You are sucessfuly register' }, { type: 'success', position: 'bottom-right' });
+            POST(ENDPOINTS.CREATE_USER, this.formData)
+                .then(() => {
+                    createToast({ title: 'Sign UP Success', description: 'You are sucessfully registered !' }, { type: 'success', position: 'bottom-right' });
+                    POST(ENDPOINTS.USER_LOGIN, {email: this.formData.email, password: this.formData.password})
+                        .then((userCredential) => {
+                            const user = {
+                                email: userCredential.data.email,
+                                token: userCredential.data.token
+                            }
+                            localStorage.setItem("user", JSON.stringify(user));
+                            this.$router.push({ path: '/' });
+                        })
+                        .catch(() => {
+                            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                        });
                 })
                 .catch(() => {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });

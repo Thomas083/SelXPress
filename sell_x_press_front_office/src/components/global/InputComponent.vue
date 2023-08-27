@@ -8,7 +8,7 @@
       :class="$attrs.class"
       :style="styleObject"
       :value="value"
-      @change="$emit('input', parseInt($event.target.value))"
+      @change="$emit('input', returnValue($event.target.value))"
     />
 </template>
 
@@ -26,6 +26,12 @@ export default {
       default: "",
     },
     styleObject: Object,
+  },
+  methods: {
+    returnValue(e) {
+      if (e.match(/.*[a-zA-Z].*/)) return e;
+      else return parseInt(e);
+    }
   },
 };
 </script>
