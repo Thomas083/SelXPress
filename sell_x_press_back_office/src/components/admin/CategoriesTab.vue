@@ -11,7 +11,7 @@
             <tbody>
                 <tr>
                     <th scope="row">-</th>
-                    <td><input-component @input="createCatageoriesData('name', $event)" /></td>
+                    <td><input-component @input="createCategeoriesData('name', $event)" /></td>
                     <td class="action-create-btn">
                         <button class="btn btn-add btn-admin" v-on:click="createCategories">
                             Create
@@ -119,7 +119,7 @@ export default {
         }
     },
     methods: {
-        createCatageoriesData(key, value) {
+        createCategeoriesData(key, value) {
             this.formCategoriesData = Object.assign(this.formCategoriesData, { [key]: value });
         },
         createTagsData(key, value) {

@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     CreateData(key, value) {
-      this.formData = Object.assign(this.formData, {[key]: value});
+      Object.assign(this.formData, {[key]: value});
     },
     updateData(index, key, value) {
       this.users[index - 1][key] = value;
