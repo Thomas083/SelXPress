@@ -12,8 +12,8 @@
 
 <script>
 import LoginForm from '@/components/identification/LoginForm.vue';
-import { auth } from "@/config/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GET, POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints'
 import { createToast } from 'mosha-vue-toastify';
 
 export default {
@@ -34,14 +34,28 @@ export default {
             this.$router.push({ path: '/register' });
         },
         logUser() {
-            signInWithEmailAndPassword(auth, this.formData.email, this.formData.password)
-          .then((userCredential) => {
-            console.log(userCredential);
-            createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
-          })
-          .catch(() => {
-            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-          });
+            POST(ENDPOINTS.USER_LOGIN, this.formData)
+                .then((userCredential) => {
+                    GET(ENDPOINTS.GET_ONE_USER, userCredential.data.token)
+                        .then((response) => {
+                            if (response.data.role.id === 1) alert('Your are not allowed to logged in please create an Account to become a seller or call an admin');
+                            else {
+                                createToast({ title: 'Sign IN Success', description: 'You are sucessfuly connected' }, { type: 'success', position: 'bottom-right' });
+                                const user = {
+                                    email: userCredential.data.email,
+                                    token: userCredential.data.token
+                                }
+                                localStorage.setItem("user", JSON.stringify(user));
+                                this.$router.push({ path: '/' });
+                            }
+                        })
+                        .catch(() => {
+                            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
     }
 }
@@ -68,7 +82,7 @@ export default {
     padding-top: 3vh;
 }
 
-.signup-button{
+.signup-button {
     align-self: flex-end;
     margin-right: 2vw;
     margin-bottom: 2vh;
@@ -79,7 +93,7 @@ a {
     margin-right: 2vw;
 }
 
-.signin-button{
+.signin-button {
     margin-top: 5vh;
     margin-bottom: 5vh;
 }

@@ -25,6 +25,7 @@ props: {
   label: {
     type: String,
     default: "",
+    disabled: String
   },
   styleObject: Object,
   disable: String
