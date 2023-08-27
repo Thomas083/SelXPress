@@ -19,6 +19,7 @@ export default {
     type: String,
     placeholder: String,
     label: String,
+    disabled: String
   },
   data() {
     return {

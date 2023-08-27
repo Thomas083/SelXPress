@@ -1,9 +1,9 @@
 <template>
   <div class="home-container">
-    <categories-list />
+    <categories-list @categoryChoose="updateCategory($event)"/>
     <div class="products-cards-container">
       <div class="search-product">
-        <h1 class="products-category" id="category">Category: All</h1>
+        <h1 class="products-category" id="category">Category: {{ category}}</h1>
         <filter-product />
       </div>
       <div class="products-cards">
@@ -31,6 +31,7 @@ export default {
   },
   data() {
     return {
+      category: 'All',
       productsPerPage: 15,
       currentPage: 1,
       products: [
@@ -38,83 +39,83 @@ export default {
           id: 1,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: '2023-08-22T11:15:50.635Z',
         }, {
           id: 2,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         }, {
           id: 3,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 4,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 5,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 6,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 7,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 8,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 9,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 10,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 11,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 12,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 13,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
         {
           id: 13,
           name: "SAMODA, Child, Baleine, T-Shirt",
           price: '16,99',
-          publication_date: "20/06/2023",
+          createdAt: "2023-08-22T11:15:50.635Z",
         },
       ]
     }
@@ -129,6 +130,9 @@ export default {
   methods: {
     updateCurrentPage(newPage) {
       this.currentPage = newPage;
+    },
+    updateCategory(categoryChoose) {
+      this.category = categoryChoose.name
     },
 }
 }
