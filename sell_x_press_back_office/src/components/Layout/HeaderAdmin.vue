@@ -3,12 +3,12 @@
         <img class="logo" src="../../assets/Header/logo_back_office.png" v-on:click="goToHome"/>
         <div class="header-content-right">
             <div class="header-btns">
-                <button class="btn btn-primary header-btn-admin">Admin Panel</button>
+                <button class="btn btn-primary header-btn-admin" v-on:click="goToAdminPanel">Admin Panel</button>
                 <button class="btn btn-secondary header-btn-add">Add Product</button>
             </div>
             <div class="header-admin">
-                <h3 class="header-name" v-on:click="goToUserProfile">{{ username }},</h3>
-                <h3 class="header-name" v-on:click="goToUserProfile">Administrator</h3>
+                <h3 class="header-name" v-on:click="goToUserProfil">{{ username }},</h3>
+                <h3 class="header-name" v-on:click="goToUserProfil">Administrator</h3>
             </div>
             <img class="logo-log-out" src="../../assets/Header/log-out.png" v-on:click="logOut" />
         </div>
@@ -22,23 +22,25 @@ import { ENDPOINTS } from '@/api/endpoints';
 
 export default {
     name: "HeaderAdmin",
+    methods: {
+        goToHome() {
+            this.$router.push({ path: '/' })
+        },
+        goToAdminPanel() {
+            this.$router.push({ path: '/admin' })
+        },
+        goToUserProfil() {
+            this.$router.push({ path: '/user' })
+        },
+        logOut() {
+            localStorage.clear();
+            window.location.reload();
+        },
+    },
     data() {
         return {
             username: ''
         }
-    },
-    methods: {
-        goToHome() {
-            this.$router.push({ path: '/' });
-        },
-        goToUserProfile() {
-            this.$router.push({ path: '/user' });
-        },
-        logOut() {
-            localStorage.clear()
-            window.location.reload()
-        }
-        
     },
     mounted() {
         GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)

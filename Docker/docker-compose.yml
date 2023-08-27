@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  mssql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports: 
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    networks:
+      - network
+
+  api:
+    build: 
+      context: ../SelXPressApi/SelXPressApi
+    env_file:
+      - .env
+    ports:
+      - 5288:80
+      - 7094:443
+    restart: on-failure
+    volumes:
+      - ./https:/https/
+    networks:
+      - network
+    depends_on:
+      - mssql
+
+  front:
+    build: ../sell_x_press_front_office
+    env_file:
+      - .env
+    ports:
+      - 4000:8080
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - api
+
+  back_office:
+    build: ../sell_x_press_back_office
+    env_file:
+      - .env
+    ports:
+      - 4001:8080
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - api 
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  network:

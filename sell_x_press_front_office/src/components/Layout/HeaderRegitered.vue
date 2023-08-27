@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="header-order">
-            <button class="order-logo-btn">
+            <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
             <p class="circle-number">0</p>
@@ -43,6 +43,9 @@ export default {
         logOut() {
             localStorage.clear();
             window.location.reload();
+        },
+        goToCart() {
+            this.$router.push({ path: '/cart'});
         }
     },
 };
