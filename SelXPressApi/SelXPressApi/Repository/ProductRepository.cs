@@ -83,33 +83,51 @@ namespace SelXPressApi.Repository
             return false;
         }
 
-        /// <summary>
-        /// Retrieves a paginated list of products based on filtering criteria.
-        /// </summary>
-        /// <param name="categoryName">The name of the category to filter by.</param>
-        /// <param name="tagNames">The list of tag names to filter by.</param>
-        /// <param name="pageNumber">The page number.</param>
-        /// <param name="pageSize">The number of items per page.</param>
-        /// <returns>A list of products.</returns>
-        public async Task<List<Product>> GetAllProducts(string categoryName, List<string> tagNames, int pageNumber, int pageSize)
-        {
-            var query = _context.Products.Include(p => p.Category).Include(p => p.ProductAttributes)
-                              .Where(p => categoryName == null || p.Category.Name == categoryName)
-                              .Where(p => tagNames == null || tagNames.All(t => p.ProductAttributes.Any(pa => pa.Attribute.Name == t)))
-                              .OrderBy(p => p.Id);
+		/// <summary>
+		/// Retrieves a paginated list of products based on filtering criteria.
+		/// </summary>
+		/// <param name="categoryName">The name of the category to filter by.</param>
+		/// <param name="tagNames">The list of tag names to filter by.</param>
+		/// <param name="pageNumber">The page number.</param>
+		/// <param name="pageSize">The number of items per page.</param>
+		/// <returns>A list of products.</returns>
+		public async Task<List<Product>> GetAllProductsFilters(string categoryName, List<string> tagNames, int pageNumber, int pageSize)
+		{
+			var query = _context.Products.Include(p => p.Category).Include(p => p.ProductAttributes)
+							  .Where(p => categoryName == null || p.Category.Name == categoryName)
+							  .Where(p => tagNames == null || tagNames.All(t => p.ProductAttributes.Any(pa => pa.Attribute.Name == t)))
+							  .OrderBy(p => p.Id);
 
-            var totalCount = await query.CountAsync();
-            var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+			var totalCount = await query.CountAsync();
+			var products = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            return products;
-        }
+			return products;
+		}
 
-        /// <summary>
-        /// Retrieves a product by its ID.
-        /// </summary>
-        /// <param name="id">The product ID.</param>
-        /// <returns>The product if found, otherwise <c>null</c>.</returns>
-        public async Task<Product?> GetProductById(int id)
+		/// <summary>
+		/// Retrieves a list of all products along with their associated data.
+		/// </summary>
+		/// <returns>A list of products with associated data.</returns>
+		public async Task<List<AllProductDTO>> GetAllProducts()
+		{
+			var query = _context.Products
+				.Include(p => p.Category)
+				.Include(p => p.ProductAttributes)
+				.OrderBy(p => p.Id);
+
+			var products = await query.ToListAsync();
+			var productDTOs = _mapper.Map<List<AllProductDTO>>(products);
+
+			return productDTOs;
+		}
+
+
+		/// <summary>
+		/// Retrieves a product by its ID.
+		/// </summary>
+		/// <param name="id">The product ID.</param>
+		/// <returns>The product if found, otherwise <c>null</c>.</returns>
+		public async Task<Product?> GetProductById(int id)
         {
             return await _context.Products.FindAsync(id);
         }

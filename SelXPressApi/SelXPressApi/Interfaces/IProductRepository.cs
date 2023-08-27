@@ -18,7 +18,13 @@ namespace SelXPressApi.Interfaces
 		/// <param name="pageNumber">Page number for pagination.</param>
 		/// <param name="pageSize">Number of items per page.</param>
 		/// <returns>A list of filtered and paginated products.</returns>
-		Task<List<Product>> GetAllProducts(string categoryName, List<string> tagNames, int pageNumber, int pageSize);
+		Task<List<Product>> GetAllProductsFilters(string categoryName, List<string> tagNames, int pageNumber, int pageSize);
+
+		/// <summary>
+		/// Retrieves a list of all products along with their associated data.
+		/// </summary>
+		/// <returns>A list of products with associated data.</returns>
+		Task<List<AllProductDTO>> GetAllProducts();
 
 		/// <summary>
 		/// Retrieves a product by its unique identifier.
