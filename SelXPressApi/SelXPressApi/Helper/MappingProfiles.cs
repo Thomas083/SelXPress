@@ -48,6 +48,9 @@ namespace SelXPressApi.Helper
             // Mapping Product model to ProductDTO
             CreateMap<Product, ProductDTO>();
 
+            // Mapping Product model to AllProductDTO
+            CreateMap<Product, AllProductDTO>();
+
             // Mapping Product model to CreateProductDTO
             CreateMap<Product, CreateProductDTO>();
 
