@@ -4,10 +4,8 @@
             <img @click="goToHome()" class="logo" src="../../assets/Header/Logo.png" />
         </div>
         <div class="header-search">
-            <select class="select-categories">
-                <option selected>All</option>
-                <option value="1">Ocean</option>
-                <option value="2">Sport</option>
+            <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
+                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
             <input class="search-input" type="text" placeholder="Search in SelXpress...">
             <button class="loop"><img src="../../assets/Header/loop.png" /></button>
@@ -15,7 +13,7 @@
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
             <div class="btn-container">
-                <button class="user" @click="goToUserProfile()">{{ store }}</button>
+                <button class="user" @click="goToUserProfile()">{{ user }}</button>
                 <button class="btn btn-secondary btn-signup" @click="logOut()">Sign Out</button>
             </div>
         </div>
@@ -32,6 +30,40 @@
 
 export default {
     name: "HeaderRegistered",
+    data() {
+        return {
+            user: JSON.parse(localStorage.getItem('user')).email,
+            selectedOption: 'All',
+            formData: {
+                search: '',
+                categoryId: 0
+            },
+            categories: [
+                {
+                    id: 1,
+                    name: 'Ocean',
+                    tags:[
+                        {
+                            id: 1,
+                            name: 'Fishing',
+                            categoryId: 1
+                        },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Sport',
+                    tags: [
+                        {
+                            id: 1,
+                            name: 'Football',
+                            categoryId: 2
+                        },
+                    ],
+                },
+            ],
+        }
+    },
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
@@ -46,6 +78,23 @@ export default {
         },
         goToCart() {
             this.$router.push({ path: '/cart'});
+        },
+        setCatagoryData() {
+            this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
+        },
+        sendSearchData() {
+            console.dir(this.formData)
+        }
+    },
+    computed: {
+        categoryList() {
+            const newList = this.categories
+            newList.unshift({
+                id: 0,
+                name: 'All',
+                tags: []
+            });
+            return newList
         }
     },
 };
@@ -131,7 +180,7 @@ p {
     font-size: 1rem;
     height: 1vh;
     margin-bottom: 0.5rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
     border: none;
 }
 

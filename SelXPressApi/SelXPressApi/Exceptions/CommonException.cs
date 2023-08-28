@@ -1,4 +1,4 @@
-﻿namespace SelXPressApi.Exceptions
+namespace SelXPressApi.Exceptions
 {
 	/// <summary>
 	/// Base exception class with additional properties for common exception handling.

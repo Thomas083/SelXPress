@@ -7,6 +7,7 @@
         id="input-email"
         name="input-email"
         type="email"
+        class="form-input"
         placeholder="Enter your email"
         @input="updateData"
       />

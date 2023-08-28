@@ -107,7 +107,7 @@ namespace SelXPressApi.Controllers
 			// Return the requested mark.
 			return Ok(mark);
 		}
-
+		
 		/// <summary>
 		/// Retrieves a list of marks associated with a specific user from the database.
 		/// </summary>
