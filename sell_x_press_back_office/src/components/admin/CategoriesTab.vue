@@ -63,7 +63,7 @@
                     <td><input-component :value='tag.categoryId' @input="updateTagsData(tag.id, 'categoryId', $event)" />
                     </td>
                     <td class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateTagsData(tag.id)">
+                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateTagsData(tag.id, tag)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
@@ -82,6 +82,7 @@
 import { GET, PUT } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
+import { createToast } from "mosha-vue-toastify";
 export default {
     name: "CategoriesTab",
     components: {
@@ -115,15 +116,22 @@ export default {
         },
         sendUpdateCategoriesData(id, name) {
             PUT(ENDPOINTS.UPDATE_CATEGORY + `/${id}`, {name: name}, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-                console.dir(response)
+            .then(() => {
+                createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} category` }, { type: 'success', position: 'bottom-right' });
             })
-            .catch((error) => {
-                console.dir(error)
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
             });
         },
-        sendUpdateTagsData(index) {
-            console.dir(this.tags[index - 1])
+        sendUpdateTagsData(id, tag) {
+            console.dir(tag.categoryId)
+            PUT(ENDPOINTS.UPDATE_TAG + `/${id}`, {name: tag.name, categoryId: tag.categoryId}, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
         },
         createCategories() {
             console.dir(this.formCategoriesData)

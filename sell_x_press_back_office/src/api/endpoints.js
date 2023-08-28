@@ -7,8 +7,10 @@ export const ENDPOINTS = {
     GET_ONE_USER: '/api/User/email', //(GET)
     CREATE_USER: '/api/User', //(POST)
     LOGOUT_USER: '/api/User/logout', //(DELETE)
-    UPDATE_USER: '/api/User/email', //(PUT)
+    UPDATE_USER: '/api/User/email', //(PUT) + id
+    UPDATE_USER_ID: '/api/User', // (PUT) + id
     REFRESH_TOKEN: '/api/User/refreshToken', //(POST)
+    DELETE_USER: '/api/User', // (DELETE) + id
 
     // CATEGORY
     GET_ALL_CATEGORY: '/api/Category', //(GET)
@@ -16,4 +18,5 @@ export const ENDPOINTS = {
 
     // TAG
     GET_ALL_TAG: '/api/Tag', //(GET)
+    UPDATE_TAG: '/api/Tag', //(PUT) + add ID
 }
