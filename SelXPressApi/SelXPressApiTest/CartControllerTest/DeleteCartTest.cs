@@ -69,5 +69,12 @@ public class DeleteCartTest
     {
         //todo
     }
-    
+
+    /// <summary>
+    /// Test to check if the status of the request is equals to 500 due to an internal server error
+    /// </summary>
+    public void CartController_DeleteCart_Status_500()
+    {
+        //todo
+    }
 }
