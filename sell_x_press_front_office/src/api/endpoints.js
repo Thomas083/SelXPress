@@ -15,6 +15,9 @@ export const ENDPOINTS = {
     GET_ONE_CATEGORY: '/api/Category/', //(GET) and add + this.$route.params.id
     UPDATE_CATEGORY: '/api/Category/', //(PUT) and add + this.$route.params.id
 
+    // TAGS
+    GET_ALL_TAGS: '/api/Tag', // (GET)
+
     // PRODUCTS
     GET_ALL_PRODUCTS: '/api/Product', //(GET)
     GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
