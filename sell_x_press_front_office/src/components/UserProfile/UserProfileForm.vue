@@ -3,7 +3,7 @@
         <label for="input-uname">Username</label>
         <input id="input-uname" name="input-uname" type="text" v-model="formData.username" />
         <label for="input-mail">Email Address</label>
-        <input id="input-mail" name="input-mail" type="email" v-model="formData.email" />
+        <input id="input-mail" name="input-mail" type="email" v-model="email" disabled />
     </div>
 </template>
   
@@ -16,9 +16,9 @@ export default {
     name: 'UserProfileForm',
     data() {
         return {
+            email: '',
             formData: {
                 username: '',
-                email: '',
             },
         }
     },
@@ -26,7 +26,7 @@ export default {
         GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem("user")).token)
         .then((user) => {
             this.formData.username = user.data.username;
-            this.formData.email = user.data.email;
+            this.email = user.data.email;
         })
         .catch((error) => {
             console.dir(error)
