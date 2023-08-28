@@ -61,7 +61,7 @@ export default {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            console.dir(this.formData)
+            this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`})
         }
     },
     computed: {
