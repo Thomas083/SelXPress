@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  smtp:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - network
+
   mssql:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     ports: 
@@ -24,6 +32,7 @@ services:
       - network
     depends_on:
       - mssql
+      - smtp
 
   front:
     build: ../sell_x_press_front_office
