@@ -31,13 +31,7 @@ export default {
     name: 'HomeCarrousel',
     data() {
         return {
-            products: [
-                {id: 1, name: 'test1', picture: 'https://m.media-amazon.com/images/I/612PtqPxOiL.__AC_SX300_SY300_QL70_ML2_.jpg'},
-                {id: 2, name: 'test2', picture: 'https://m.media-amazon.com/images/I/61UkKXVBdIL._AC_SX679_.jpg'},
-                {id: 3, name: 'test3', picture: 'https://m.media-amazon.com/images/I/614NHZvRgeL._AC_SX679_.jpg'},
-                {id: 4, name: 'test4', picture: 'https://m.media-amazon.com/images/I/612PtqPxOiL.__AC_SX300_SY300_QL70_ML2_.jpg'},
-                {id: 5, name: 'test5', picture: 'https://m.media-amazon.com/images/I/612PtqPxOiL.__AC_SX300_SY300_QL70_ML2_.jpg'},
-            ],
+            products: null,
             numProduct: 12,
         }
     },
@@ -54,24 +48,25 @@ export default {
     },
     computed: {
         carrouselProduct() {
+            console.dir(this.products)
             if (this.products && this.products.length <= this.numProduct) {
                 return this.products;
             } else if (this.products && this.products.length > this.numProduct) {
                 const shuffledProducts = [...this.products];
                 this.shuffleArray(shuffledProducts);
                 return shuffledProducts.slice(0, this.numProduct);
-            }
+            } else return []
         }
     },
-    // mounted() {
-    //     GET(ENDPOINTS.GET_ALL_PRODUCTS)
-    //         .then((response) => {
-    //             this.products = response.data
-    //         })
-    //         .catch((error) => {
-    //             console.dir(error)
-    //         });
-    // },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_PRODUCTS)
+            .then((response) => {
+                this.products = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+    },
 }
 </script>
 
