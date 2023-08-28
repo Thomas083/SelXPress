@@ -82,6 +82,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.length === 0) {
     // Route doesn't exist, redirect to home
     next({ name: 'home' });
+  } else if (to.name === 'user' & !localStorage.getItem('user')) {
+    next({ name: 'home'});
   } else {
     // Route exists, proceed with navigation
     next();
