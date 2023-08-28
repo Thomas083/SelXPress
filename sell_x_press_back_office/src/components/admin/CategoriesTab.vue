@@ -24,7 +24,7 @@
                     <td><input-component :value='category.name'
                             @input="updateCategoriesData(category.id, 'name', $event)" /></td>
                     <td class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateCategoriesData(category.id)">
+                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateCategoriesData(category.id, category.name)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import { GET, PUT } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
 export default {
     name: "CategoriesTab",
@@ -94,28 +96,8 @@ export default {
                 name: '',
                 categoryId: null
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean'
-                },
-                {
-                    id: 2,
-                    name: 'Sport'
-                }
-            ],
-            tags: [
-                {
-                    id: 1,
-                    name: 'Fishing',
-                    categoryId: 1
-                },
-                {
-                    id: 2,
-                    name: 'Electric',
-                    categoryId: 10
-                }
-            ],
+            categories: null,
+            tags: null
         }
     },
     methods: {
@@ -131,8 +113,14 @@ export default {
         updateTagsData(index, key, value) {
             this.tags[index - 1][key] = value;
         },
-        sendUpdateCategoriesData(index) {
-            console.dir(this.categories[index - 1])
+        sendUpdateCategoriesData(id, name) {
+            PUT(ENDPOINTS.UPDATE_CATEGORY + `/${id}`, {name: name}, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                console.dir(response)
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
         },
         sendUpdateTagsData(index) {
             console.dir(this.tags[index - 1])
@@ -144,11 +132,27 @@ export default {
             console.dir(this.formTagsData)
         }
     },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_CATEGORY)
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+        GET(ENDPOINTS.GET_ALL_TAG)
+            .then((response) => {
+                this.tags = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+    }
 }
+
 </script>
 
 <style scoped>
-
 .categories-tags-container {
     display: flex;
     flex-direction: row;
@@ -161,15 +165,15 @@ img {
 }
 
 .action-create-btn {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .action-btns {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-admin {

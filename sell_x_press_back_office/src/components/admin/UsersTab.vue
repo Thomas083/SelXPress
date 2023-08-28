@@ -29,8 +29,10 @@
           <th scope="row">{{ user.id }}</th>
           <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
           <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" disable="disable" /></td>
-          <td><input-component :value="user.password" type="password" @input="updateData(user.id, 'password', $event)" disable="disable" /></td>
-          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" disable="disable" /></td>
+          <td><input-component :value="user.password" type="password" @input="updateData(user.id, 'password', $event)"
+              disable="disable" /></td>
+          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" disable="disable" />
+          </td>
           <td class="action-btns">
             <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id)">
               Update
@@ -63,6 +65,8 @@
 </template>
 
 <script>
+import { GET } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
 export default {
   name: "UsersTab",
@@ -74,27 +78,11 @@ export default {
       formData: {
         username: '',
       },
-      users: [
-        {
-          id: 1,
-          username: 'tester',
-          email: 'tester@gmail.com',
-          password: 'unpassword',
-          roleId: '1'
-        },
-        {
-          id: 2,
-          username: 'tester2',
-          email: 'testermax@gmail.com',
-          password: 'unpassword2',
-          roleId: '1'
-        },
-      ],
     };
   },
   methods: {
     CreateData(key, value) {
-      Object.assign(this.formData, {[key]: value});
+      Object.assign(this.formData, { [key]: value });
     },
     updateData(index, key, value) {
       this.users[index - 1][key] = value;
@@ -106,11 +94,21 @@ export default {
       console.dir(this.formData)
     }
   },
+  computed: {
+    users() {
+      GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          console.dir(error)
+        });
+    }
+  },  
 };
 </script>
 
 <style scoped>
-
 .user-container {
   padding: 1rem;
 }
