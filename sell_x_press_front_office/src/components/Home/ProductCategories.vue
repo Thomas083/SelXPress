@@ -14,7 +14,6 @@
 import { GET } from '@/api/axios';
 import { ENDPOINTS } from '@/api/endpoints';
 
-
 export default {
     name: 'ProductCategories',
     props: {
@@ -26,53 +25,7 @@ export default {
     data() {
         return {
             numProducts: 5,
-            products: [
-                {
-                    id: 0,
-                    name: 'test0',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 1,
-                    name: 'test1',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 2,
-                    name: 'test2',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 3,
-                    name: 'test3',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 4,
-                    name: 'test4',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 5,
-                    name: 'test5',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 6,
-                    name: 'test6',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 7,
-                    name: 'test7',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-                {
-                    id: 8,
-                    name: 'test8',
-                    picture: "https://m.media-amazon.com/images/I/A13usaonutL._CLa%7C2140%2C2000%7C81OjqS8lfCL.png%7C0%2C0%2C2140%2C2000%2B0.0%2C0.0%2C2140.0%2C2000.0_AC_UX679_.png",
-                },
-            ]
+            products: null
         }
     },
     methods: {
@@ -91,14 +44,30 @@ export default {
     },
     computed: {
         selectedProduct() {
+            const productList = [];
             if (this.products && this.products.length <= this.numProducts) {
-                return this.products;
+                for (let i = 0; i < this.products.length; i++) {
+                    if (this.products[i].category.id === this.category.id) productList.push(this.products[i]);             
+                }
             } else if (this.products && this.products.length > this.numProducts) {
-                const shuffledProducts = [...this.products];
+                for (let i = 0; i < this.products.length; i++) {
+                    if (this.products[i].category.id === this.category.id) productList.push(this.products[i]);             
+                }
+                const shuffledProducts = [...productList];
                 this.shuffleArray(shuffledProducts);
                 return shuffledProducts.slice(0, this.numProducts);
             }
+            return productList;
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_PRODUCTS)
+        .then((response) => {
+            this.products = response.data;
+        })
+        .catch((error) => {
+            console.dir(error);
+        });
     },
 }
 
