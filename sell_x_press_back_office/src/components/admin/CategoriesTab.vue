@@ -28,7 +28,7 @@
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
+                        <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteCategories(category.id)">
                             Delete
                             <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
                         </button>
@@ -67,7 +67,7 @@
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
+                        <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteTags(tag.id)">
                             Delete
                             <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
                         </button>
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { GET, PUT } from "@/api/axios";
+import { GET, PUT, POST, DELETE } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
 import { createToast } from "mosha-vue-toastify";
@@ -134,11 +134,45 @@ export default {
             });
         },
         createCategories() {
-            console.dir(this.formCategoriesData)
+            POST(ENDPOINTS.CREATE_CATEGORY, this.formCategoriesData, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                this.categories.push(this.formCategoriesData);
+                createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formCategoriesData.name.toLocaleUpperCase()} category` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
+        },
+        deleteCategories(id) {
+            DELETE(ENDPOINTS.DELETE_CATEGORY + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                this.categories.splice(this.categories.indexOf(id), 1);
+                createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} category` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
         },
         createTags() {
-            console.dir(this.formTagsData)
-        }
+            POST(ENDPOINTS.CREATE_TAG, this.formTagsData, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                this.tags.push(this.formTagsData)
+                createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formTagsData.name.toLocaleUpperCase()} tag` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
+        },
+        deleteTags(id) {
+            DELETE(ENDPOINTS.DELETE_TAG + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                this.tags.splice(this.tags.indexOf(id), 1);
+                createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
+        },
     },
     mounted() {
         GET(ENDPOINTS.GET_ALL_CATEGORY)

@@ -15,8 +15,12 @@ export const ENDPOINTS = {
     // CATEGORY
     GET_ALL_CATEGORY: '/api/Category', //(GET)
     UPDATE_CATEGORY: '/api/Category', //(PUT) + add ID
+    CREATE_CATEGORY: '/api/Category', // (POST)
+    DELETE_CATEGORY: '/api/Category', //(DELETE) + add ID
 
     // TAG
     GET_ALL_TAG: '/api/Tag', //(GET)
     UPDATE_TAG: '/api/Tag', //(PUT) + add ID
+    CREATE_TAG: '/api/Tag', //(POST) + add ID
+    DELETE_TAG: '/api/Tag', //(DELETE) + add ID
 }
