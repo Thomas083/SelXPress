@@ -25,7 +25,8 @@
                 </tr>
                 <tr v-for="attribute in attributes">
                     <td scope="row" class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
+                        <button class="btn btn-primary btn-admin"
+                            v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
@@ -38,7 +39,8 @@
                     <td><input-component :value='attribute.name' @input="updateData(attribute.id, 'name', $event)" />
                     </td>
                     <td><input-component :value="attribute.type" @input="updateData(attribute.id, 'type', $event)" /></td>
-                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png" v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
+                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
+                            v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
                 </tr>
             </tbody>
         </table>
@@ -78,9 +80,11 @@
                         </button>
                     </td>
                     <td>{{ data.id }}</td>
-                    <td><input-component :value='data.key' @input="updateAttributeData(selectedAttributeIndex, data.id, 'key', $event)" />
+                    <td><input-component :value='data.key'
+                            @input="updateAttributeData(selectedAttributeIndex, data.id, 'key', $event)" />
                     </td>
-                    <td><input-component :value="data.value" @input="updateAttributeData(selectedAttributeIndex, data.id, 'value', $event)" /></td>
+                    <td><input-component :value="data.value"
+                            @input="updateAttributeData(selectedAttributeIndex, data.id, 'value', $event)" /></td>
                 </tr>
             </tbody>
         </table>
@@ -95,7 +99,7 @@ import { createToast } from 'mosha-vue-toastify';
 
 export default {
     name: "AttributesTab",
-    components: {   
+    components: {
         InputComponent
     },
     data() {
@@ -132,65 +136,93 @@ export default {
             this.attributes[index_attribute].attributeData[index_data - 1][key] = value;
         },
         sendUpdateData(id, name, type) {
-            PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${id}`, {name: name, type: type}, JSON.parse(localStorage.getItem('user')).token)
-            .then(() => {
-                createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+            PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${id}`, { name: name, type: type }, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
-        sendUpdateAttributeData(id, data) { 
+        sendUpdateAttributeData(id, data) {
             PUT(ENDPOINTS.UPDATE_ATTRIBUTE_DATA + `/${id}`, data, JSON.parse(localStorage.getItem('user')).token)
-            .then(() => {
-                createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         createAttribute() {
             POST(ENDPOINTS.CREATE_ATTRIBUTE, this.formAttributeType, JSON.parse(localStorage.getItem('user')).token)
-            .then(() => {
-                createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeType.name.toLocaleUpperCase()} attribute` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeType.name.toLocaleUpperCase()} attribute` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         createAttributeData(id) {
             this.formAttributeData.attributeId = id + 1,
-            this.formAttributeData.attribute = this.attributes[id]
+                this.formAttributeData.attribute = this.attributes[id]
             POST(ENDPOINTS.CREATE_ATTRIBUTE_DATA, this.formAttributeData, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-                createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeData.key.toLocaleUpperCase()} attribute data` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeData.key.toLocaleUpperCase()} attribute data` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         deleteAttribute(id) {
             DELETE(ENDPOINTS.DELETE_ATTRIBUTE + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
-            .then(() => {
-                createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         deleteAttributeData(id) {
             DELETE(ENDPOINTS.DELETE_ATTRIBUTE_DATA + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
-            .then(() => {
-                createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch(() => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         }
     },
     mounted() {
         GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
-        .then((response) => {
+            .then((response) => {
                 this.attributes = response.data
             })
             .catch((error) => {
