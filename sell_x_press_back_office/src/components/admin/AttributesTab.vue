@@ -72,7 +72,7 @@
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
+                        <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteAttributeData(data.id)">
                             Delete
                             <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
                         </button>
@@ -173,6 +173,15 @@ export default {
             DELETE(ENDPOINTS.DELETE_ATTRIBUTE + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
             .then(() => {
                 createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
+        },
+        deleteAttributeData(id) {
+            DELETE(ENDPOINTS.DELETE_ATTRIBUTE_DATA + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+            .then(() => {
+                createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
             })
             .catch(() => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
