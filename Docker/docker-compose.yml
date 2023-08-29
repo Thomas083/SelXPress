@@ -2,15 +2,16 @@ version: '3'
 
 services:
   smtp:
-    image: bytemark/smtp
+    image: marcopas/docker-mailslurper
     env_file:
       - .env
     restart: always
-    environment:
-      RELAY_HOST: smtp.selxpress.com
-      RELAY_PORT: 587
-      RELAY_USERNAME: support@selxpress.com
-      RELAY_PASSWORD: ${RELAY_PASSWORD}
+    ports: 
+      - "2500:2500"
+      - "8080:8080"
+      - "8085:8085"
+    # volumes:
+    #   - ./smtp-config.json:/opt/mailslurper/config.json
 
   mssql:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
