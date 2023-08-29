@@ -246,7 +246,7 @@ namespace SelXPressApi.Controllers
         /// <returns>Returns a status code indicating the result of the operation.</returns>
         /// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided user update data is incomplete.</exception>
         /// <exception cref="NotFoundException">Thrown when the user with the specified email doesn't exist.</exception>
-        [HttpPut("id")]
+        [HttpPut("{id}")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
