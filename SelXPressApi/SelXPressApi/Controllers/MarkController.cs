@@ -187,7 +187,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="ForbiddenRequestException">Thrown if the user is not authorized to perform the operation.</exception>
 		/// <exception cref="BadRequestException">Thrown if the request model is invalid or missing fields.</exception>
 		[HttpPost]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -214,7 +214,7 @@ namespace SelXPressApi.Controllers
 			await _markRepository.CreateMark(markDto);
 
 			// Return an OK result indicating successful mark creation.
-			return Ok();
+			return StatusCode(201);
 		}
 		#endregion
 
