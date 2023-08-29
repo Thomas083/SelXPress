@@ -50,12 +50,17 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the creation is successful; otherwise, false.</returns>
 		public async Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
 		{
-			var attribute = await _context.Attributes.FindAsync(createAttribute.AttributeId);
-			if (attribute != null)
+			var attribute = await _context.Attributes.Where(a => a.Id == createAttribute.AttributeId).FirstOrDefaultAsync();
+			if (attribute !=  null)
 			{
-				var newAttributeData = _mapper.Map<AttributeData>(createAttribute);
-
-				await _context.AttributesData.AddAsync(newAttributeData);
+				var newAttributeData = new AttributeData
+				{
+                    Attribute = attribute,
+                    Value = createAttribute.Value,
+					Key = createAttribute.Key,
+					AttributeId	= createAttribute.AttributeId
+                };
+				_context.AttributesData.Add(newAttributeData);
 				return await _commonMethods.Save();
 			}
 			return false;

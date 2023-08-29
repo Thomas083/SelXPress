@@ -1,7 +1,4 @@
-﻿using SelXPressApi.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace SelXPressApi.DTO.AttributeDataDTO
+﻿namespace SelXPressApi.DTO.AttributeDataDTO
 {
     /// <summary>
     /// Data transfer object for creating AttributeData.
@@ -21,9 +18,6 @@ namespace SelXPressApi.DTO.AttributeDataDTO
         /// <summary>
         /// Gets or sets the ID of the associated Attribute.
         /// </summary>
-        [Required]
         public int AttributeId { get; set; }
-
-        public Models.Attribute Attribute { get; set; }
     }
 }
