@@ -17,28 +17,6 @@
                 <input-component label="Price :" id="input-price" name="input-price" type="text" placeholder="...€"
                     @input="updateData($event, 'price')" />
                     <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" />
-                <!-- <div v-for="(chooseOption, index_attribute) in chooseOptions" :key="index" class="attributes">
-                    <div class="attributes-data">
-                        <select class="form-select" v-model="chooseOption.attribute.name"
-                            @change="setAttributeName($event.target.value)">
-                            <option v-for="option in selectOptions" :key="option" :value="option">
-                                {{ option }}
-                            </option>
-                        </select>
-                        <div v-for="(data, index_value) in chooseOption.attribute.values">
-                            <select v-if="chooseOptions[index_attribute].attribute.name === 'Color'" v-model="data.value"
-                                @change="setAttributeData(index_attribute, index_value)" class="form-select"
-                                :style="{ backgroundColor: data.value }">
-                                <option v-for="option in selectColorData" :key="option.name" :value="option.value"
-                                    class="option-color">
-                                    {{ option.name }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="add-attributes" @click="addAttributes(index_attribute)">+ Add Data</div>
-                    </div>
-                </div>
-                <div class="add-attributes" @click="addSelect()">+ Add Attributes</div> -->
             </div>
         </div>
         <div class="separation-line"></div>
@@ -75,6 +53,7 @@ export default {
                 description: "",
                 upload_file: "",
                 attributes: [],
+                categories: [],
             },
             attributes: [
                 {
@@ -141,27 +120,6 @@ export default {
                 this.formData.attributes.push(attribute);
             }
         },
-        // addSelect() {
-        //     this.chooseOptions.push({ attribute: { name: '--- Select a type ---', values: [{ name: '', value: '' }] } })
-        // },
-        // addAttributes(index) {
-        //     this.chooseOptions[index].attribute.values.push({ name: '', value: '' })
-        // },
-        // setAttributeName(e) {
-        //     if (e && !this.formData.attributes.some(attr => attr.name === e)) {
-        //         this.formData.attributes.push({ name: e, data: [] });
-        //     }
-        // },
-        // setAttributeData(index_attribute, index_value) {
-        //     const value = this.chooseOptions[index_attribute].attribute.values[index_value].value;
-        //     if (value) {
-        //         const attributeName = this.chooseOptions[index_attribute].attribute.name;
-        //         const attributeIndex = this.formData.attributes.findIndex(attr => attr.name === attributeName);
-        //         if (attributeIndex !== -1) {
-        //             this.formData.attributes[attributeIndex].data.push({name: this.selectColorData.find(color => color.value === value).name, value: value});
-        //         }
-        //     }
-        // },
         addProduct() {
             console.dir(this.formData)
         }
