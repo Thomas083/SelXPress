@@ -45,6 +45,9 @@ namespace SelXPressApi.Helper
             // Mapping AttributeData model to AttributeDataDto
             CreateMap<AttributeData, AttributeDataDto>();
 
+            // Mapping AttributeData model to CreateAttributeDataDTO
+            CreateMap<AttributeData, CreateAttributeDataDTO>();
+
             // Mapping Product model to ProductDTO
             CreateMap<Product, ProductDTO>();
 
