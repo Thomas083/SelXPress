@@ -11,9 +11,9 @@
 </template>
 
 <script>
+import { POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
 import LoginForm from '@/components/identification/LoginForm.vue';
-import { auth } from "@/config/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { createToast } from 'mosha-vue-toastify';
 
 export default {
@@ -23,7 +23,7 @@ export default {
     },
     data() {
         return {
-            formData: null,
+            formData: null
         }
     },
     methods: {
@@ -34,13 +34,19 @@ export default {
             this.$router.push({ path: '/register' });
         },
         logUser() {
-            signInWithEmailAndPassword(auth, this.formData.email, this.formData.password)
-          .then((userCredential) => {
-            createToast({ title: 'Sign IN Success', description: 'You are sucessfuly login' }, { type: 'success', position: 'bottom-right' });
-          })
-          .catch(() => {
-            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-          });
+            POST(ENDPOINTS.USER_LOGIN, this.formData)
+                .then((userCredential) => {
+                    createToast({ title: 'Sign IN Success', description: 'You are sucessfully connected' }, { type: 'success', position: 'bottom-right' });
+                    const user = {
+                        email: userCredential.data.email,
+                        token: userCredential.data.token
+                    }
+                    localStorage.setItem("user", JSON.stringify(user));
+                    this.$router.push({ path: '/' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
     }
 }
@@ -67,7 +73,7 @@ export default {
     padding-top: 3vh;
 }
 
-.signup-button{
+.signup-button {
     align-self: flex-end;
     margin-right: 2vw;
     margin-bottom: 2vh;
@@ -78,7 +84,7 @@ a {
     margin-right: 2vw;
 }
 
-.signin-button{
+.signin-button {
     margin-top: 5vh;
     margin-bottom: 5vh;
 }
