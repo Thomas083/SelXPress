@@ -136,8 +136,14 @@ export default {
         createCategories() {
             POST(ENDPOINTS.CREATE_CATEGORY, this.formCategoriesData, JSON.parse(localStorage.getItem('user')).token)
             .then(() => {
-                this.categories.push(this.formCategoriesData);
+                GET(ENDPOINTS.GET_ALL_CATEGORY)
+            .then((response) => {
+                this.categories = response.data
                 createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formCategoriesData.name.toLocaleUpperCase()} category` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
             })
             .catch(() => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
@@ -146,8 +152,14 @@ export default {
         deleteCategories(id) {
             DELETE(ENDPOINTS.DELETE_CATEGORY + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
             .then(() => {
-                this.categories.splice(this.categories.indexOf(id), 1);
+                GET(ENDPOINTS.GET_ALL_CATEGORY)
+            .then((response) => {
+                this.categories = response.data
                 createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} category` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
             })
             .catch(() => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
@@ -156,8 +168,14 @@ export default {
         createTags() {
             POST(ENDPOINTS.CREATE_TAG, this.formTagsData, JSON.parse(localStorage.getItem('user')).token)
             .then(() => {
-                this.tags.push(this.formTagsData)
+                GET(ENDPOINTS.GET_ALL_TAG)
+            .then((response) => {
+                this.tags = response.data
                 createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formTagsData.name.toLocaleUpperCase()} tag` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
             })
             .catch(() => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
@@ -166,8 +184,14 @@ export default {
         deleteTags(id) {
             DELETE(ENDPOINTS.DELETE_TAG + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
             .then(() => {
-                this.tags.splice(this.tags.indexOf(id), 1);
+                GET(ENDPOINTS.GET_ALL_TAG)
+            .then((response) => {
+                this.tags = response.data
                 createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
             })
             .catch(() => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
