@@ -54,7 +54,6 @@ namespace SelXPressApi.Repository
 			if (attribute != null)
 			{
 				var newAttributeData = _mapper.Map<AttributeData>(createAttribute);
-				newAttributeData.Attribute = attribute;
 
 				await _context.AttributesData.AddAsync(newAttributeData);
 				return await _commonMethods.Save();

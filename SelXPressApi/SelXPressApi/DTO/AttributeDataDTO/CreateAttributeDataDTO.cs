@@ -22,5 +22,7 @@ namespace SelXPressApi.DTO.AttributeDataDTO
         /// </summary>
         [Required]
         public int AttributeId { get; set; }
+
+        public Attribute Attribute { get; set; }
     }
 }
