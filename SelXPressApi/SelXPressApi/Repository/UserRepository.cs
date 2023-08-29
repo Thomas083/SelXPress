@@ -146,12 +146,29 @@ namespace SelXPressApi.Repository
 			return await _commonMethods.Save();
 		}
 
-		/// <summary>
-		/// Checks if a user with the specified ID exists.
-		/// </summary>
-		/// <param name="id">The ID of the user to check.</param>
-		/// <returns>True if the user exists; otherwise, false.</returns>
-		public async Task<bool> UserExists(int id)
+        /// <summary>
+        /// Updates a user's information by operator by their ID.
+        /// </summary>
+        /// <param name="updateUser">DTO containing updated user details.</param>
+        /// <param name="id">The Id of the user to update.</param>
+        /// <returns>True if the user was updated successfully; otherwise, false.</returns>
+        public async Task<bool> UpdateUserById(UpdateUserDTO updateUser, int id)
+		{
+			  if (!await UserExists(id))
+				return false;
+			  User? user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+
+			if (user != null && updateUser.Username != null && user.Username != updateUser.Username)
+				await _context.Users.Where(u => u.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Username, x => updateUser.Username));
+			return await _commonMethods.Save();
+		}
+
+        /// <summary>
+        /// Checks if a user with the specified ID exists.
+        /// </summary>
+        /// <param name="id">The ID of the user to check.</param>
+        /// <returns>True if the user exists; otherwise, false.</returns>
+        public async Task<bool> UserExists(int id)
 		{
 			return await _context.Users.AnyAsync(r => r.Id == id);
 		}

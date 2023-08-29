@@ -229,6 +229,45 @@ namespace SelXPressApi.Controllers
 			await _userRepository.UpdateUser(userUpdate, email);
 			return Ok();
 		}
+
+        /// <summary>
+        /// Update an existing user's information by operator based on their Id.
+        /// </summary>
+        /// <param name="userUpdate">The updated user data.</param>
+        /// <returns>Returns a status code indicating the result of the operation.</returns>
+        /// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided user update data is incomplete.</exception>
+        /// <exception cref="NotFoundException">Thrown when the user with the specified email doesn't exist.</exception>
+        [HttpPut("id")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> UpdateUserById([FromBody] UpdateUserDTO userUpdate, [FromQuery] int id)
+		{
+			// check if a valid token exists in the HttpContext
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+
+			// check if the user is an admin
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "USR-2001");
+
+			// check if the provided user update data is complete
+			if (userUpdate == null)
+                throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
+
+			// check if the model state is valid
+			if (!ModelState.IsValid)
+                throw new BadRequestException("The model is wrong, a bad request occurred", "USR-1101");
+
+			// check if the user with the given id exists
+			if (!await _userRepository.UserExists(id))
+                throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1403");
+
+			// update the user's information using the repository
+			await _userRepository.UpdateUserById(userUpdate, id);
+			return Ok();
+		}
 		#endregion
 
 		#region Delete Methods
