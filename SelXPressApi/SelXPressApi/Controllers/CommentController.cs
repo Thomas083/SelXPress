@@ -174,7 +174,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided comment data is incomplete.</exception>
 		/// <exception cref="NotFoundException">Thrown when the specified user or product does not exist.</exception>
 		[HttpPost]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -210,7 +210,7 @@ namespace SelXPressApi.Controllers
 
 			// Create the comment using the repository
 			await _commentRepository.CreateComment(createCommentDto);
-			return Ok();
+			return StatusCode(201);
 		}
 
 		#endregion
