@@ -107,44 +107,53 @@ namespace SelXPressApi.Controllers
 			var user = _mapper.Map<UserDto>(await _userRepository.GetUserByEmail(email));
 			return Ok(user);
 		}
-		#endregion
+        #endregion
 
 
-		#region Post Methods
-		/// <summary>
-		/// Create a new user.
-		/// </summary>
-		/// <param name="newUser">The user information to create.</param>
-		/// <returns>Returns a status code indicating the result of the operation.</returns>
-		/// <exception cref="BadRequestException">Thrown when the provided user data is incomplete.</exception>
-		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to create a seller or operator user</exception>
-		[HttpPost]
-		[ProducesResponseType(201)]
-		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
-		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
-		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
-		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
-		{
-			// Check if the provided user data is complete
-			if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == 0)
-				throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
+        #region Post Methods
+        /// <summary>
+        /// Create a new user.
+        /// </summary>
+        /// <param name="newUser">The user information to create.</param>
+        /// <returns>Returns a status code indicating the result of the operation.</returns>
+        /// <exception cref="BadRequestException">Thrown when the provided user data is incomplete.</exception>
+        /// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to create a seller or operator user</exception>
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
+        [ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+        [ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+        [ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
+        {
+            // Check if the provided user data is complete
+            if (newUser.Username == null || newUser.Email == null || newUser.Password == null || newUser.RoleId == 0)
+                throw new BadRequestException("There are missing fields, please try again with some data", "USR-1102");
 
-			//Check if the provided RoleId id equals to 3 or 2 and check if the user is authorized to do this operation
-			if (newUser.RoleId == 3 || newUser.RoleId == 2)
+            //Check if the provided RoleId id equals to 3 or 2 and check if the user is authorized to do this operation
+            if (newUser.RoleId == 3 || newUser.RoleId == 2)
+            {
+                await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+                if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
+                    throw new ForbiddenRequestException("You are not authorized to do this operation", "USR-2001");
+            }
+
+            // Create user with email and password using the authentication manager (firebase)
+            string firebaseToken = await _authManager.CreateWithEmailAndPasswordAsync(newUser.Email, newUser.Password);
+
+			if (!string.IsNullOrEmpty(firebaseToken))
 			{
-				await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
-				if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext))
-					throw new ForbiddenRequestException("You are not authorized to do this operation", "USR-2001");
+				// The authentication succeeded, proceed to create the user using the repository
+				await _userRepository.CreateUser(newUser);
 			}
-			// Create the user using the repository
-			await _userRepository.CreateUser(newUser);
+			else
+			{
+				// The authentication failed, throw an exception
+				throw new BadRequestException("The user could not be created, please try again", "USR-1103");
+			}
 
-			// Create user with email and password using the authentication manager
-			await _authManager.CreateWithEmailAndPasswordAsync(newUser.Email, newUser.Password);
-
-			return StatusCode(201);
-		}
+            return StatusCode(201);
+        }
 
 		/// <summary>
 		/// Authenticate and log in a user using email and password.
