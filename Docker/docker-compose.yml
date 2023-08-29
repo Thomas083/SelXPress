@@ -2,17 +2,21 @@ version: '3'
 
 services:
   smtp:
-    image: mailhog/mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-    networks:
-      - network
+    image: bytemark/smtp
+    env_file:
+      - .env
+    restart: always
+    environment:
+      RELAY_HOST: smtp.selxpress.com
+      RELAY_PORT: 587
+      RELAY_USERNAME: support@selxpress.com
+      RELAY_PASSWORD: ${RELAY_PASSWORD}
 
   mssql:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     ports: 
       - "1433:1433" 
+    restart: always
     environment:
       - ACCEPT_EULA=y
       - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
