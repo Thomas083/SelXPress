@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SelXPressApi.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SelXPressApi.DTO.AttributeDataDTO
 {
@@ -23,6 +24,6 @@ namespace SelXPressApi.DTO.AttributeDataDTO
         [Required]
         public int AttributeId { get; set; }
 
-        public Attribute Attribute { get; set; }
+        public Models.Attribute Attribute { get; set; }
     }
 }
