@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.IdentityModel.Tokens;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.OrderDTO;
@@ -46,8 +47,10 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="NotFoundException">Thrown when there are no orders in the database.</exception>
 		[HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<Order>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetAllOrders()
 		{
