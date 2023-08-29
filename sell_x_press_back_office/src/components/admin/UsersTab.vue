@@ -98,15 +98,14 @@ export default {
           createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
         });
     },
-    sendUpdateData(username) {
-      console.dir(username)
-      // PUT(ENDPOINTS.UPDATE_USER_ID + `/${id}`, {username: username}, JSON.parse(localStorage.getItem('user')).token)
-      //   .then(() => {
-      //     createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
-      //   })
-      //   .catch(() => {
-      //     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-      //   });
+    sendUpdateData(id, username) {
+      PUT(ENDPOINTS.UPDATE_USER_ID + `/${id}`, {username: username}, JSON.parse(localStorage.getItem('user')).token)
+        .then(() => {
+          createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
+        })
+        .catch(() => {
+          createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+        });
     },
     deleteUser(id) {
       DELETE(ENDPOINTS.DELETE_USER + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
