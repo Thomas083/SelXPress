@@ -23,4 +23,14 @@ export const ENDPOINTS = {
     UPDATE_TAG: '/api/Tag', //(PUT) + add ID
     CREATE_TAG: '/api/Tag', //(POST) + add ID
     DELETE_TAG: '/api/Tag', //(DELETE) + add ID
+
+    // ATTRIBUTE
+    GET_ALL_ATTRIBUTE: '/api/Attribute', //(GET),
+    UPDATE_ATTRIBUTE: '/api/Attribute', //(PUT) + add ID
+    CREATE_ATTRIBUTE: '/api/Attribute', //(POST)
+    DELETE_ATTRIBUTE: '/api/Attribute', //(DELETE) + add ID
+
+    // ATTRIBUTE_DATA
+    UPDATE_ATTRIBUTE_DATA: '/api/AttributeData', //(PUT) + add ID
+    DELETE_ATTRIBUTE_DATA: '/api/AttributeData', //(DELETE) + add ID
 }
