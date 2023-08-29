@@ -91,15 +91,22 @@ export default {
     },
     createUser() {
       POST(ENDPOINTS.CREATE_USER, this.formData, JSON.parse(localStorage.getItem('user')).token)
-      .then(() => {
-          createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formData.username.toLocaleUpperCase()} user` }, { type: 'success', position: 'bottom-right' });
+        .then(() => {
+          GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.users = response.data
+              createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formData.username.toLocaleUpperCase()} user` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
         })
         .catch(() => {
           createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
         });
     },
     sendUpdateData(id, username) {
-      PUT(ENDPOINTS.UPDATE_USER_ID + `/${id}`, {username: username}, JSON.parse(localStorage.getItem('user')).token)
+      PUT(ENDPOINTS.UPDATE_USER_ID + `/${id}`, { username: username }, JSON.parse(localStorage.getItem('user')).token)
         .then(() => {
           createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
         })
@@ -109,8 +116,15 @@ export default {
     },
     deleteUser(id) {
       DELETE(ENDPOINTS.DELETE_USER + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
-      .then(() => {
-          createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
+        .then(() => {
+          GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.users = response.data
+              createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
         })
         .catch(() => {
           createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
