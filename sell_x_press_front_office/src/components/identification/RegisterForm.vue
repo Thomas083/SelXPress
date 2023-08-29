@@ -53,6 +53,7 @@ export default {
         email: "",
         password: "",
         cpassword: "",
+        roleId: 1
       },
     };
   },

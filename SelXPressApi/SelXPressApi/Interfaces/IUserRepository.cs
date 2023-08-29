@@ -46,6 +46,14 @@ namespace SelXPressApi.Interfaces
 		/// <returns>True if the user was updated successfully; otherwise, false.</returns>
 		Task<bool> UpdateUser(UpdateUserDTO updateUser, string email);
 
+        /// <summary>
+        /// Updates a user's information by operator by their Id.
+        /// </summary>
+        /// <param name="updateUser">DTO containing updated user details.</param>
+        /// <param name="id">The Id of the user to update.</param>
+        /// <returns>True if the user was updated successfully; otherwise, false.</returns>
+        Task<bool> UpdateUserById(UpdateUserDTO updateUser, int id);
+
 		/// <summary>
 		/// Retrieves a user by their email.
 		/// </summary>

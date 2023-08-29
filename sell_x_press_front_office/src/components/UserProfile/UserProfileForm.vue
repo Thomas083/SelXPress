@@ -8,16 +8,29 @@
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+
 
 export default {
     name: 'UserProfileForm',
     data() {
         return {
             formData: {
-                username: 'Elsharion',
-                email: 'empereurdusale59@yahoo.com',
+                username: '',
+                email: '',
             },
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem("user")).token)
+        .then((user) => {
+            this.formData.username = user.data.username;
+            this.formData.email = user.data.email;
+        })
+        .catch((error) => {
+            console.dir(error)
+        });
     },
 }
 </script>

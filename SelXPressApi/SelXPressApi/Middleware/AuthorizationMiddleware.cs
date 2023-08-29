@@ -52,7 +52,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
 
     public async Task<bool> CheckRoleIfAdmin(HttpContext context)
     {
-        string? emailValue = context.Request.Headers["EmailHeader"];
+        string? emailValue = context.Response.Headers["EmailHeader"];
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
@@ -65,7 +65,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
 
     public async Task<bool> CheckRoleIfCustomer(HttpContext context)
     {
-        string? emailValue = context.Request.Headers["EmailHeader"];
+        string? emailValue = context.Response.Headers["EmailHeader"];
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
@@ -78,7 +78,7 @@ public class AuthorizationMiddleware : IAuthorizationMiddleware
 
     public async Task<bool> CheckRoleIfSeller(HttpContext context)
     {
-        string? emailValue = context.Request.Headers["EmailHeader"];
+        string? emailValue = context.Response.Headers["EmailHeader"];
         if (emailValue != null)
         {
             User user = await _userRepository.GetUserByEmail(emailValue);
