@@ -243,6 +243,7 @@ namespace SelXPressApi.Controllers
         /// Update an existing user's information by operator based on their Id.
         /// </summary>
         /// <param name="userUpdate">The updated user data.</param>
+        /// <param name="id">The updated user id.</param>
         /// <returns>Returns a status code indicating the result of the operation.</returns>
         /// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided user update data is incomplete.</exception>
         /// <exception cref="NotFoundException">Thrown when the user with the specified email doesn't exist.</exception>
@@ -252,7 +253,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> UpdateUserById([FromBody] UpdateUserDTO userUpdate, [FromQuery] int id)
+		public async Task<IActionResult> UpdateUserById([FromBody] UpdateUserDTO userUpdate, int id)
 		{
 			// check if a valid token exists in the HttpContext
 			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
