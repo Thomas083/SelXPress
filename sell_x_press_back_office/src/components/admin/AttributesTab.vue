@@ -109,6 +109,7 @@ export default {
                 key: '',
                 value: '',
                 attributeId: null,
+                attribute: null
             },
             attributes: null
         }
@@ -158,7 +159,8 @@ export default {
             });
         },
         createAttributeData(id) {
-            this.formAttributeData.attributeId = id + 1
+            this.formAttributeData.attributeId = id + 1,
+            this.formAttributeData.attribute = this.attributes[id]
             POST(ENDPOINTS.CREATE_ATTRIBUTE_DATA, this.formAttributeData, JSON.parse(localStorage.getItem('user')).token)
             .then((response) => {
                 createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeData.key.toLocaleUpperCase()} attribute data` }, { type: 'success', position: 'bottom-right' });
