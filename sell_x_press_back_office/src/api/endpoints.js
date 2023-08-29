@@ -32,5 +32,6 @@ export const ENDPOINTS = {
 
     // ATTRIBUTE_DATA
     UPDATE_ATTRIBUTE_DATA: '/api/AttributeData', //(PUT) + add ID
+    CREATE_ATTRIBUTE_DATA: '/api/AttributeData', //(POST)
     DELETE_ATTRIBUTE_DATA: '/api/AttributeData', //(DELETE) + add ID
 }

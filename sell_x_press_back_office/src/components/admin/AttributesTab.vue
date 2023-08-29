@@ -63,7 +63,7 @@
                         </button>
                     </td>
                     <td>-</td>
-                    <td><input-component @input="createDataAttribute('name', $event)" /></td>
+                    <td><input-component @input="createDataAttribute('key', $event)" /></td>
                     <td><input-component @input="createDataAttribute('value', $event)" /></td>
                 </tr>
                 <tr v-for="data in attributes[selectedAttributeIndex].attributeData">
@@ -108,6 +108,7 @@ export default {
             formAttributeData: {
                 key: '',
                 value: '',
+                attributeId: null,
             },
             attributes: null
         }
@@ -156,8 +157,15 @@ export default {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
             });
         },
-        createAttributeData() {
-            console.dir(this.formAttributeData)
+        createAttributeData(id) {
+            this.formAttributeData.attributeId = id + 1
+            POST(ENDPOINTS.CREATE_ATTRIBUTE_DATA, this.formAttributeData, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeData.key.toLocaleUpperCase()} attribute data` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch(() => {
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+            });
         },
         deleteAttribute(id) {
             DELETE(ENDPOINTS.DELETE_ATTRIBUTE + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
