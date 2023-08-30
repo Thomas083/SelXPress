@@ -17,7 +17,7 @@
                     :style="{ backgroundColor: '#F17720', width: Math.floor((star_rating[5 - index] / (number_review)) * 100) + '%' }">
                 </div>
             </div>
-            <span>{{ Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
+            <span>{{Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
         </div>
     </div>
 </template>
@@ -42,16 +42,9 @@ export default {
                 2: 0,
                 1: 0,
             },
-            hoveredStars: 0,
         }
     },
     methods: {
-        setHoveredStars(index) {
-            this.hoveredStars = index;
-        },
-        updateData(e, key) {
-            this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
-        },
         calculateProductRating() {
             let totalStars = 0;
             let totalReviews = 0;

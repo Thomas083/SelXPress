@@ -11,7 +11,7 @@
             <h1>Customer Review</h1>
             <div class="rating-review-container">
                 <rating-review :comments="product.comments"/>
-                <customer-review :comments="product.comments"/>
+                <customer-review :comments="product.comments" :productId="product.id"/>
             </div>
         </div>
         
@@ -51,18 +51,10 @@ export default {
         GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
             .then((response) => {
                 this.product = response.data;
-                this.sendReviewData.productId = response.data.id
             })
             .catch((error) => {
                 console.dir(error);
             });
-        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-                this.sendReviewData.userId = response.data.id
-            })
-            .catch((error) => {
-                console.dir(error);
-            })
     }
 }
 

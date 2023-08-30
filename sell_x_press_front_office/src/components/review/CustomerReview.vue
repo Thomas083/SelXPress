@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { POST } from '@/api/axios';
+import { GET, POST } from '@/api/axios';
 import { ENDPOINTS } from "@/api/endpoints";
 import { createToast } from 'mosha-vue-toastify';
 import InputComponent from "@/components/global/InputComponent.vue";
@@ -48,8 +48,12 @@ export default {
     props: {
         comments: {
             type: Array,
-            required: true 
+            required: true
         },
+        productId: {
+            type: Number,
+            required: true,
+        }
     },
     data() {
         return {
@@ -60,26 +64,44 @@ export default {
                 productId: null,
                 rate: 0,
             },
+            hoveredStars: 0,
         }
     },
     methods: {
+        setHoveredStars(index) {
+            this.hoveredStars = index;
+        },
+        updateData(e, key) {
+            this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
+        },
         addReview() {
             this.sendReviewData.rate = this.hoveredStars;
-            if (this.sendReviewData.rate === 0) createToast(`You need to select at least one star please !`, { type: 'danger', position: 'bottom-right' })
+            if (!localStorage.getItem('user')) createToast(`You need to be connected to add a review on this product`, { type: 'danger', position: 'bottom-right' })
+            else if (this.sendReviewData.rate == 0) createToast(`You need to select at least one star please !`, { type: 'danger', position: 'bottom-right' })
             else {
-                POST(ENDPOINTS.CREATE_COMMENT, this.sendReviewData, JSON.parse(localStorage.getItem('user')).token)
-                    .then(() => {
-                        createToast({ title: 'Comment created successfully', description: `Your ${this.sendReviewData.title} comment is sucessfully created` }, { type: 'success', position: 'bottom-right' })
-                    })
-                    .catch(() => {
-                        createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' })
-                    });
+                GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+                .then((response) => {
+                    this.sendReviewData.userId = response.data.id
+                    POST(ENDPOINTS.CREATE_COMMENT, this.sendReviewData, JSON.parse(localStorage.getItem('user')).token)
+                        .then(() => {
+                            createToast({ title: 'Comment created successfully', description: `Your ${this.sendReviewData.title} comment is sucessfully created` }, { type: 'success', position: 'bottom-right' })
+                        })
+                        .catch(() => {
+                            createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' })
+                        });
+                })
+                .catch((error) => {
+                    console.dir(error)
+                });
             }
         },
         formatCreatedAt(createdAt) {
             if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
             else return '';
         },
+    },
+    mounted () {
+        this.sendReviewData.productId = this.productId;
     },
 }
 </script>
