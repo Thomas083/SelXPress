@@ -19,6 +19,21 @@
                 <input-component label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
                     @input="updateData($event, 'stock')" />
                 <!-- <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" /> -->
+                <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
+                <Select2
+                    v-model="formData.attributeIds"
+                    :options="attributeOptions" 
+                    :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }"
+                    @select="console.log(formData.attributeIds)"
+                />
+                <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
+                <Select2
+                    v-model="formData.categoryId"
+                    :options="categoryOptions" 
+                    :settings="{ placeholder: 'Select the category', width: '100%'}"
+                    @select="console.log(formData.categoryId)"
+                />
+
             </div>
         </div>
         <div class="separation-line"></div>
@@ -57,102 +72,100 @@ export default {
                 description: "",
                 picture: "",
                 attributeIds: [],
-                categoryId: 0,
+                categoryId: null,
                 stock: 0,
             },
             attributeOptions: null,
             categoryOptions: null,
-            selectedData: null,
-            attributes: [
-                {
-                    name: 'color',
-                    type: 'select',
-                    data: [
-                        { name: '--- Select a color ---', value: '' },
-                        { name: 'blue', value: '#0000FF' },
-                        { name: 'red', value: '#FF0000' },
-                        { name: 'green', value: '#00FF00' }
-                    ]
-                },
-                {
-                    name: 'size',
-                    type: 'select',
-                    data: [
-                        { name: '--- Select a size ---', value: '' },
-                        { 'name': 'extra_small', 'value': 'xs' },
-                        { 'name': 'small', 'value': 's' },
-                        { 'name': 'medium', 'value': 'm' },
-                        { 'name': 'large', 'value': 'l' },
-                        { 'name': 'extra_large', 'value': 'xl' }
-                    ]
-                }
-            ],
-            selectOptions: ['--- Select a type ---', 'Color', 'Size'],
-            selectColorData: [
-                { name: '--- Select a color ---', value: '' },
-                { name: 'blue', value: '#0000FF' },
-                { name: 'red', value: '#FF0000' },
-                { name: 'green', value: '#00FF00' }
-            ],
-            selectedColors: [],
-            chooseOptions: [],
+            // attributes: [
+            //     {
+            //         name: 'color',
+            //         type: 'select',
+            //         data: [
+            //             { name: '--- Select a color ---', value: '' },
+            //             { name: 'blue', value: '#0000FF' },
+            //             { name: 'red', value: '#FF0000' },
+            //             { name: 'green', value: '#00FF00' }
+            //         ]
+            //     },
+            //     {
+            //         name: 'size',
+            //         type: 'select',
+            //         data: [
+            //             { name: '--- Select a size ---', value: '' },
+            //             { 'name': 'extra_small', 'value': 'xs' },
+            //             { 'name': 'small', 'value': 's' },
+            //             { 'name': 'medium', 'value': 'm' },
+            //             { 'name': 'large', 'value': 'l' },
+            //             { 'name': 'extra_large', 'value': 'xl' }
+            //         ]
+            //     }
+            // ],
+            // selectOptions: ['--- Select a type ---', 'Color', 'Size'],
+            // selectColorData: [
+            //     { name: '--- Select a color ---', value: '' },
+            //     { name: 'blue', value: '#0000FF' },
+            //     { name: 'red', value: '#FF0000' },
+            //     { name: 'green', value: '#00FF00' }
+            // ],
+            // selectedColors: [],
+            // chooseOptions: [],
         };
     },
     methods: {
-        updateData(e, key) {
-            this.formData = Object.assign(this.formData, { [key]: e });
-        },
-        selectFile() {
-            document.getElementById('file-input').click();
-        },
-        handleFileSelection(event) {
-            const selectedFile = event.target.files[0];
-            if (selectedFile) {
-                // Convertir le fichier en URL de données (data URL) pour l'afficher
-                const reader = new FileReader();
-                reader.onload = () => {
-                    this.formData.picture = reader.result;
-                };
-                reader.readAsDataURL(selectedFile);
-            }
-        },
-        handleSelectedAttribute(attribute) {
-            // Find the index of the attribute in formData.attributes
-            const index = this.formData.attributes.findIndex(attr => attr.name === attribute.name);
+        // updateData(e, key) {
+        //     this.formData = Object.assign(this.formData, { [key]: e });
+        // },
+        // selectFile() {
+        //     document.getElementById('file-input').click();
+        // },
+        // handleFileSelection(event) {
+        //     const selectedFile = event.target.files[0];
+        //     if (selectedFile) {
+        //         // Convertir le fichier en URL de données (data URL) pour l'afficher
+        //         const reader = new FileReader();
+        //         reader.onload = () => {
+        //             this.formData.picture = reader.result;
+        //         };
+        //         reader.readAsDataURL(selectedFile);
+        //     }
+        // },
+        // handleSelectedAttribute(attribute) {
+        //     // Find the index of the attribute in formData.attributes
+        //     const index = this.formData.attributes.findIndex(attr => attr.name === attribute.name);
             
-            if (index !== -1) {
-                // Update the data of the selected attribute
-                this.formData.attributes[index] = attribute;
-            } else {
-                // If attribute is not found, add it to formData.attributes
-                this.formData.attributes.push(attribute);
-            }
-        },
-        addProduct() {
-            console.log(this.formData)
-        }
+        //     if (index !== -1) {
+        //         // Update the data of the selected attribute
+        //         this.formData.attributes[index] = attribute;
+        //     } else {
+        //         // If attribute is not found, add it to formData.attributes
+        //         this.formData.attributes.push(attribute);
+        //     }
+        // },
+        // addProduct() {
+        //     console.log(this.formData)
+        // }
     },
     created () {
         GET(ENDPOINTS.GET_ALL_ATTRIBUTES)
             .then((response) => {
-                this.attributeOptions = response.data;
-                console.log(this.attributeOptions)
+                this.attributeOptions = response.data.map(item => {
+                    return {
+                        id: item.id,
+                        text: item.name
+                    }});
             })
             .catch((error) => {
                 console.dir(error)
             });
         GET(ENDPOINTS.GET_ALL_CATEGORIES)
             .then((response) => {
-                this.categoryOptions = response.data;
+                this.categoryOptions = response.data.map(item => {
+                    return {
+                        id: item.id,
+                        text: item.name
+                    }});
             });
-    },
-    watch: {
-        formData: {
-            deep: true,
-            handler(newValue, oldValue) {
-                console.log(newValue);            
-            }
-    }
     },
 };
 
