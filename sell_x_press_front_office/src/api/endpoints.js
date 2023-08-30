@@ -23,4 +23,8 @@ export const ENDPOINTS = {
     GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
     GET_ONE_PRODUCT: '/api/Product/', //(GET) and add + this.$route.params.id
     UPDATE_PRODUCT: '/api/Product/', //(PUT) and add + this.$route.params.id
+
+    // COMMENTS
+    GET_ALL_COMMENT: '/api/Comment',
+    CREATE_COMMENT: '/api/Comment' //(POST)
 }
