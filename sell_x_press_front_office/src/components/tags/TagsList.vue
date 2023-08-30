@@ -8,33 +8,35 @@
 </template>
 
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
 
 export default {
     name: 'TagsList',
     data() {
         return {
-            tags: [
-                {
-                    id: 1,
-                    name: 'Fishing',
-                    categoryId: 1
-                },
-                {
-                    id: 2,
-                    name: 'Football',
-                    categoryId: 10
-                }
-            ],
+            tags: null
         }
     },
     computed: {
         tagsList() {
-            const tagList = []
-            for (let i = 0; i < this.tags.length; i++) {
-                if (this.tags[i].categoryId == this.$route.params.id) tagList.push(this.tags[i])
+            if (this.tags) {
+                const tagList = []
+                for (let i = 0; i < this.tags.length; i++) {
+                    if (this.tags[i].categoryId == this.$route.params.id) tagList.push(this.tags[i])
+                };
+                return tagList
             }
-            return tagList
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_TAGS)
+        .then((response) => {
+            this.tags = response.data
+        })
+        .catch((error) => {
+            console.dir(error)
+        });
     },
 }
 

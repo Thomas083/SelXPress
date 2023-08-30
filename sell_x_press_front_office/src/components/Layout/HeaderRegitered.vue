@@ -27,6 +27,8 @@
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS} from '@/api/endpoints';
 
 export default {
     name: "HeaderRegistered",
@@ -38,36 +40,12 @@ export default {
                 search: '',
                 categoryId: 0
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean',
-                    tags:[
-                        {
-                            id: 1,
-                            name: 'Fishing',
-                            categoryId: 1
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Sport',
-                    tags: [
-                        {
-                            id: 1,
-                            name: 'Football',
-                            categoryId: 2
-                        },
-                    ],
-                },
-            ],
+            categories: null
         }
     },
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
-            window.location.reload();
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
@@ -83,19 +61,30 @@ export default {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            console.dir(this.formData)
+            this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`})
         }
     },
     computed: {
         categoryList() {
             const newList = this.categories
-            newList.unshift({
-                id: 0,
-                name: 'All',
-                tags: []
-            });
-            return newList
+            if (newList !== null) {
+                newList.unshift({
+                    id: 0,
+                    name: 'All',
+                    tags: []
+                });
+                return newList
+            }
         }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+        .then((response) => {
+            this.categories = response.data
+        })
+        .catch((error) => {
+        console.dir(error)
+        });
     },
 };
 </script>

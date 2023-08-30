@@ -9,4 +9,18 @@ export const ENDPOINTS = {
     LOGOUT_USER: '/api/User/logout', //(DELETE)
     UPDATE_USER: '/api/User/email', //(PUT)
     REFRESH_TOKEN: '/api/User/refreshToken', //(POST)
+
+    // CATEGORIES
+    GET_ALL_CATEGORIES: '/api/Category', //(GET)
+    GET_ONE_CATEGORY: '/api/Category/', //(GET) and add + this.$route.params.id
+    UPDATE_CATEGORY: '/api/Category/', //(PUT) and add + this.$route.params.id
+
+    // TAGS
+    GET_ALL_TAGS: '/api/Tag', // (GET)
+
+    // PRODUCTS
+    GET_ALL_PRODUCTS: '/api/Product', //(GET)
+    GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
+    GET_ONE_PRODUCT: '/api/Product/', //(GET) and add + this.$route.params.id
+    UPDATE_PRODUCT: '/api/Product/', //(PUT) and add + this.$route.params.id
 }
