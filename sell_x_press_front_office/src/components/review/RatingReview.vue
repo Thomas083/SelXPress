@@ -25,16 +25,22 @@
 <script>
 export default {
     name: 'RatingReview',
+    props: {
+        comments: {
+            type: Array,
+            required: true,
+        },
+    },
     data() {
-        return {    
-            number_review: '430',
-            product_rating: 4,
+        return {
+            number_review: 0,
+            product_rating: 0,
             star_rating: {
-                5: 270,
-                4: 100,
-                3: 30,
+                5: 0,
+                4: 0,
+                3: 0,
                 2: 0,
-                1: 30,
+                1: 0,
             },
             hoveredStars: 0,
         }
@@ -46,12 +52,53 @@ export default {
         updateData(e, key) {
             this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
         },
+        calculateProductRating() {
+            let totalStars = 0;
+            let totalReviews = 0;
+
+            for (let i = 1; i <= 5; i++) {
+                totalStars += i * this.star_rating[i];
+                totalReviews += this.star_rating[i];
+            }
+
+            if (totalReviews > 0) {
+                this.product_rating = Math.floor(totalStars / totalReviews);
+            } else {
+                this.product_rating = 0;
+            }
+        },
+    },
+    mounted() {
+        if (this.comments) {
+            this.number_review = this.comments.length;
+            for (let i = 0; i < this.comments.length; i++) {
+                switch (this.comments[i].mark.rate) {
+                    case 5:
+                        this.star_rating[5] += 1;
+                        break;
+                    case 4:
+                        this.star_rating[4] += 1;
+                        break;
+                    case 3:
+                        this.star_rating[3] += 1;
+                        break;
+                    case 2:
+                        this.star_rating[2] += 1;
+                        break;
+                    case 1:
+                        this.star_rating[1] += 1;
+                        break;
+                    default:
+                        break;
+                };
+            };
+            this.calculateProductRating();
+        };
     },
 }
 </script>
 
 <style scoped>
-
 .rating-container {
     display: flex;
     flex-direction: column;
@@ -93,6 +140,4 @@ export default {
     color: var(--main-grey-separation);
     font-size: 1rem;
 }
-
-
 </style>

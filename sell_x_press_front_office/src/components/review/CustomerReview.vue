@@ -13,22 +13,22 @@
             </div>
             <button class="btn btn-primary add-review-btn" @click="addReview()">Add your review</button>
         </div>
-        <div v-for="(review, index) in reviews">
+        <div v-for="comment in comments">
             <div class="review-img-editor-container">
                 <img src="@/assets/Product/client.png" alt="editor" />
-                <h3>{{ review.editor }}</h3>
+                <h3>{{ comment.user }}</h3>
             </div>
             <div class="star-rating-container review">
-                <div v-for="index  in review.rating" :key="index">
+                <div v-for="index  in comment.mark.rate" :key="index">
                     <img src="../../assets/Product/yellow_star.png" alt="yellow stars" />
                 </div>
-                <div v-for="index in (5 - review.rating)" :key="index">
+                <div v-for="index in (5 - comment.mark.rate)" :key="index">
                     <img src="../../assets/Product/star.png" alt="stars" />
                 </div>
-                <div class="review-title">{{ review.title }}</div>
+                <div class="review-title">{{ comment.title }}</div>
             </div>
-            <div class="review_publication_date">Published on: {{ review.publication_date }}</div>
-            <div class="review-comment">{{ review.comment }}</div>
+            <div class="review_publication_date">Published on: {{ formatCreatedAt(comment.createdAt) }}</div>
+            <div class="review-comment">{{ comment.message }}</div>
         </div>
     </div>
 </template>
@@ -38,11 +38,18 @@ import { POST } from '@/api/axios';
 import { ENDPOINTS } from "@/api/endpoints";
 import { createToast } from 'mosha-vue-toastify';
 import InputComponent from "@/components/global/InputComponent.vue";
+import { format } from 'date-fns';
 
 export default {
     name: 'CustomerReview',
     components: {
         InputComponent,
+    },
+    props: {
+        comments: {
+            type: Array,
+            required: true 
+        },
     },
     data() {
         return {
@@ -53,23 +60,6 @@ export default {
                 productId: null,
                 rate: 0,
             },
-            
-            reviews: [
-                {
-                    title: 'Awesome product !',
-                    editor: 'Elsharion',
-                    rating: 4,
-                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
-                    publication_date: '20/06/2023',
-                },
-                {
-                    title: 'Terrible.',
-                    editor: 'Thomas',
-                    rating: 2,
-                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
-                    publication_date: '22/06/2023',
-                },
-            ],
         }
     },
     methods: {
@@ -85,7 +75,11 @@ export default {
                         createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' })
                     });
             }
-        }
+        },
+        formatCreatedAt(createdAt) {
+            if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
+            else return '';
+        },
     },
 }
 </script>

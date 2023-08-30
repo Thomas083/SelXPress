@@ -10,8 +10,8 @@
         <div class="customer-review-container">
             <h1>Customer Review</h1>
             <div class="rating-review-container">
-                <rating-review />
-                <customer-review />
+                <rating-review :comments="product.comments"/>
+                <customer-review :comments="product.comments"/>
             </div>
         </div>
         
