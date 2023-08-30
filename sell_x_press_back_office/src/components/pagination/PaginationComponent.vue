@@ -6,16 +6,16 @@
                     @click="gotoPage(currentPage - 1)">Previous</a>
             </li>
             <li class="page-item" v-for="page in displayedPages" :key="page">
-                <a class="page-link" href="#category" @click="gotoPage(page)">{{ page }}</a>
+                <a class="page-link" :href='("#" + redirectId)' @click="gotoPage(page)">{{ page }}</a>
             </li>
             <li v-if="showEllipsisBefore">
                 <span class="page-link">...</span>
             </li>
             <li class="page-item" v-if="showLastPage">
-                <a class="page-link" href="#category" @click="gotoPage(totalPages)">{{ totalPages }}</a>
+                <a class="page-link" :href='("#" + redirectId)' @click="gotoPage(totalPages)">{{ totalPages }}</a>
             </li>
             <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a class="page-link" href="#category" @click="gotoPage(currentPage + 1)">Next</a>
+                <a class="page-link" :href='("#" + redirectId)' @click="gotoPage(currentPage + 1)">Next</a>
             </li>
         </ul>
     </nav>
@@ -39,6 +39,10 @@ export default {
         },
         currentPage: {
             type: Number,
+            required: true,
+        },
+        redirectId: {
+            type: String,
             required: true,
         }
     },

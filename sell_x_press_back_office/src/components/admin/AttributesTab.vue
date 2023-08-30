@@ -1,49 +1,54 @@
 <template>
     <div class="user-container">
-        <table class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Actions</th>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Attribute</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td scope="row" class="action-create-btn">
-                        <button class="btn btn-add btn-admin" v-on:click="createAttribute">
-                            Create
-                            <img src="../../assets/Admin/add-category.png" alt="create" />
-                        </button>
-                    </td>
-                    <td>-</td>
-                    <td><input-component @input="createData('name', $event)" /></td>
-                    <td><input-component @input="createData('type', $event)" /></td>
-                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
-                </tr>
-                <tr v-for="attribute in attributes">
-                    <td scope="row" class="action-btns">
-                        <button class="btn btn-primary btn-admin"
-                            v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
-                            Update
-                            <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
-                        </button>
-                        <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteAttribute(attribute.id)">
-                            Delete
-                            <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
-                        </button>
-                    </td>
-                    <td>{{ attribute.id }}</td>
-                    <td><input-component :value='attribute.name' @input="updateData(attribute.id, 'name', $event)" />
-                    </td>
-                    <td><input-component :value="attribute.type" @input="updateData(attribute.id, 'type', $event)" /></td>
-                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
-                            v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="attributes-table">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Attribute</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row" class="action-create-btn">
+                            <button class="btn btn-add btn-admin" v-on:click="createAttribute">
+                                Create
+                                <img src="../../assets/Admin/add-category.png" alt="create" />
+                            </button>
+                        </td>
+                        <td>-</td>
+                        <td><input-component @input="createData('name', $event)" /></td>
+                        <td><input-component @input="createData('type', $event)" /></td>
+                        <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
+                    </tr>
+                    <tr v-for="attribute in displayedAttributes">
+                        <td scope="row" class="action-btns">
+                            <button class="btn btn-primary btn-admin"
+                                v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
+                                Update
+                                <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
+                            </button>
+                            <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteAttribute(attribute.id)">
+                                Delete
+                                <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
+                            </button>
+                        </td>
+                        <td>{{ attribute.id }}</td>
+                        <td><input-component :value='attribute.name' @input="updateData(attribute.id, 'name', $event)" />
+                        </td>
+                        <td><input-component :value="attribute.type" @input="updateData(attribute.id, 'type', $event)" /></td>
+                        <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
+                                v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination-component v-if="(attributes && attributes.length > attributePerPage)" :key="currentAttributePage"
+                :totalProducts="attributes.length" :products="attributes" :products-per-page="attributePerPage"
+                :currentPage="currentAttributePage" redirectId="category-table" @page-changed="updateCurrentAttributePage" />
+        </div>
         <table v-if="selectedAttributeIndex !== null" class="table table-striped table-hover table-bordered">
             <thead>
                 <tr class="table-grey">
@@ -96,14 +101,18 @@ import { DELETE, GET, POST, PUT } from '@/api/axios';
 import InputComponent from '../global/InputComponent.vue';
 import { ENDPOINTS } from '@/api/endpoints';
 import { createToast } from 'mosha-vue-toastify';
+import PaginationComponent from '../pagination/PaginationComponent.vue';
 
 export default {
     name: "AttributesTab",
     components: {
-        InputComponent
+        InputComponent,
+        PaginationComponent
     },
     data() {
         return {
+            attributePerPage: 2,
+            currentAttributePage: 1,
             selectedAttributeIndex: null,
             formAttributeType: {
                 name: '',
@@ -119,6 +128,12 @@ export default {
         }
     },
     methods: {
+        updateCurrentAttributePage(newPage) {
+            this.currentAttributePage = newPage;
+        },
+        updateCurrentAttributeDataPage(newPage) {
+            this.currentAttributeDataPage = newPage;
+        },
         createData(key, value) {
             this.formAttributeType = Object.assign(this.formAttributeType, { [key]: value });
         },
@@ -219,6 +234,15 @@ export default {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
                 });
         }
+    },
+    computed: {
+        displayedAttributes() {
+            if (this.attributes) {
+                const startIndex = (this.currentAttributePage - 1) * this.attributePerPage;
+                const endIndex = startIndex + this.attributePerPage;
+                return this.attributes.slice(startIndex, endIndex);
+            }
+        },
     },
     mounted() {
         GET(ENDPOINTS.GET_ALL_ATTRIBUTE)

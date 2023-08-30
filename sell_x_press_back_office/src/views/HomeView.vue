@@ -11,7 +11,7 @@
       </div>
     </div>
   </div>
-  <pagination-component v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length" :products="products" :products-per-page="productsPerPage" :currentPage="currentPage" @page-changed="updateCurrentPage" />
+  <pagination-component v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length" :products="products" :products-per-page="productsPerPage" :currentPage="currentPage" redirectId="category" @page-changed="updateCurrentPage" />
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <table class="table table-striped table-hover table-bordered">
+    <table class="table table-striped table-hover table-bordered" id="user-table">
       <thead class="table-dark">
         <tr>
           <th scope="col">Id</th>
@@ -25,7 +25,7 @@
             </button>
           </td>
         </tr>
-        <tr v-for="user in users">
+        <tr v-for="user in displayedUsers">
           <th scope="row">{{ user.id }}</th>
           <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
           <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" disable="disable" /></td>
@@ -44,22 +44,8 @@
           </td>
         </tr>
       </tbody>
-      <tfoot>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
-      </tfoot>
     </table>
+    <pagination-component v-if="(users && users.length > usersPerPage)" :key="currentPage" :totalProducts="users.length" :products="users" :products-per-page="usersPerPage" :currentPage="currentPage" redirectId="user-table" @page-changed="updateCurrentPage" />
   </div>
 </template>
 
@@ -68,21 +54,28 @@ import { GET, PUT, POST, DELETE } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
 import { createToast } from "mosha-vue-toastify";
+import PaginationComponent from "../pagination/PaginationComponent.vue";
 
 export default {
   name: "UsersTab",
   components: {
     InputComponent,
+    PaginationComponent
   },
   data() {
     return {
       formData: {
         username: '',
       },
-      users: null
+      users: null,
+      usersPerPage: 4,
+      currentPage: 1,
     };
   },
   methods: {
+    updateCurrentPage(newPage) {
+      this.currentPage = newPage;
+    },
     CreateData(key, value) {
       Object.assign(this.formData, { [key]: value });
     },
@@ -129,6 +122,15 @@ export default {
         .catch(() => {
           createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
         });
+    }
+  },
+  computed: {
+    displayedUsers() {
+      if (this.users) {
+        const startIndex = (this.currentPage - 1) * this.usersPerPage;
+        const endIndex = startIndex + this.usersPerPage;
+        return this.users.slice(startIndex, endIndex);
+      }
     }
   },
   mounted() {
