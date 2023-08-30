@@ -3,7 +3,7 @@
         <div class="img-details-container">
             <div class="import-file-container">
                 <div class="img-upload" id="input-upload-file" name="input-upload-file">
-                    <img ref="uploadedImage" :src="formData.upload_file" alt="Uploaded Image" />
+                    <img ref="uploadedImage" :src="formData.picture" alt="Uploaded Image" />
                 </div>
                 <div class="upload-file" @click="selectFile">
                     <p>Import file</p>
@@ -12,11 +12,13 @@
                 </div>
             </div>
             <div :onChange="$emit('inputForm', formData)" class="product-details">
-                <input-component label="Title :" id="input-title" name="input-title" type="text"
-                    placeholder="Enter your product title..." @input="updateData($event, 'title')" />
-                <input-component label="Price :" id="input-price" name="input-price" type="text" placeholder="...€"
+                <input-component label="Title :" id="input-title" name="input-title" type="text" placeholder="Enter your product title..."
+                    @input="updateData($event, 'name')" />
+                <input-component label="Price :" id="input-price" name="input-price" type="number" placeholder="...€"
                     @input="updateData($event, 'price')" />
-                    <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" />
+                <input-component label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
+                    @input="updateData($event, 'stock')" />
+                <!-- <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" /> -->
             </div>
         </div>
         <div class="separation-line"></div>
@@ -38,23 +40,29 @@
 
 import InputComponent from "@/components/global/InputComponent.vue";
 import SelectComponent from "@/components/global/SelectComponent.vue";
+import { GET } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 
 export default {
     name: "AddProduct",
     components: {
         InputComponent,
-        SelectComponent
+        SelectComponent,
     },
     data() {
         return {
             formData: {
-                title: "",
-                price: "",
+                name: "",
+                price: 0,
                 description: "",
-                upload_file: "",
-                attributes: [],
-                categories: [],
+                picture: "",
+                attributeIds: [],
+                categoryId: 0,
+                stock: 0,
             },
+            attributeOptions: null,
+            categoryOptions: null,
+            selectedData: null,
             attributes: [
                 {
                     name: 'color',
@@ -103,7 +111,7 @@ export default {
                 // Convertir le fichier en URL de données (data URL) pour l'afficher
                 const reader = new FileReader();
                 reader.onload = () => {
-                    this.formData.upload_file = reader.result;
+                    this.formData.picture = reader.result;
                 };
                 reader.readAsDataURL(selectedFile);
             }
@@ -121,8 +129,30 @@ export default {
             }
         },
         addProduct() {
-            console.dir(this.formData)
+            console.log(this.formData)
         }
+    },
+    created () {
+        GET(ENDPOINTS.GET_ALL_ATTRIBUTES)
+            .then((response) => {
+                this.attributeOptions = response.data;
+                console.log(this.attributeOptions)
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+            .then((response) => {
+                this.categoryOptions = response.data;
+            });
+    },
+    watch: {
+        formData: {
+            deep: true,
+            handler(newValue, oldValue) {
+                console.log(newValue);            
+            }
+    }
     },
 };
 

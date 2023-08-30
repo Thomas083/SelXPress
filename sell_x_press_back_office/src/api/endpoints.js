@@ -9,4 +9,10 @@ export const ENDPOINTS = {
     LOGOUT_USER: '/api/User/logout', //(DELETE)
     UPDATE_USER: '/api/User/email', //(PUT)
     REFRESH_TOKEN: '/api/User/refreshToken', //(POST)
+
+    //ATRIBUTES
+    GET_ALL_ATTRIBUTES: '/api/Attribute', //(GET)
+
+    //CATEGORIES
+    GET_ALL_CATEGORIES: '/api/Category', //(GET)
 }
