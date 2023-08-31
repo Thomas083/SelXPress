@@ -6,7 +6,7 @@
     </div>
     <button
       class="btn btn-primary go-to-payment-btn"
-      v-on:click="resetPassword"
+      v-on:click="goToPayement()"
     >
       Go to Payment
     </button>
@@ -22,13 +22,18 @@ export default {
       required: true,
     },
   },
+  methods: {
+    goToPayement() {
+      console.dir(this.cart)
+    }
+  },
   computed: {
     totalQuantity() {
       return this.cart.reduce((acc, item) => acc + item.quantity, 0);
     },
     totalPrice() {
       return this.cart.reduce(
-        (acc, item) => acc + item.price * item.quantity,
+        (acc, item) => acc + item.product.price * item.quantity,
         0
       );
     },

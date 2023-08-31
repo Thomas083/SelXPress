@@ -3,11 +3,11 @@
     <div class="cart-container">
         <div class="cart-list-container">
             <div v-for="(item, key) in cart" :key="item.id">
-                <cart-card :cardId="key" :cart="item" @delete="deleteItem" @update-quantity="updateQuantity"/>
+                <cart-card :cardId="key" :cart="item" @delete="deleteItem" @update-quantity="updateQuantity" />
             </div>
         </div>
         <div class="cart-summary">
-            <cart-summary :cart="cart"/>
+            <cart-summary :cart="cart" />
         </div>
     </div>
 </template>
@@ -15,56 +15,49 @@
 <script>
 import CartCard from "@/components/cart/Card.vue";
 import CartSummary from "@/components/cart/Summary.vue";
-    export default {
-        name: "CartView",
-        components: {
-            CartCard,
-            CartSummary
+import { GET } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
+
+export default {
+    name: "CartView",
+    components: {
+        CartCard,
+        CartSummary
+    },
+    data() {
+        return {
+            cart: []
+        }
+    },
+    methods: {
+        deleteItem(id) {
+            this.cart.splice(id, 1);
         },
-        data() {
-            return {
-                // WIP : to be replaced by the cart from the API
-                cart: [
-                    {
-                        quantity: 1,
-                        id: 1,
-                        name: "name1",
-                        price: 10,
-                        picture: "@/assets/button/minus_button.png",
-                        description: "description1",
-                    },
-                    {
-                        quantity: 2,
-                        id: 2,
-                        name: "name2",
-                        price: 20,
-                        picture: "@/assets/button/minus_button.png",
-                        description: "description2",
-                    },
-                    {
-                        quantity: 3,
-                        id: 3,
-                        name: "name3",
-                        price: 30,
-                        picture: "@/assets/button/minus_button.png",
-                        description: "description3",
-                    },
-                ]
-            }
-        },
-        methods: {
-            deleteItem(id) {
-                this.cart.splice(id, 1);
-            },
-            updateQuantity([id, quantity]) {
-                this.cart[id].quantity = quantity;
-            }
-        },
-    }
+        updateQuantity([id, quantity]) {
+            this.cart[id].quantity = quantity;
+        }
+    },
+    mounted() {
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
+                    .then((response) => {
+                        this.cart = response.data
+                        console.dir(this.cart)
+                    })
+                    .catch((error) => {
+                        console.dir(error)
+                    });
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+    },
+}
 </script>
 
 <style scoped>
-.cart-container{
+.cart-container {
     display: flex;
     justify-content: center;
     gap: 1rem;
@@ -84,7 +77,7 @@ import CartSummary from "@/components/cart/Summary.vue";
 
 
 @media screen and (max-width: 430px) {
-    .cart-container{
+    .cart-container {
         flex-direction: column;
     }
 
