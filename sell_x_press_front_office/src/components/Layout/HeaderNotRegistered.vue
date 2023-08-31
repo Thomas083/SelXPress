@@ -30,13 +30,14 @@
 <script>
 import { GET } from '@/api/axios';
 import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
 
 
 export default {
     name: "HeaderNotRegistered",
     data() {
         return {
-            selectedOption: 'All',
+            selectedOption: 'Select a category',
             formData: {
                 search: '',
                 categoryId: 0
@@ -61,7 +62,9 @@ export default {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`})
+            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'danger', position: 'bottom-right' });
+            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all`});
+            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`});
         }
     },
     computed: {
@@ -70,7 +73,7 @@ export default {
             if (newList !== null) {
                 newList.unshift({
                     id: 0,
-                    name: 'All',
+                    name: 'Select a category',
                     tags: []
                 });
                 return newList

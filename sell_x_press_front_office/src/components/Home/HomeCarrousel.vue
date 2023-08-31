@@ -48,7 +48,6 @@ export default {
     },
     computed: {
         carrouselProduct() {
-            console.dir(this.products)
             if (this.products && this.products.length <= this.numProduct) {
                 return this.products;
             } else if (this.products && this.products.length > this.numProduct) {
