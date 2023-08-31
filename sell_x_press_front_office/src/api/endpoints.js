@@ -25,6 +25,10 @@ export const ENDPOINTS = {
     UPDATE_PRODUCT: '/api/Product/', //(PUT) and add + this.$route.params.id
 
     // COMMENTS
-    GET_ALL_COMMENT: '/api/Comment',
-    CREATE_COMMENT: '/api/Comment' //(POST)
+    GET_ALL_COMMENT: '/api/Comment', //(GET)
+    CREATE_COMMENT: '/api/Comment', //(POST)
+
+    // CART
+    GET_ALL_CART: '/api/Cart', //(GET)
+    CREATE_CART: '/api/Cart/me', //(POST)
 }
