@@ -8,6 +8,7 @@ using SelXPressApi.DTO.ProductDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 using SelXPressApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -146,6 +147,26 @@ namespace SelXPressApi.Controllers
 				throw new NotFoundException("There are no products in the database", "PRO-1401");
 
 			return Ok(product);
+		}
+
+		[HttpGet("me")]
+		[ProducesResponseType(200, Type = typeof(List<Product>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductByUserForSeller()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PRO-2001");
+
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			var products = await _productRepository.GetProductByUser(email);
+			if (products.Count == 0)
+				throw new NotFoundException("There is no products for the current user", "PRO-");
+			return Ok(products);
 		}
 		#endregion
 
