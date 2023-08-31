@@ -29,28 +29,60 @@ export default {
         return {
             productsPerPage: 4,
             currentPage: 1,
-            products: []
+            products: [],
         }
     },
     computed: {
         displayedProducts() {
-            const startIndex = (this.currentPage - 1) * this.productsPerPage;
-            const endIndex = startIndex + this.productsPerPage;
-            return this.products.slice(startIndex, endIndex);
+            if (this.$route.params.name && this.$route.params.name !== 'all') {
+                var newProductList = this.setProductlist(this.$route.params.name)
+                const startIndex = (this.currentPage - 1) * this.productsPerPage;
+                const endIndex = startIndex + this.productsPerPage;
+                return newProductList.slice(startIndex, endIndex);
+            } else {
+                const startIndex = (this.currentPage - 1) * this.productsPerPage;
+                const endIndex = startIndex + this.productsPerPage;
+                return this.products.slice(startIndex, endIndex);
+            }
         },
     },
     methods: {
         updateCurrentPage(newPage) {
             this.currentPage = newPage;
         },
+        setProductlist(searchTerm) {
+            if (!searchTerm) {
+                return this.tempProduct;
+            } else {
+                searchTerm = searchTerm.toLowerCase();
+                return this.products.filter(product => {
+                    const nameMatches = product.name.toLowerCase().includes(searchTerm);
+                    const descriptionMatches = product.description.toLowerCase().includes(searchTerm);
+                    return nameMatches || descriptionMatches;
+                });
+            }
+        }
     },
-    mounted () {
+    watch: {
+        '$route.params.id': function (newId, oldId) {
+            if (newId !== oldId) {
+                this.products = [];
+                GET(ENDPOINTS.GET_ALL_PRODUCTS)
+                    .then((response) => {
+                        for (let i = 0; i < response.data.length; i++) {
+                            if (response.data[i].category.id == this.$route.params.id) this.products.push(response.data[i])
+                        };
+                    });
+            }
+        }
+    },
+    mounted() {
         GET(ENDPOINTS.GET_ALL_PRODUCTS)
-        .then((response) => {
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].category.id == this.$route.params.id) this.products.push(response.data[i])                
-            };
-        });
+            .then((response) => {
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].category.id == this.$route.params.id) this.products.push(response.data[i])
+                };
+            });
     },
 }
 
