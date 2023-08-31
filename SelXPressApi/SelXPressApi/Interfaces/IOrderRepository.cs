@@ -30,6 +30,8 @@ namespace SelXPressApi.Interfaces
 		/// <returns>A list of all orders.</returns>
 		Task<List<Order>> GetAllOrders();
 
+		Task<List<Order>> GetOrderByUser(string email);
+
 		/// <summary>
 		/// Creates a new order.
 		/// </summary>

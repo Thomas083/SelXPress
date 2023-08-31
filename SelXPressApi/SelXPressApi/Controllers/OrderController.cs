@@ -101,6 +101,27 @@ namespace SelXPressApi.Controllers
 			var order = await _orderRepository.GetOrderById(id);
 			return Ok(order);
 		}
+
+		[HttpGet("me")]
+		[ProducesResponseType(200, Type = typeof(List<Order>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetOrderByUser()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "ORD-2001");
+
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			var orders = await _orderRepository.GetOrderByUser(email);
+			if (orders.Count == 0)
+				throw new NotFoundException("There is no orders for this user", "ORD-");
+			
+			return Ok(orders);
+		}
 		#endregion
 
 		#region Post Method
