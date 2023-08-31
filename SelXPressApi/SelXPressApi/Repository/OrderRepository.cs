@@ -126,5 +126,17 @@ namespace SelXPressApi.Repository
 			// Save changes to the database and return the result
 			return await _commonMethods.Save();
 		}
+
+		public async Task<List<Order>> GetOrderByUser(string email)
+		{
+			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
+			{
+				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+				var orders = await _context.Orders.Where(o => o.User == user).ToListAsync();
+				return orders;
+			}
+
+			return null;
+		}
 	}
 }
