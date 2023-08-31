@@ -5,10 +5,11 @@
         </div>
         <div class="header-search">
             <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
-                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
+                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}
+                </option>
             </select>
-            <input class="search-input" type="text" placeholder="Search in SelXpress...">
-            <button class="loop"><img src="../../assets/Header/loop.png" /></button>
+            <input v-model="formData.search" class="search-input" type="text" placeholder="Search in SelXpress...">
+            <button class="loop" v-on:click="sendSearchData"><img src="../../assets/Header/loop.png" /></button>
         </div>
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
@@ -21,26 +22,27 @@
             <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
-            <p class="circle-number">0</p>
+            <p class="circle-number">{{ numberProductCart }}</p>
         </div>
     </header>
 </template>
   
 <script>
 import { GET } from '@/api/axios';
-import { ENDPOINTS} from '@/api/endpoints';
+import { ENDPOINTS } from '@/api/endpoints';
 
 export default {
     name: "HeaderRegistered",
     data() {
         return {
-            user: JSON.parse(localStorage.getItem('user')).email,
+            user: '',
             selectedOption: 'Select a category',
             formData: {
                 search: '',
                 categoryId: 0
             },
-            categories: null
+            categories: null,
+            numberProductCart: 0
         }
     },
     methods: {
@@ -55,15 +57,15 @@ export default {
             window.location.reload();
         },
         goToCart() {
-            this.$router.push({ path: '/cart'});
+            this.$router.push({ path: '/cart' });
         },
         setCatagoryData() {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
             if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'danger', position: 'bottom-right' });
-            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all`});
-            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`})
+            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all` });
+            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}` })
         }
     },
     computed: {
@@ -77,16 +79,32 @@ export default {
                 });
                 return newList
             }
-        }
+        },
     },
-    mounted () {
+    mounted() {
         GET(ENDPOINTS.GET_ALL_CATEGORIES)
-        .then((response) => {
-            this.categories = response.data
-        })
-        .catch((error) => {
-        console.dir(error)
-        });
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.user = response.data.username
+                GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
+                    .then((response) => {
+                       this.numberProductCart = response.data.length;
+                    })
+                    .catch((error) => {
+                        console.dir(error);
+                        0;
+                    });
+            })
+            .catch((error) => {
+                console.dir(error);
+                0;
+            });
     },
 };
 </script>

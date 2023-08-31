@@ -1,5 +1,5 @@
 <template>
-    <div class="products-by-categories-container">
+    <div class="products-by-categories-container" v-if="selectedProduct.length !== 0">
         <div class="title-show-more-container">
             <h2>{{ category.name }}</h2>
             <button class="show-more-btn" v-on:click="goToCategory(category.id, category.name)">Show more</button>

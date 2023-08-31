@@ -43,7 +43,6 @@ export default {
                 GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
                     .then((response) => {
                         this.cart = response.data
-                        console.dir(this.cart)
                     })
                     .catch((error) => {
                         console.dir(error)
