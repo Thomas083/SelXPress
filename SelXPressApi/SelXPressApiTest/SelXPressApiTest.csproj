@@ -26,5 +26,17 @@
     <ItemGroup>
         <ProjectReference Include="..\SelXPressApi\SelXPressApi.csproj"/>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="CategoryControllerTest\" />
+      <Folder Include="CommentControllerTest\" />
+      <Folder Include="MarkControllerTest\" />
+      <Folder Include="OrderControllerTest\" />
+      <Folder Include="OrderProductControllerTest\" />
+      <Folder Include="ProductAttributeControllerTest\" />
+      <Folder Include="ProductControllerTest\" />
+      <Folder Include="RoleControllerTest\" />
+      <Folder Include="TagControllerTest\" />
+    </ItemGroup>
 
 </Project>
