@@ -15,4 +15,7 @@ export const ENDPOINTS = {
 
     //CATEGORIES
     GET_ALL_CATEGORIES: '/api/Category', //(GET)
+
+    //PRODUCTS
+    POST_PRODUCT: '/api/Product', //(POST)
 }

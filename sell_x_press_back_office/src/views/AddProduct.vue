@@ -24,14 +24,12 @@
                     v-model="formData.attributeIds"
                     :options="attributeOptions" 
                     :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }"
-                    @select="console.log(formData.attributeIds)"
                 />
                 <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
                 <Select2
                     v-model="formData.categoryId"
                     :options="categoryOptions" 
                     :settings="{ placeholder: 'Select the category', width: '100%'}"
-                    @select="console.log(formData.categoryId)"
                 />
 
             </div>
@@ -55,7 +53,7 @@
 
 import InputComponent from "@/components/global/InputComponent.vue";
 import SelectComponent from "@/components/global/SelectComponent.vue";
-import { GET } from "@/api/axios";
+import { GET, POST } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 
 export default {
@@ -71,80 +69,42 @@ export default {
                 price: 0,
                 description: "",
                 picture: "",
-                attributeIds: [],
                 categoryId: null,
                 stock: 0,
+                attributeIds: [],
             },
             attributeOptions: null,
             categoryOptions: null,
-            // attributes: [
-            //     {
-            //         name: 'color',
-            //         type: 'select',
-            //         data: [
-            //             { name: '--- Select a color ---', value: '' },
-            //             { name: 'blue', value: '#0000FF' },
-            //             { name: 'red', value: '#FF0000' },
-            //             { name: 'green', value: '#00FF00' }
-            //         ]
-            //     },
-            //     {
-            //         name: 'size',
-            //         type: 'select',
-            //         data: [
-            //             { name: '--- Select a size ---', value: '' },
-            //             { 'name': 'extra_small', 'value': 'xs' },
-            //             { 'name': 'small', 'value': 's' },
-            //             { 'name': 'medium', 'value': 'm' },
-            //             { 'name': 'large', 'value': 'l' },
-            //             { 'name': 'extra_large', 'value': 'xl' }
-            //         ]
-            //     }
-            // ],
-            // selectOptions: ['--- Select a type ---', 'Color', 'Size'],
-            // selectColorData: [
-            //     { name: '--- Select a color ---', value: '' },
-            //     { name: 'blue', value: '#0000FF' },
-            //     { name: 'red', value: '#FF0000' },
-            //     { name: 'green', value: '#00FF00' }
-            // ],
-            // selectedColors: [],
-            // chooseOptions: [],
         };
     },
     methods: {
-        // updateData(e, key) {
-        //     this.formData = Object.assign(this.formData, { [key]: e });
-        // },
-        // selectFile() {
-        //     document.getElementById('file-input').click();
-        // },
-        // handleFileSelection(event) {
-        //     const selectedFile = event.target.files[0];
-        //     if (selectedFile) {
-        //         // Convertir le fichier en URL de données (data URL) pour l'afficher
-        //         const reader = new FileReader();
-        //         reader.onload = () => {
-        //             this.formData.picture = reader.result;
-        //         };
-        //         reader.readAsDataURL(selectedFile);
-        //     }
-        // },
-        // handleSelectedAttribute(attribute) {
-        //     // Find the index of the attribute in formData.attributes
-        //     const index = this.formData.attributes.findIndex(attr => attr.name === attribute.name);
-            
-        //     if (index !== -1) {
-        //         // Update the data of the selected attribute
-        //         this.formData.attributes[index] = attribute;
-        //     } else {
-        //         // If attribute is not found, add it to formData.attributes
-        //         this.formData.attributes.push(attribute);
-        //     }
-        // },
-        // addProduct() {
-        //     console.log(this.formData)
-        // }
+        addProduct() {
+            POST(ENDPOINTS.POST_PRODUCT, this.formData, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                console.log('Product added', response);
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+        },
+
+        updateData(e, key) {
+            this.formData = Object.assign(this.formData, { [key]: e });
+        },
+        selectFile() {
+            document.getElementById('file-input').click();
+        },
+        handleFileSelection(event) {
+            const selectedFile = event.target.files[0];
+            if (selectedFile) {
+                // Convertir le fichier en URL de données (data URL) pour l'afficher
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.formData.picture = reader.result;
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        },
     },
     created () {
         GET(ENDPOINTS.GET_ALL_ATTRIBUTES)
