@@ -6,7 +6,7 @@ using SelXPressApi.Middleware;
 namespace SelXPressApiTest.CartControllerTest;
 
 /// <summary>
-/// Class to test the api/Cart/ GET route
+/// Class to test the /api/Cart GET route
 /// </summary>
 public class GetAllCartsTest
 {
@@ -15,7 +15,7 @@ public class GetAllCartsTest
     private IAuthorizationMiddleware _authorizationMiddleware;
 
     /// <summary>
-    /// Initialize a new instance of the <see cref="GetAllCartsTest"/>
+    /// Initialize a new instance of the <see cref="GetAllCartsTest"/> class
     /// </summary>
     public GetAllCartsTest()
     {
@@ -76,13 +76,13 @@ public class GetAllCartsTest
     /// <summary>
     /// Test to check if the status of the request is equals to 404
     /// </summary>
-    public void CartController_GetALlCarts_Status_404()
+    public void CartController_GetAllCarts_Status_404()
     {
         //todo
     }
 
     /// <summary>
-    /// Test to check if the status of the request is equals to 500 due to an internal server error
+    /// Test to check if the status of the request is equals to 500
     /// </summary>
     public void CartController_GetAllCarts_Status_500()
     {
