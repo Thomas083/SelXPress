@@ -18,7 +18,6 @@
                     @input="updateData($event, 'price')" />
                 <input-component label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
                     @input="updateData($event, 'stock')" />
-                <!-- <select-component :attributes="attributes"  @selectedAttribute="handleSelectedAttribute" /> -->
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
                 <Select2
                     v-model="formData.attributeIds"
