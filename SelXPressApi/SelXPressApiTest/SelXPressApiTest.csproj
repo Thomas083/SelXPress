@@ -33,7 +33,6 @@
       <Folder Include="MarkControllerTest\" />
       <Folder Include="OrderControllerTest\" />
       <Folder Include="OrderProductControllerTest\" />
-      <Folder Include="ProductControllerTest\" />
       <Folder Include="RoleControllerTest\" />
       <Folder Include="TagControllerTest\" />
     </ItemGroup>
