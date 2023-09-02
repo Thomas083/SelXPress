@@ -30,4 +30,6 @@ public class User
     /// List of the product in the user's cart
     /// </summary>
     public ICollection<Cart> Carts { get; set; }
+
+    public ICollection<Product> products { get; set; }
 }

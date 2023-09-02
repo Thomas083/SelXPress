@@ -66,4 +66,6 @@ public class Product
     /// List of comments for the product
     /// </summary>
     public ICollection<Comment> Comments { get; set; }
+
+    public User User { get; set; }
 }
