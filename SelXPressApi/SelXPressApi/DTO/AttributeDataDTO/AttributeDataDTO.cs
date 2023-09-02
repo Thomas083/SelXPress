@@ -19,5 +19,10 @@
         /// Gets or sets the value associated with the attribute data.
         /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the attribute this data belongs to.
+        /// </summary>
+        public int AttributeId { get; set; }
     }
 }
