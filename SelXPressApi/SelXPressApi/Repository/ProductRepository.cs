@@ -48,7 +48,7 @@ namespace SelXPressApi.Repository
         /// </summary>
         /// <param name="createProduct">The product details.</param>
         /// <returns><c>true</c> if the product was created successfully, otherwise <c>false</c>.</returns>
-        public async Task<bool> CreateProduct(CreateProductDTO createProduct)
+        public async Task<bool> CreateProduct(CreateProductDTO createProduct, string email)
         {
             var newProduct = new Product
             {
@@ -58,7 +58,8 @@ namespace SelXPressApi.Repository
                 Picture = createProduct.Picture,
                 Stock = createProduct.Stock,
                 Category = createProduct.Category,
-                ProductAttributes = new List<ProductAttribute>()
+                ProductAttributes = new List<ProductAttribute>(),
+                User = await _context.Users.FirstAsync(u => u.Email == email)
 			};
 
             for (int i = 0; i < createProduct.ProductAttributes.Count; i++)

@@ -47,7 +47,7 @@ namespace SelXPressApi.Interfaces
 		/// </summary>
 		/// <param name="createProductDTO">DTO containing the details of the product to create.</param>
 		/// <returns>True if the product was created successfully; otherwise, false.</returns>
-		Task<bool> CreateProduct(CreateProductDTO createProductDTO);
+		Task<bool> CreateProduct(CreateProductDTO createProductDTO, string email);
 
 		/// <summary>
 		/// Updates an existing product.
