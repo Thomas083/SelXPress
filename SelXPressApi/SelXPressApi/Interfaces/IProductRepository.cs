@@ -31,9 +31,9 @@ namespace SelXPressApi.Interfaces
 		/// </summary>
 		/// <param name="id">The unique identifier of the product.</param>
 		/// <returns>The product with the specified ID.</returns>
-		Task<Product> GetProductById(int id);
+		Task<AllProductDTO> GetProductById(int id);
 
-		Task<List<Product>> GetProductByUser(string email);
+		Task<List<AllProductDTO>> GetProductByUser(string email);
 
 		/// <summary>
 		/// Checks if a product with the given ID exists.
