@@ -132,9 +132,12 @@ namespace SelXPressApi.Repository
 		/// </summary>
 		/// <param name="id">The product ID.</param>
 		/// <returns>The product if found, otherwise <c>null</c>.</returns>
-		public async Task<Product?> GetProductById(int id)
+		public async Task<AllProductDTO?> GetProductById(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return _mapper.Map<AllProductDTO>(await _context.Products
+                			.Include(p => p.Category)
+                            .Include(p => p.ProductAttributes)
+                            .FirstOrDefaultAsync(p => p.Id == id));
         }
 
         /// <summary>
