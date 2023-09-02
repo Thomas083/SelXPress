@@ -190,6 +190,8 @@ namespace SelXPressApi.Helper
 				sizeAttribute.AttributeData.Add(lAttributeData);
 				sizeAttribute.AttributeData.Add(xlAttributeData);
 				
+				//todo creation of the seller product object
+				
 				//Creation of 3 product
 				Product product1 = new Product()
 				{
@@ -203,7 +205,8 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
 				};
 
 				Product product2 = new Product()
@@ -219,7 +222,9 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
+					
 				};
 
 				Product product3 = new Product()
@@ -234,7 +239,8 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
 				};
 				//Creation of the productAttribute object and set it in the product object
 				ProductAttribute productAttribute1 = new ProductAttribute()

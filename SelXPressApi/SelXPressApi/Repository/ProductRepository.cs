@@ -161,13 +161,13 @@ namespace SelXPressApi.Repository
         {
 	        if (await _context.Users.Where(u => u.Email == email).AnyAsync())
 	        {
-                var query = _context.Products
+                /*var query = _context.Products
 	                .Include(p => p.Category)
 	                .Include(p => p.ProductAttributes)
 	                .Where(p => p.User.Email == email)
 	                .OrderBy(p => p.Id);
                 var products = await query.ToListAsync();
-				return _mapper.Map<List<AllProductDTO>>(products);
+				return _mapper.Map<List<AllProductDTO>>(products);*/
 			}
 	        return null;
         }
