@@ -25,9 +25,9 @@
         /// </summary>
         public int AttributeId { get; set; }
 
-        /*/// <summary>
+        /// <summary>
         /// Gets or sets the attribute this data belongs to.
         /// </summary>
-        public Attribute Attribute { get; set; }*/
+        public Attribute Attribute { get; set; }
     }
 }

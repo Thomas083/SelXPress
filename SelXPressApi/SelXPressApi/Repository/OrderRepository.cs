@@ -51,12 +51,22 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the order creation was successful, otherwise false.</returns>
 		public async Task<bool> CreateOrder(CreateOrderDTO createOrder)
 		{
-			var orderEntity = _mapper.Map<Order>(createOrder);
+			var newOrder = new Order
+			{
+				User = createOrder.User,
+				TotalPrice = createOrder.TotalPrice,
+				CreatedAt = DateTime.UtcNow,
+				OrderProducts = new List<OrderProduct>()
+			};
 
-			// Set the creation date of the order to the current UTC time
-			orderEntity.CreatedAt = DateTime.UtcNow;
+			for (int i = 0; i < createOrder.OrderProducts.Count; i++)
+			{
+				var orderProducts = await _context.OrderProducts.FindAsync(createOrder.OrderProducts[i].Id);
+				if (orderProducts != null)
+					newOrder.OrderProducts.Add(orderProducts);
+			}
 
-			_context.Orders.Add(orderEntity);
+			_context.Orders.Add(newOrder);
 
 			return await _commonMethods.Save();
 		}

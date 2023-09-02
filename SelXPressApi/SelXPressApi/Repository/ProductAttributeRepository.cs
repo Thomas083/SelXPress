@@ -49,9 +49,13 @@ namespace SelXPressApi.Repository
 		/// <returns><c>true</c> if the product attribute is successfully created; otherwise, <c>false</c>.</returns>
 		public async Task<bool> CreateProductAttribute(CreateProductAttributeDTO createProductAttribute)
 		{
-			var productAttributeEntity = _mapper.Map<ProductAttribute>(createProductAttribute);
+			var newProductAttribute = new ProductAttribute
+			{
+				ProductId = createProductAttribute.ProductId,
+				AttributeId = createProductAttribute.AttributeId,
+			};
 
-			_context.ProductAttributes.Add(productAttributeEntity);
+			_context.ProductAttributes.Add(newProductAttribute);
 			return await _commonMethods.Save();
 		}
 
