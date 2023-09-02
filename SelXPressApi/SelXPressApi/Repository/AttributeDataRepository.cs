@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.AttributeDataDTO;
@@ -51,15 +51,21 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the creation is successful; otherwise, false.</returns>
 		public async Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
 		{
-            AttributeData newAttributeData = new AttributeData
-            {
-                AttributeId = createAttribute.AttributeId,
-				Value = createAttribute.Value,
-				Key = createAttribute.Key
-            };
-            await _context.AttributesData.AddAsync(newAttributeData);
-            return await _commonMethods.Save();
-        }
+			var attribute = await _context.Attributes.Where(a => a.Id == createAttribute.AttributeId).FirstOrDefaultAsync();
+			if (attribute !=  null)
+			{
+				var newAttributeData = new AttributeData
+				{
+                    Attribute = attribute,
+                    Value = createAttribute.Value,
+					Key = createAttribute.Key,
+					AttributeId	= createAttribute.AttributeId
+                };
+				_context.AttributesData.Add(newAttributeData);
+				return await _commonMethods.Save();
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// Deletes an AttributeData record by its ID if it exists.

@@ -33,6 +33,8 @@ namespace SelXPressApi.Interfaces
 		/// <returns>The product with the specified ID.</returns>
 		Task<Product> GetProductById(int id);
 
+		Task<List<Product>> GetProductByUser(string email);
+
 		/// <summary>
 		/// Checks if a product with the given ID exists.
 		/// </summary>
