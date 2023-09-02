@@ -31,5 +31,8 @@ public class User
     /// </summary>
     public ICollection<Cart> Carts { get; set; }
 
-    public ICollection<Product> products { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public ICollection<SellerProduct> SellerProducts { get; set; }
 }

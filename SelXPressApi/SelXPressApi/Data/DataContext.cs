@@ -79,6 +79,18 @@ namespace SelXPressApi.Data
 				.HasMany(a => a.AttributeData)
 				.WithOne(ad => ad.Attribute)
 				.HasForeignKey(ad => ad.AttributeId);
+			
+			// Configure User and product relationship with the SellerProduct Entity
+			modelBuilder.Entity<SellerProduct>()
+				.HasKey(sp => new { sp.ProductId, sp.UserId });
+			modelBuilder.Entity<SellerProduct>()
+				.HasOne(p => p.Product)
+				.WithMany(p => p.SellerProducts)
+				.HasForeignKey(p => p.ProductId);
+			modelBuilder.Entity<SellerProduct>()
+				.HasOne(u => u.User)
+				.WithMany(u => u.SellerProducts)
+				.HasForeignKey(u => u.UserId);
 		}
 	}
 }

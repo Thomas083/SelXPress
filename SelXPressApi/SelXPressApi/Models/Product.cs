@@ -67,5 +67,8 @@ public class Product
     /// </summary>
     public ICollection<Comment> Comments { get; set; }
 
-    public User User { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public ICollection<SellerProduct> SellerProducts { get; set; }
 }
