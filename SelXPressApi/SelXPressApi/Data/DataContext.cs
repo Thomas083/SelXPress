@@ -29,6 +29,7 @@ namespace SelXPressApi.Data
 		public DbSet<Product> Products { get; set; }
 		public DbSet<ProductAttribute> ProductAttributes { get; set; }
 		public DbSet<Role> Roles { get; set; }
+		public DbSet<SellerProduct> SellerProducts { get; set; }
 		public DbSet<Tag> Tags { get; set; }
 		public DbSet<User> Users { get; set; }
 
