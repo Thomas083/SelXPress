@@ -136,7 +136,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> Get(int id)
+		public async Task<IActionResult> GetProduct(int id)
 		{
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");

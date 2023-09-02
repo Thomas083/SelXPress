@@ -44,7 +44,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> GetCategory()
+		public async Task<IActionResult> GetCategories()
 		{
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
