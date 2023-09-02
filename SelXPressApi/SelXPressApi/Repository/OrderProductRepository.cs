@@ -53,11 +53,14 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the order product was created successfully, otherwise false.</returns>
 		public async Task<bool> CreateOrderProduct(CreateOrderProductDTO createOrderProduct)
 		{
-			// Map the data from the DTO to an OrderProduct entity
-			var orderProductEntity = _mapper.Map<OrderProduct>(createOrderProduct);
+			var newOrderProduct = new OrderProduct
+			{
+				ProductId = createOrderProduct.ProductId,
+				Quantity = createOrderProduct.Quantity
+			};
 
 			// Add the new order product entity to the database context
-			_context.OrderProducts.Add(orderProductEntity);
+			_context.OrderProducts.Add(newOrderProduct);
 
 			// Save changes to the database and return the result asynchronously
 			return await _commonMethods.Save();

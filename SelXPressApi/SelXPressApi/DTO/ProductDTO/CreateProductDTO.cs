@@ -1,4 +1,6 @@
-﻿namespace SelXPressApi.DTO.ProductDTO
+﻿using SelXPressApi.Models;
+
+namespace SelXPressApi.DTO.ProductDTO
 {
     /// <summary>
     /// Data Transfer Object for creating a new product.
@@ -28,7 +30,7 @@
         /// <summary>
         /// Gets or sets the ID of the category to which the product belongs.
         /// </summary>
-        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
         /// <summary>
         /// Gets or sets the stock quantity of the product.
@@ -38,6 +40,6 @@
         /// <summary>
         /// Gets or sets a list of attribute IDs associated with the product.
         /// </summary>
-        public List<int> AttributeIds { get; set; } // New property for attribute IDs
+        public List<ProductAttribute> ProductAttributes { get; set; } // New property for attribute IDs
     }
 }

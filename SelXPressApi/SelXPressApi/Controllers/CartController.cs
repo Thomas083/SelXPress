@@ -155,7 +155,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform the operation.</exception>
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid or required fields are missing.</exception>
 		[HttpPost]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -178,7 +178,7 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("There are missing fields, please try again with some data", "CRT-1102");
 
 			await _cartRepository.CreateCartByAdmin(cartDto);
-			return Ok();
+			return StatusCode(201);
 		}
 
 		/// <summary>

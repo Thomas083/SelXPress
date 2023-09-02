@@ -204,6 +204,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> UpdateOrderProduct(int id, [FromBody] UpdateOrderProductDTO order)
 		{
 			// Check if the token exists in the HttpContext for authorization.

@@ -50,20 +50,25 @@ namespace SelXPressApi.Repository
         /// <returns><c>true</c> if the product was created successfully, otherwise <c>false</c>.</returns>
         public async Task<bool> CreateProduct(CreateProductDTO createProduct)
         {
-            var productEntity = _mapper.Map<Product>(createProduct);
-
-            // Create ProductAttributes based on the provided AttributeIds
-            if (createProduct.AttributeIds != null && createProduct.AttributeIds.Any())
+            var newProduct = new Product
             {
-                var productAttributes = createProduct.AttributeIds.Select(attributeId => new ProductAttribute
-                {
-                    AttributeId = attributeId
-                }).ToList();
+				Name = createProduct.Name,
+				Description = createProduct.Description,
+				Price = createProduct.Price,
+                Picture = createProduct.Picture,
+                Stock = createProduct.Stock,
+                Category = createProduct.Category,
+                ProductAttributes = new List<ProductAttribute>()
+			};
 
-                productEntity.ProductAttributes = productAttributes;
-            }
+            for (int i = 0; i < createProduct.ProductAttributes.Count; i++)
+            {
+				var productAttribute = await _context.ProductAttributes.FindAsync(createProduct.ProductAttributes[i].Id);
+                if (productAttribute != null)
+				    newProduct.ProductAttributes.Add(productAttribute);
+			}
 
-            _context.Products.Add(productEntity);
+            _context.Products.Add(newProduct);
             return await _commonMethods.Save();
         }
 
