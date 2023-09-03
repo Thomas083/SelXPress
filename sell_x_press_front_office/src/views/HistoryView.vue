@@ -10,6 +10,8 @@
 </template>
   
 <script>
+import { GET, POST } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import CardHistory from "@/components/history/CardHistory.vue";
 
 export default {
@@ -86,11 +88,17 @@ export default {
             ]
         }
     },
+    mounted() {
+        GET(ENDPOINTS.GET_MY_ORDER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                console.dir(response)
+            })
+            .catch((error) => { console.dir(error) });
+    },
 }
 </script>
   
 <style>
-
 .accordion-item {
     width: 90vw;
     gap: 1rem;

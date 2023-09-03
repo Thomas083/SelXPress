@@ -32,4 +32,8 @@ export const ENDPOINTS = {
     GET_ALL_CART: '/api/Cart', //(GET)
     GET_MY_CART: '/api/Cart', //(GET)
     CREATE_CART: '/api/Cart/me', //(POST)
+
+    // ORDER
+    GET_MY_ORDER: '/api/Order/me', // (GET)
+    CREATE_ORDER: '/api/Order', //(POST)
 }

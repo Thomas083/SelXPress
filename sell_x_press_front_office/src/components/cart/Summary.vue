@@ -14,6 +14,10 @@
 </template>
 
 <script>
+import { POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
+
 export default {
   name: "CartSummary",
   props: {
@@ -22,9 +26,33 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      sendOrder: {
+        totalPrice: '',
+        userId: '',
+        orderProducts: []
+      }
+    }
+  },
   methods: {
     goToPayement() {
-      console.dir(this.cart)
+      this.sendOrder.totalPrice = this.totalPrice
+      this.sendOrder.userId = this.cart[0].userId
+      for (let i = 0; i < this.cart.length; i++) {
+        this.sendOrder.orderProducts.push({
+          productId: this.cart[i].productId,
+          quantity: this.cart[i].quantity
+        })     
+      };
+      console.dir(this.sendOrder)
+      POST(ENDPOINTS.CREATE_ORDER, this.sendOrder, JSON.parse(localStorage.getItem('user')).token)
+      .then(() => {
+        createToast({ title: 'Order register succesfully', description: 'You sucessfully registered your order' }, { type: 'success', position: 'bottom-right' });
+      })
+      .catch(() => {
+        createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+      })
     }
   },
   computed: {
