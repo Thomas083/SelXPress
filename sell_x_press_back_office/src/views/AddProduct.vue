@@ -51,7 +51,6 @@
 <script>
 
 import InputComponent from "@/components/global/InputComponent.vue";
-import SelectComponent from "@/components/global/SelectComponent.vue";
 import { GET, POST } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 
@@ -59,7 +58,6 @@ export default {
     name: "AddProduct",
     components: {
         InputComponent,
-        SelectComponent,
     },
     data() {
         return {
