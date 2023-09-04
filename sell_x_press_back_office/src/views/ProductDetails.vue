@@ -20,9 +20,10 @@
                     @input="updateData($event, 'stock')" />
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
                 <Select2
-                    v-model="formData.productAttributeIds"
+                    v-model="product.productAttributes[0].attributeId"
                     :options="attributeOptions" 
-                    :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }"
+                    :settings="{ placeholder: 'Select all the attributes', width: '100%' }"
+                    :disabled="true"
                 />
                 <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
                 <Select2
@@ -73,16 +74,25 @@ export default {
                     tags: []
                 },
                 stock: 0,
-                productAttributes: null
+                productAttributes: [
+                    {
+                        attributeId: 0,
+                        id: 0,
+                        product: 0
+                    }
+                ]
             },
             formData: {
                 name: "",
                 price: 0,
                 description: "",
                 picture: "",
-                categoryId: null,
+                category: null,
                 stock: 0,
-                productAttributeIds: [],
+            },
+            productAttribute: {
+                productId: 0,
+                attribute: 0
             },
             attributeOptions: null,
             categoryOptions: null,
@@ -114,9 +124,13 @@ export default {
     created () {
         GET(ENDPOINTS.GET_ONE_PRODUCT + `/${this.$route.params.id}`, JSON.parse(localStorage.getItem('user')).token)
         .then((response) => {
-            console.dir(response)
             this.product = response.data
-            this.formData = response.data
+            this.formData.name = response.data.name;
+            this.formData.description = response.data.description;
+            this.formData.picture = response.data.picture;
+            this.formData.stock = response.data.stock;
+            this.formData.price = response.data.price;
+            this.formData.category = response.data.category;
         })
         .catch((error) => {
             console.dir(error)
