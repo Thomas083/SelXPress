@@ -25,9 +25,9 @@
             </button>
           </td>
         </tr>
-        <tr v-for="user in users">
+        <tr v-for="(user, index) in users">
           <th scope="row">{{ user.id }}</th>
-          <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
+          <td><input-component :value='user.username' @input="updateData(index, 'username', $event)" /></td>
           <td><input-component :value="user.email" disable="disable" /></td>
           <td><input-component value="**********" type="password" disable="disable" /></td>
           <td><input-component :value="user.role.id" disable="disable" />
@@ -75,7 +75,7 @@ export default {
       Object.assign(this.formData, { [key]: value });
     },
     updateData(index, key, value) {
-      this.users[index - 1][key] = value;
+      this.users[index][key] = value;
     },
     createUser() {
       POST(ENDPOINTS.CREATE_USER, this.formData, JSON.parse(localStorage.getItem('user')).token)

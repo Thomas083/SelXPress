@@ -20,10 +20,10 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-for="category in categories">
+                    <tr v-for="(category, index) in categories">
                         <th scope="row">{{ category.id }}</th>
                         <td><input-component :value='category.name'
-                                @input="updateCategoriesData(category.id, 'name', $event)" /></td>
+                                @input="updateCategoriesData(index, 'name', $event)" /></td>
                         <td class="action-btns">
                             <button class="btn btn-primary btn-admin"
                                 v-on:click="sendUpdateCategoriesData(category.id, category.name)">
@@ -62,9 +62,9 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-for="tag in tags">
+                    <tr v-for="(tag, index) in tags">
                         <th scope="row">{{ tag.id }}</th>
-                        <td><input-component :value='tag.name' @input="updateTagsData(tag.id, 'name', $event)" /></td>
+                        <td><input-component :value='tag.name' @input="updateTagsData(index, 'name', $event)" /></td>
                         <td><input-component :value='tag.categoryId'
                                 @input="updateTagsData(tag.id, 'categoryId', $event)" />
                         </td>
@@ -123,10 +123,10 @@ export default {
             this.formTagsData = Object.assign(this.formTagsData, { [key]: value });
         },
         updateCategoriesData(index, key, value) {
-            this.categories[index - 1][key] = value;
+            this.categories[index][key] = value;
         },
         updateTagsData(index, key, value) {
-            this.tags[index - 1][key] = value;
+            this.tags[index][key] = value;
         },
         sendUpdateCategoriesData(id, name) {
             PUT(ENDPOINTS.UPDATE_CATEGORY + `/${id}`, { name: name }, JSON.parse(localStorage.getItem('user')).token)

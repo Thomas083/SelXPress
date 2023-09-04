@@ -24,10 +24,10 @@
                         <td><input-component @input="createData('type', $event)" /></td>
                         <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
                     </tr>
-                    <tr v-for="attribute in attributes">
+                    <tr v-for="(attribute, key, index) in attributes">
                         <td scope="row" class="action-btns">
                             <button class="btn btn-primary btn-admin"
-                                v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
+                                v-on:click="sendUpdateData(index, attribute.name, attribute.type)">
                                 Update
                                 <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                             </button>
@@ -138,7 +138,7 @@ export default {
             else this.selectedAttributeIndex = index - 1;
         },
         updateData(index, key, value) {
-            this.attributes[index - 1][key] = value;
+            this.attributes[index][key] = value;
         },
         updateAttributeData(index_attribute, index_data, key, value) {
             this.attributes[index_attribute].attributeData[index_data - 1][key] = value;
