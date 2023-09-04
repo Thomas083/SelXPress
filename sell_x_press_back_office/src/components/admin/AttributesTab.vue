@@ -121,12 +121,6 @@ export default {
         }
     },
     methods: {
-        updateCurrentAttributePage(newPage) {
-            this.currentAttributePage = newPage;
-        },
-        updateCurrentAttributeDataPage(newPage) {
-            this.currentAttributeDataPage = newPage;
-        },
         createData(key, value) {
             this.formAttributeType = Object.assign(this.formAttributeType, { [key]: value });
         },

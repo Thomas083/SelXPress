@@ -68,9 +68,6 @@ export default {
     };
   },
   methods: {
-    updateCurrentPage(newPage) {
-      this.currentPage = newPage;
-    },
     CreateData(key, value) {
       Object.assign(this.formData, { [key]: value });
     },

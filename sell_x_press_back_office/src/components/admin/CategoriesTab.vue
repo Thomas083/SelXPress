@@ -110,12 +110,6 @@ export default {
         }
     },
     methods: {
-        updateCurrentCategoriesPage(newPage) {
-            this.currentCategoriesPage = newPage;
-        },
-        updateCurrentTagsPage(newPage) {
-            this.currentTagsPage = newPage;
-        },
         createCategeoriesData(key, value) {
             this.formCategoriesData = Object.assign(this.formCategoriesData, { [key]: value });
         },
