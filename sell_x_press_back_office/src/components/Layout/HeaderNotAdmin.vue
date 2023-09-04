@@ -4,7 +4,7 @@
         <div class="header-content-right">
             <button class="btn btn-primary header-btn-add" @click="goToAddProduct()">Add Product</button>
             <h3 class="header-name" @click="goToUserProfile()">{{ username }}</h3>
-            <img class="logo-log-out" src="../../assets/Header/log-out.png" />
+            <img class="logo-log-out" @click="logOut()" src="../../assets/Header/log-out.png" />
         </div>
     </div>
 </template>
@@ -27,6 +27,10 @@ export default {
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
+        },
+        logOut() {
+            localStorage.clear();
+            window.location.reload();
         },
         goToAddProduct() {
             this.$router.push({ path: '/add-product' });

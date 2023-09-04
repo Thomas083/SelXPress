@@ -7,7 +7,7 @@
     :placeholder="placeholder"
     :class="$attrs.class"
     :style="styleObject"
-    :value="value"
+    :value="$attrs.value"
     :disabled="disable"
     @change="$emit('input', returnValue($event.target.value))"
   />
@@ -20,12 +20,10 @@ props: {
   id: String,
   name: String,
   type: String,
-  value: [String, Number],
   placeholder: String,
   label: {
     type: String,
     default: "",
-    disabled: String
   },
   styleObject: Object,
   disable: String

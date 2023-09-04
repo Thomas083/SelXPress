@@ -106,7 +106,7 @@ export default {
         },
     },
     created () {
-        GET(ENDPOINTS.GET_ALL_ATTRIBUTES)
+        GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
             .then((response) => {
                 this.attributeOptions = response.data.map(item => {
                     return {

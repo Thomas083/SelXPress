@@ -1,89 +1,100 @@
 <template>
     <div class="categories-tags-container">
-        <table class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">-</th>
-                    <td><input-component @input="createCategeoriesData('name', $event)" /></td>
-                    <td class="action-create-btn">
-                        <button class="btn btn-add btn-admin" v-on:click="createCategories">
-                            Create
-                            <img src="../../assets/Admin/add-category.png" alt="create" />
-                        </button>
-                    </td>
-                </tr>
-                <tr v-for="category in categories">
-                    <th scope="row">{{ category.id }}</th>
-                    <td><input-component :value='category.name'
-                            @input="updateCategoriesData(category.id, 'name', $event)" /></td>
-                    <td class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateCategoriesData(category.id)">
-                            Update
-                            <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
-                        </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
-                            Delete
-                            <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">CategoryId</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">-</th>
-                    <td><input-component @input="createTagsData('name', $event)" /></td>
-                    <td><input-component @input="createTagsData('categoryId', $event)" /></td>
-                    <td class="action-create-btn">
-                        <button class="btn btn-add btn-admin" v-on:click="createTags">
-                            Create
-                            <img src="../../assets/Admin/add-category.png" alt="create" />
-                        </button>
-                    </td>
-                </tr>
-                <tr v-for="tag in tags">
-                    <th scope="row">{{ tag.id }}</th>
-                    <td><input-component :value='tag.name' @input="updateTagsData(tag.id, 'name', $event)" /></td>
-                    <td><input-component :value='tag.categoryId' @input="updateTagsData(tag.id, 'categoryId', $event)" />
-                    </td>
-                    <td class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateTagsData(tag.id)">
-                            Update
-                            <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
-                        </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
-                            Delete
-                            <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="categories-table">
+            <table class="table table-striped table-hover table-bordered" id="category-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">-</th>
+                        <td><input-component @input="createCategeoriesData('name', $event)" /></td>
+                        <td class="action-create-btn">
+                            <button class="btn btn-add btn-admin" v-on:click="createCategories">
+                                Create
+                                <img src="../../assets/Admin/add-category.png" alt="create" />
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-for="(category, index) in categories">
+                        <th scope="row">{{ category.id }}</th>
+                        <td><input-component :value='category.name'
+                                @input="updateCategoriesData(index, 'name', $event)" /></td>
+                        <td class="action-btns">
+                            <button class="btn btn-primary btn-admin"
+                                v-on:click="sendUpdateCategoriesData(category.id, category.name)">
+                                Update
+                                <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
+                            </button>
+                            <button class="btn btn-secondary btn-delete btn-admin"
+                                v-on:click="deleteCategories(category.id)">
+                                Delete
+                                <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tags-table">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">CategoryId</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">-</th>
+                        <td><input-component @input="createTagsData('name', $event)" /></td>
+                        <td><input-component @input="createTagsData('categoryId', $event)" /></td>
+                        <td class="action-create-btn">
+                            <button class="btn btn-add btn-admin" v-on:click="createTags">
+                                Create
+                                <img src="../../assets/Admin/add-category.png" alt="create" />
+                            </button>
+                        </td>
+                    </tr>
+                    <tr v-for="(tag, index) in tags">
+                        <th scope="row">{{ tag.id }}</th>
+                        <td><input-component :value='tag.name' @input="updateTagsData(index, 'name', $event)" /></td>
+                        <td><input-component :value='tag.categoryId'
+                                @input="updateTagsData(tag.id, 'categoryId', $event)" />
+                        </td>
+                        <td class="action-btns">
+                            <button class="btn btn-primary btn-admin" v-on:click="sendUpdateTagsData(tag.id, tag)">
+                                Update
+                                <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
+                            </button>
+                            <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteTags(tag.id)">
+                                Delete
+                                <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
+import { GET, PUT, POST, DELETE } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
+import { createToast } from "mosha-vue-toastify";
+
 export default {
     name: "CategoriesTab",
     components: {
-        InputComponent
+        InputComponent,
     },
     data() {
         return {
@@ -94,28 +105,8 @@ export default {
                 name: '',
                 categoryId: null
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean'
-                },
-                {
-                    id: 2,
-                    name: 'Sport'
-                }
-            ],
-            tags: [
-                {
-                    id: 1,
-                    name: 'Fishing',
-                    categoryId: 1
-                },
-                {
-                    id: 2,
-                    name: 'Electric',
-                    categoryId: 10
-                }
-            ],
+            categories: null,
+            tags: null
         }
     },
     methods: {
@@ -126,33 +117,120 @@ export default {
             this.formTagsData = Object.assign(this.formTagsData, { [key]: value });
         },
         updateCategoriesData(index, key, value) {
-            this.categories[index - 1][key] = value;
+            this.categories[index][key] = value;
         },
         updateTagsData(index, key, value) {
-            this.tags[index - 1][key] = value;
+            this.tags[index][key] = value;
         },
-        sendUpdateCategoriesData(index) {
-            console.dir(this.categories[index - 1])
+        sendUpdateCategoriesData(id, name) {
+            PUT(ENDPOINTS.UPDATE_CATEGORY + `/${id}`, { name: name }, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} category` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
-        sendUpdateTagsData(index) {
-            console.dir(this.tags[index - 1])
+        sendUpdateTagsData(id, tag) {
+            PUT(ENDPOINTS.UPDATE_TAG + `/${id}`, { name: tag.name, categoryId: tag.categoryId }, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         createCategories() {
-            console.dir(this.formCategoriesData)
+            POST(ENDPOINTS.CREATE_CATEGORY, this.formCategoriesData, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_CATEGORY)
+                        .then((response) => {
+                            this.categories = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formCategoriesData.name.toLocaleUpperCase()} category` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
+        },
+        deleteCategories(id) {
+            DELETE(ENDPOINTS.DELETE_CATEGORY + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_CATEGORY)
+                        .then((response) => {
+                            this.categories = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} category` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         createTags() {
-            console.dir(this.formTagsData)
-        }
+            POST(ENDPOINTS.CREATE_TAG, this.formTagsData, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_TAG)
+                        .then((response) => {
+                            this.tags = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formTagsData.name.toLocaleUpperCase()} tag` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
+        },
+        deleteTags(id) {
+            DELETE(ENDPOINTS.DELETE_TAG + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_TAG)
+                        .then((response) => {
+                            this.tags = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
+        },
     },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_CATEGORY)
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+        GET(ENDPOINTS.GET_ALL_TAG)
+            .then((response) => {
+                this.tags = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+    }
 }
+
 </script>
 
 <style scoped>
-
 .categories-tags-container {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    justify-content: center;
+    gap: 5rem;
     padding: 1rem;
 }
 
@@ -161,15 +239,15 @@ img {
 }
 
 .action-create-btn {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .action-btns {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-admin {

@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <table class="table table-striped table-hover table-bordered">
+    <table class="table table-striped table-hover table-bordered" id="user-table">
       <thead class="table-dark">
         <tr>
           <th scope="col">Id</th>
@@ -25,45 +25,35 @@
             </button>
           </td>
         </tr>
-        <tr v-for="user in users">
+        <tr v-for="(user, index) in users">
           <th scope="row">{{ user.id }}</th>
-          <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
-          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" disable="disable" /></td>
-          <td><input-component :value="user.password" type="password" @input="updateData(user.id, 'password', $event)" disable="disable" /></td>
-          <td><input-component :value="user.roleId" @input="updateData(user.id, 'roleId', $event)" disable="disable" /></td>
+          <td><input-component :value='user.username' @input="updateData(index, 'username', $event)" /></td>
+          <td><input-component :value="user.email" disable="disable" /></td>
+          <td><input-component value="**********" type="password" disable="disable" /></td>
+          <td><input-component :value="user.role.id" disable="disable" />
+          </td>
           <td class="action-btns">
-            <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id)">
+            <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(user.id, user.username)">
               Update
               <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
             </button>
-            <button class="btn btn-secondary btn-delete btn-admin">
+            <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteUser(user.id)">
               Delete
               <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
             </button>
           </td>
         </tr>
       </tbody>
-      <tfoot>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
-      </tfoot>
     </table>
   </div>
 </template>
 
 <script>
+import { GET, PUT, POST, DELETE } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
+import { createToast } from "mosha-vue-toastify";
+
 export default {
   name: "UsersTab",
   components: {
@@ -74,43 +64,71 @@ export default {
       formData: {
         username: '',
       },
-      users: [
-        {
-          id: 1,
-          username: 'tester',
-          email: 'tester@gmail.com',
-          password: 'unpassword',
-          roleId: '1'
-        },
-        {
-          id: 2,
-          username: 'tester2',
-          email: 'testermax@gmail.com',
-          password: 'unpassword2',
-          roleId: '1'
-        },
-      ],
+      users: null,
     };
   },
   methods: {
     CreateData(key, value) {
-      Object.assign(this.formData, {[key]: value});
+      Object.assign(this.formData, { [key]: value });
     },
     updateData(index, key, value) {
-      this.users[index - 1][key] = value;
-    },
-    sendUpdateData(index) {
-      console.dir(this.users[index - 1])
+      this.users[index][key] = value;
     },
     createUser() {
-      console.dir(this.formData)
+      POST(ENDPOINTS.CREATE_USER, this.formData, JSON.parse(localStorage.getItem('user')).token)
+        .then(() => {
+          GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.users = response.data
+              createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formData.username.toLocaleUpperCase()} user` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
+        })
+        .catch(() => {
+          createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+        });
+    },
+    sendUpdateData(id, username) {
+      PUT(ENDPOINTS.UPDATE_USER_ID + `/${id}`, { username: username }, JSON.parse(localStorage.getItem('user')).token)
+        .then(() => {
+          createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
+        })
+        .catch(() => {
+          createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+        });
+    },
+    deleteUser(id) {
+      DELETE(ENDPOINTS.DELETE_USER + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+        .then(() => {
+          GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.users = response.data
+              createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} user` }, { type: 'success', position: 'bottom-right' });
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
+        })
+        .catch(() => {
+          createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+        });
     }
   },
+  mounted() {
+    GET(ENDPOINTS.GET_ALL_USER, JSON.parse(localStorage.getItem('user')).token)
+      .then((response) => {
+        this.users = response.data
+      })
+      .catch((error) => {
+        console.dir(error)
+      });
+  }
 };
 </script>
 
 <style scoped>
-
 .user-container {
   padding: 1rem;
 }

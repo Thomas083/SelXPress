@@ -1,47 +1,51 @@
 <template>
     <div class="user-container">
-        <table class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Actions</th>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Attribute</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td scope="row" class="action-create-btn">
-                        <button class="btn btn-add btn-admin" v-on:click="createAttribute">
-                            Create
-                            <img src="../../assets/Admin/add-category.png" alt="create" />
-                        </button>
-                    </td>
-                    <td>-</td>
-                    <td><input-component @input="createData('name', $event)" /></td>
-                    <td><input-component @input="createData('type', $event)" /></td>
-                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
-                </tr>
-                <tr v-for="attribute in attributes">
-                    <td scope="row" class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateData(attribute.id)">
-                            Update
-                            <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
-                        </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
-                            Delete
-                            <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
-                        </button>
-                    </td>
-                    <td>{{ attribute.id }}</td>
-                    <td><input-component :value='attribute.name' @input="updateData(attribute.id, 'name', $event)" />
-                    </td>
-                    <td><input-component :value="attribute.type" @input="updateData(attribute.id, 'type', $event)" /></td>
-                    <td><img class="attribute-img" src="../../assets/Admin/attribut.png" v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="attributes-table">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Attribute</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row" class="action-create-btn">
+                            <button class="btn btn-add btn-admin" v-on:click="createAttribute">
+                                Create
+                                <img src="../../assets/Admin/add-category.png" alt="create" />
+                            </button>
+                        </td>
+                        <td>-</td>
+                        <td><input-component @input="createData('name', $event)" /></td>
+                        <td><input-component @input="createData('type', $event)" /></td>
+                        <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
+                    </tr>
+                    <tr v-for="(attribute, index) in attributes">
+                        <td scope="row" class="action-btns">
+                            <button class="btn btn-primary btn-admin"
+                                v-on:click="sendUpdateData(attribute)">
+                                Update
+                                <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
+                            </button>
+                            <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteAttribute(attribute.id)">
+                                Delete
+                                <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
+                            </button>
+                        </td>
+                        <td>{{ attribute.id }}</td>
+                        <td><input-component :value='attribute.name' @input="attribute.name = String($event)" />
+                        </td>
+                        <td><input-component :value="attribute.type" @input="attribute.type = String($event)" /></td>
+                        <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
+                                v-on:click="setSelectedAttributeIndex(index)" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <table v-if="selectedAttributeIndex !== null" class="table table-striped table-hover table-bordered">
             <thead>
                 <tr class="table-grey">
@@ -50,7 +54,7 @@
                 <tr class="table-dark">
                     <th scope="col">Actions</th>
                     <th scope="col">Id</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Key</th>
                     <th scope="col">Value</th>
                 </tr>
             </thead>
@@ -63,24 +67,24 @@
                         </button>
                     </td>
                     <td>-</td>
-                    <td><input-component @input="createDataAttribute('name', $event)" /></td>
+                    <td><input-component @input="createDataAttribute('key', $event)" /></td>
                     <td><input-component @input="createDataAttribute('value', $event)" /></td>
                 </tr>
-                <tr v-for="data in attributes[selectedAttributeIndex].data">
+                <tr v-for="data in attributes[selectedAttributeIndex].attributeData">
                     <td scope="row" class="action-btns">
-                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateAttributeData(selectedAttributeIndex)">
+                        <button class="btn btn-primary btn-admin" v-on:click="sendUpdateAttributeData(data.id, data)">
                             Update
                             <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                         </button>
-                        <button class="btn btn-secondary btn-delete btn-admin">
+                        <button class="btn btn-secondary btn-delete btn-admin" v-on:click="deleteAttributeData(data.id)">
                             Delete
                             <img src="../../assets/Admin/bouton-supprimer.png" alt="delete" />
                         </button>
                     </td>
                     <td>{{ data.id }}</td>
-                    <td><input-component :value='data.name' @input="updateAttributeData(selectedAttributeIndex, data.id, 'name', $event)" />
+                    <td><input-component :value='data.key' @input="data.key = $event" />
                     </td>
-                    <td><input-component :value="data.value" @input="updateAttributeData(selectedAttributeIndex, data.id, 'value', $event)" /></td>
+                    <td><input-component :value="data.value" @input="data.value = $event" /></td>
                 </tr>
             </tbody>
         </table>
@@ -88,12 +92,15 @@
 </template>
 
 <script>
+import { DELETE, GET, POST, PUT } from '@/api/axios';
 import InputComponent from '../global/InputComponent.vue';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
 
 export default {
     name: "AttributesTab",
-    components: {   
-        InputComponent
+    components: {
+        InputComponent,
     },
     data() {
         return {
@@ -101,53 +108,14 @@ export default {
             formAttributeType: {
                 name: '',
                 type: '',
-                data: [],
             },
             formAttributeData: {
-                name: '',
+                key: '',
                 value: '',
+                attributeId: null,
+                attribute: null
             },
-            attributes: [
-                {
-                    id: 1,
-                    name: 'color',
-                    type: 'select',
-                    data: [
-                        {
-                            id: 1,
-                            name: 'red',
-                            value: '#FF0000'
-                        },
-                        {
-                            id: 2,
-                            name: 'green',
-                            value: '#00FF00'
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'size',
-                    type: 'select',
-                    data: [
-                        {
-                            id: 1,
-                            name: 'small',
-                            value: 'S'
-                        },
-                        {
-                            id: 2,
-                            name: 'medium',
-                            value: 'M'
-                        },
-                        {
-                            id: 3,
-                            name: 'large',
-                            value: 'L'
-                        }
-                    ]
-                }
-            ]
+            attributes: null
         }
     },
     methods: {
@@ -158,31 +126,111 @@ export default {
             this.formAttributeData = Object.assign(this.formAttributeData, { [key]: value });
         },
         setSelectedAttributeIndex(index) {
-            if (this.selectedAttributeIndex === index - 1) this.selectedAttributeIndex = null;
-            else this.selectedAttributeIndex = index - 1;
+            if (this.selectedAttributeIndex === index) this.selectedAttributeIndex = null;
+            else this.selectedAttributeIndex = index;
         },
-        updateData(index, key, value) {
-            this.attributes[index - 1][key] = value;
+        sendUpdateData(data) {
+            PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${data.id}`, data, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${data.id} attribute` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
-        updateAttributeData(index_attribute, index_data, key, value) {
-            this.attributes[index_attribute].data[index_data - 1][key] = value;
-        },
-        sendUpdateData(index) {
-            console.dir(this.attributes[index - 1])
-        },
-        sendUpdateAttributeData(index_attribute) {
-            console.dir(this.attributes[index_attribute])
+        sendUpdateAttributeData(id, data) {
+            PUT(ENDPOINTS.UPDATE_ATTRIBUTE_DATA + `/${id}`, data, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
         createAttribute() {
-            console.dir(this.formAttributeType);
+            POST(ENDPOINTS.CREATE_ATTRIBUTE, this.formAttributeType, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeType.name.toLocaleUpperCase()} attribute` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
-        createAttributeData(index_attribute) {
-            console.dir(this.formAttributeData)
+        createAttributeData(index) {
+            this.formAttributeData.attributeId = this.attributes[index].id;
+            this.formAttributeData.attribute = this.attributes[index].id;
+            POST(ENDPOINTS.CREATE_ATTRIBUTE_DATA, this.formAttributeData, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Created Succesfuly', description: `You created successfuly the ${this.formAttributeData.key.toLocaleUpperCase()} attribute data` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
+        },
+        deleteAttribute(id) {
+            DELETE(ENDPOINTS.DELETE_ATTRIBUTE + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
+        },
+        deleteAttributeData(id) {
+            DELETE(ENDPOINTS.DELETE_ATTRIBUTE_DATA + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+                        .then((response) => {
+                            this.attributes = response.data
+                            createToast({ title: 'Deleted Succesfuly', description: `You deleted successfuly the ${id} attribute data` }, { type: 'success', position: 'bottom-right' });
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         }
     },
     mounted() {
-
-    }
+        GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
+            .then((response) => {
+                this.attributes = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
+    },
+    watch: {
+        attributes: {
+            deep: true,
+            handler(newValue, oldValue) {
+                console.log(newValue)
+            }
+        }
+    },
 }
 </script>
 

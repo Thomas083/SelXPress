@@ -7,18 +7,16 @@
         <filter-product />
       </div>
       <div class="products-cards">
-        <product-card v-for="product in displayedProducts" :key="product.id" :product="product" />
+        <product-card v-for="product in products" :key="product.id" :product="product" />
       </div>
     </div>
   </div>
-  <pagination-component v-if="products.length > productsPerPage" :key="currentPage" :totalProducts="products.length" :products="products" :products-per-page="productsPerPage" :currentPage="currentPage" @page-changed="updateCurrentPage" />
 </template>
 
 <script>
 
 import CategoriesList from "@/components/categories/CategoriesList.vue"
 import ProductCard from "@/components/products/ProductsCard.vue"
-import PaginationComponent from "@/components/pagination/PaginationComponent.vue"
 import FilterProduct from "@/components/filter/FilterProduct.vue"
 
 export default {
@@ -26,14 +24,11 @@ export default {
   components: {
     ProductCard,
     CategoriesList,
-    PaginationComponent,
     FilterProduct
   },
   data() {
     return {
       category: 'All',
-      productsPerPage: 15,
-      currentPage: 1,
       products: [
         {
           id: 1,
@@ -119,13 +114,6 @@ export default {
         },
       ]
     }
-  },
-  computed: {
-    displayedProducts() {
-      const startIndex = (this.currentPage - 1) * this.productsPerPage;
-      const endIndex = startIndex + this.productsPerPage;
-      return this.products.slice(startIndex, endIndex);
-    },
   },
   methods: {
     updateCurrentPage(newPage) {
