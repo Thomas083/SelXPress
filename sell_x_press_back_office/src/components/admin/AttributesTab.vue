@@ -24,7 +24,7 @@
                         <td><input-component @input="createData('type', $event)" /></td>
                         <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
                     </tr>
-                    <tr v-for="(attribute, key, index) in attributes">
+                    <tr v-for="(attribute, index) in attributes">
                         <td scope="row" class="action-btns">
                             <button class="btn btn-primary btn-admin"
                                 v-on:click="sendUpdateData(attribute)">
@@ -41,7 +41,7 @@
                         </td>
                         <td><input-component :value="attribute.type" @input="attribute.type = String($event)" /></td>
                         <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
-                                v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
+                                v-on:click="setSelectedAttributeIndex(index)" /></td>
                     </tr>
                 </tbody>
             </table>
@@ -82,11 +82,9 @@
                         </button>
                     </td>
                     <td>{{ data.id }}</td>
-                    <td><input-component :value='data.key'
-                            @input="updateAttributeData(selectedAttributeIndex, data.id, 'key', $event)" />
+                    <td><input-component :value='data.key' @input="data.key = $event" />
                     </td>
-                    <td><input-component :value="data.value"
-                            @input="updateAttributeData(selectedAttributeIndex, data.id, 'value', $event)" /></td>
+                    <td><input-component :value="data.value" @input="data.value = $event" /></td>
                 </tr>
             </tbody>
         </table>
@@ -128,11 +126,8 @@ export default {
             this.formAttributeData = Object.assign(this.formAttributeData, { [key]: value });
         },
         setSelectedAttributeIndex(index) {
-            if (this.selectedAttributeIndex === index - 1) this.selectedAttributeIndex = null;
-            else this.selectedAttributeIndex = index - 1;
-        },
-        updateAttributeData(index_attribute, index_data, key, value) {
-            this.attributes[index_attribute].attributeData[index_data - 1][key] = value;
+            if (this.selectedAttributeIndex === index) this.selectedAttributeIndex = null;
+            else this.selectedAttributeIndex = index;
         },
         sendUpdateData(data) {
             PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${data.id}`, data, JSON.parse(localStorage.getItem('user')).token)
@@ -168,9 +163,9 @@ export default {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
                 });
         },
-        createAttributeData(id) {
-            this.formAttributeData.attributeId = id + 1,
-                this.formAttributeData.attribute = this.attributes[id]
+        createAttributeData(index) {
+            this.formAttributeData.attributeId = this.attributes[index].id;
+            this.formAttributeData.attribute = this.attributes[index].id;
             POST(ENDPOINTS.CREATE_ATTRIBUTE_DATA, this.formAttributeData, JSON.parse(localStorage.getItem('user')).token)
                 .then(() => {
                     GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
