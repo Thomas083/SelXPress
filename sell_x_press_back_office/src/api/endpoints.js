@@ -17,6 +17,9 @@ export const ENDPOINTS = {
     GET_ALL_CATEGORIES: '/api/Category', //(GET)
 
     //PRODUCTS
+    GET_ALL_PRODUCT: '/api/Product', // (GET)
     GET_ONE_PRODUCT: '/api/Product', // (GET) + add this.$route.params.id
+    GET_MY_PRODUCT: '/api/Product/me', // (GET)
     POST_PRODUCT: '/api/Product', //(POST)
+    DELETE_PRODUCT: '/api/Product', // (DELETE) + add id
 }

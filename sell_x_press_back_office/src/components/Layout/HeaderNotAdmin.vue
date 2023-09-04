@@ -4,7 +4,7 @@
         <div class="header-content-right">
             <button class="btn btn-primary header-btn-add" @click="goToAddProduct()">Add Product</button>
             <h3 class="header-name" @click="goToUserProfile()">{{ username }}</h3>
-            <img class="logo-log-out" src="../../assets/Header/log-out.png" />
+            <img class="logo-log-out" src="../../assets/Header/log-out.png" v-on:click="logOut" />
         </div>
     </div>
 </template>
@@ -30,6 +30,10 @@ export default {
         },
         goToAddProduct() {
             this.$router.push({ path: '/add-product' });
+        },
+        logOut() {
+            localStorage.clear();
+            window.location.reload();
         },
     },
     mounted() {
