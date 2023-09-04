@@ -132,7 +132,6 @@ export default {
                 });
         },
         sendUpdateTagsData(id, tag) {
-            console.dir(tag.categoryId)
             PUT(ENDPOINTS.UPDATE_TAG + `/${id}`, { name: tag.name, categoryId: tag.categoryId }, JSON.parse(localStorage.getItem('user')).token)
                 .then(() => {
                     createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} tag` }, { type: 'success', position: 'bottom-right' });
