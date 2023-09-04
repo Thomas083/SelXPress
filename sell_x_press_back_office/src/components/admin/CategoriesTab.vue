@@ -20,7 +20,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-for="category in displayedCategories">
+                    <tr v-for="category in categories">
                         <th scope="row">{{ category.id }}</th>
                         <td><input-component :value='category.name'
                                 @input="updateCategoriesData(category.id, 'name', $event)" /></td>
@@ -39,9 +39,6 @@
                     </tr>
                 </tbody>
             </table>
-            <pagination-component v-if="(categories && categories.length > categoriesPerPage)" :key="currentCategoriesPage"
-                :totalProducts="categories.length" :products="categories" :products-per-page="categoriesPerPage"
-                :currentPage="currentCategoriesPage" redirectId="category-table" @page-changed="updateCurrentCategoriesPage" />
         </div>
         <div class="tags-table">
             <table class="table table-striped table-hover table-bordered">
@@ -65,7 +62,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr v-for="tag in displayedTags">
+                    <tr v-for="tag in tags">
                         <th scope="row">{{ tag.id }}</th>
                         <td><input-component :value='tag.name' @input="updateTagsData(tag.id, 'name', $event)" /></td>
                         <td><input-component :value='tag.categoryId'
@@ -84,9 +81,6 @@
                     </tr>
                 </tbody>
             </table>
-            <pagination-component v-if="(tags && tags.length > tagsPerPage)" :key="currentTagsPage"
-                :totalProducts="tags.length" :products="tags" :products-per-page="tagsPerPage"
-                :currentPage="currentTagsPage" redirectId="category-table" @page-changed="updateCurrentTagsPage" />
         </div>
     </div>
 </template>
@@ -96,20 +90,14 @@ import { GET, PUT, POST, DELETE } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 import InputComponent from "@/components/global/InputComponent";
 import { createToast } from "mosha-vue-toastify";
-import PaginationComponent from "../pagination/PaginationComponent.vue";
 
 export default {
     name: "CategoriesTab",
     components: {
         InputComponent,
-        PaginationComponent
     },
     data() {
         return {
-            categoriesPerPage: 2,
-            currentCategoriesPage: 1,
-            tagsPerPage: 2,
-            currentTagsPage: 1,
             formCategoriesData: {
                 name: '',
             },
@@ -223,22 +211,6 @@ export default {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
                 });
         },
-    },
-    computed: {
-        displayedCategories() {
-            if (this.categories) {
-                const startIndex = (this.currentCategoriesPage - 1) * this.categoriesPerPage;
-                const endIndex = startIndex + this.categoriesPerPage;
-                return this.categories.slice(startIndex, endIndex);
-            }
-        },
-        displayedTags() {
-            if (this.tags) {
-                const startIndex = (this.currentTagsPage - 1) * this.tagsPerPage;
-                const endIndex = startIndex + this.tagsPerPage;
-                return this.tags.slice(startIndex, endIndex);
-            }
-        }
     },
     mounted() {
         GET(ENDPOINTS.GET_ALL_CATEGORY)

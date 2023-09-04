@@ -24,7 +24,7 @@
                         <td><input-component @input="createData('type', $event)" /></td>
                         <td><img class="attribute-img" src="../../assets/Admin/attribut.png" /></td>
                     </tr>
-                    <tr v-for="attribute in displayedAttributes">
+                    <tr v-for="attribute in attributes">
                         <td scope="row" class="action-btns">
                             <button class="btn btn-primary btn-admin"
                                 v-on:click="sendUpdateData(attribute.id, attribute.name, attribute.type)">
@@ -45,9 +45,6 @@
                     </tr>
                 </tbody>
             </table>
-            <pagination-component v-if="(attributes && attributes.length > attributePerPage)" :key="currentAttributePage"
-                :totalProducts="attributes.length" :products="attributes" :products-per-page="attributePerPage"
-                :currentPage="currentAttributePage" redirectId="category-table" @page-changed="updateCurrentAttributePage" />
         </div>
         <table v-if="selectedAttributeIndex !== null" class="table table-striped table-hover table-bordered">
             <thead>
@@ -101,18 +98,14 @@ import { DELETE, GET, POST, PUT } from '@/api/axios';
 import InputComponent from '../global/InputComponent.vue';
 import { ENDPOINTS } from '@/api/endpoints';
 import { createToast } from 'mosha-vue-toastify';
-import PaginationComponent from '../pagination/PaginationComponent.vue';
 
 export default {
     name: "AttributesTab",
     components: {
         InputComponent,
-        PaginationComponent
     },
     data() {
         return {
-            attributePerPage: 2,
-            currentAttributePage: 1,
             selectedAttributeIndex: null,
             formAttributeType: {
                 name: '',
@@ -234,15 +227,6 @@ export default {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
                 });
         }
-    },
-    computed: {
-        displayedAttributes() {
-            if (this.attributes) {
-                const startIndex = (this.currentAttributePage - 1) * this.attributePerPage;
-                const endIndex = startIndex + this.attributePerPage;
-                return this.attributes.slice(startIndex, endIndex);
-            }
-        },
     },
     mounted() {
         GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
