@@ -20,7 +20,7 @@
                     @input="updateData($event, 'stock')" />
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
                 <Select2
-                    v-model="formData.attributeIds"
+                    v-model="formData.productAttributeIds"
                     :options="attributeOptions" 
                     :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }"
                 />
@@ -68,7 +68,7 @@ export default {
                 picture: "",
                 categoryId: null,
                 stock: 0,
-                attributeIds: [],
+                productAttributeIds: [],
             },
             attributeOptions: null,
             categoryOptions: null,
