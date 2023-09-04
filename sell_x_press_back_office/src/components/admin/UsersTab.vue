@@ -28,7 +28,7 @@
         <tr v-for="user in displayedUsers">
           <th scope="row">{{ user.id }}</th>
           <td><input-component :value='user.username' @input="updateData(user.id, 'username', $event)" /></td>
-          <td><input-component :value="user.email" @input="updateData(user.id, 'email', $event)" disable="disable" /></td>
+          <td><input-component :value="user.email" disable="disable" /></td>
           <td><input-component value="**********" type="password" disable="disable" /></td>
           <td><input-component :value="user.role.id" disable="disable" />
           </td>
