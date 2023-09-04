@@ -4,7 +4,7 @@
         <div class="header-content-right">
             <div class="header-btns">
                 <button class="btn btn-primary header-btn-admin" v-on:click="goToAdminPanel">Admin Panel</button>
-                <button class="btn btn-secondary header-btn-add">Add Product</button>
+                <button class="btn btn-secondary header-btn-add" @click="goToAddProduct()">Add Product</button>
             </div>
             <div class="header-admin">
                 <h3 class="header-name" v-on:click="goToUserProfil">{{ username }},</h3>
@@ -31,6 +31,9 @@ export default {
         },
         goToUserProfil() {
             this.$router.push({ path: '/user' })
+        },
+        goToAddProduct() {
+            this.$router.push({ path: '/add-product' });
         },
         logOut() {
             localStorage.clear();

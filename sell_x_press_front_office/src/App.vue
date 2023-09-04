@@ -19,7 +19,7 @@ import ProductCategories from '@/components/Home/ProductCategories.vue';
 export default {
   name: 'Appvue',
   components: {
-    HeaderNotRegistered,
+    HeaderNotRegistered,  
     HeaderRegistered,
     HeaderIdentificationPage,
     FooterLayout,
@@ -30,7 +30,7 @@ export default {
       return (this.$route.path === '/login' || this.$route.path === '/register' || this.$route.path === '/forgot')
     },
     isUserLoggedIn() {
-      return (localStorage.getItem("email") != null);
+      return (localStorage.getItem("user") != null);
     },
   }
 }

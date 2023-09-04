@@ -2,7 +2,7 @@
     <div class="header-container">
         <img @click="goToHome()" class="logo" src="../../assets/Header/logo_back_office.png" />
         <div class="header-content-right">
-            <button class="btn btn-primary header-btn-add">Add Product</button>
+            <button class="btn btn-primary header-btn-add" @click="goToAddProduct()">Add Product</button>
             <h3 class="header-name" @click="goToUserProfile()">{{ username }}</h3>
             <img class="logo-log-out" @click="logOut()" src="../../assets/Header/log-out.png" />
         </div>
@@ -31,6 +31,9 @@ export default {
         logOut() {
             localStorage.clear();
             window.location.reload();
+        },
+        goToAddProduct() {
+            this.$router.push({ path: '/add-product' });
         },
     },
     mounted() {

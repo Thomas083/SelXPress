@@ -34,4 +34,10 @@ export const ENDPOINTS = {
     UPDATE_ATTRIBUTE_DATA: '/api/AttributeData', //(PUT) + add ID
     CREATE_ATTRIBUTE_DATA: '/api/AttributeData', //(POST)
     DELETE_ATTRIBUTE_DATA: '/api/AttributeData', //(DELETE) + add ID
+
+    //CATEGORIES
+    GET_ALL_CATEGORIES: '/api/Category', //(GET)
+
+    //PRODUCTS
+    POST_PRODUCT: '/api/Product', //(POST)
 }
