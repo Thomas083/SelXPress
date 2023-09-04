@@ -6,6 +6,7 @@ import ForgotView from '../views/identification/ForgotView.vue'
 import UserView from "../views/UserView.vue"
 import AdminView from "../views/AdminView.vue"
 import AddProduct from "../views/AddProduct.vue"
+import ProductDetails from '../views/ProductDetails.vue'
 
 const routes = [
   {
@@ -51,6 +52,12 @@ const routes = [
     name: 'add-product',
     component: AddProduct
   },
+  {
+    path: '/product/:id/:name',
+    name: 'product',
+    component: ProductDetails
+  },
+
 ]
 
 const router = createRouter({
