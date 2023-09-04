@@ -29,6 +29,8 @@ services:
   api:
     build: 
       context: ../SelXPressApi/SelXPressApi
+      args:
+        ASPNETCORE_PASSWORD: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
     env_file:
       - .env
     ports:
