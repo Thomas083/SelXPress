@@ -43,5 +43,6 @@ export const ENDPOINTS = {
     GET_ONE_PRODUCT: '/api/Product', // (GET) + add this.$route.params.id
     GET_MY_PRODUCT: '/api/Product/me', // (GET)
     POST_PRODUCT: '/api/Product', //(POST)
+    UPDATE_PRODUCT: '/api/Product', // (PUT) + add this.$route.params.id
     DELETE_PRODUCT: '/api/Product', // (DELETE) + add id
 }

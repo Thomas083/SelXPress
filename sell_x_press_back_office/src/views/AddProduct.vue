@@ -83,7 +83,6 @@ export default {
             })
             .catch((error) => {
                 createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-
             });
         },
 
