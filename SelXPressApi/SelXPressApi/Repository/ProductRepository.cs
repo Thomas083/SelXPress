@@ -173,15 +173,17 @@ namespace SelXPressApi.Repository
         {
 	        if (await _context.Users.Where(u => u.Email == email).AnyAsync())
 	        {
-                /*var query = _context.Products
-	                .Include(p => p.Category)
-	                .Include(p => p.ProductAttributes)
-	                .Where(p => p.User.Email == email)
-	                .OrderBy(p => p.Id);
-                var products = await query.ToListAsync();
-				return _mapper.Map<List<AllProductDTO>>(products);*/
+		        var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+		        var sellerProduct = await _context.SellerProducts.Where(sp => sp.UserId == user.Id).ToListAsync();
+		        var products = new List<Product>();
+		        for (int i = 0; i < sellerProduct.Count; i++)
+		        {
+			        var productToAdd = await _context.Products.Where(p => p.Id == sellerProduct[i].ProductId).FirstAsync();
+			        products.Add(productToAdd);
+		        }
+				return _mapper.Map<List<AllProductDTO>>(products);
 			}
-	        return null;
+	        return new List<AllProductDTO>();
         }
     }
 }

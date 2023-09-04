@@ -35,6 +35,11 @@ namespace SelXPressApi.DTO.ProductDTO
         /// <summary>
         /// Gets or sets the updated category of the product.
         /// </summary>
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
+        
+        /// <summary>
+        /// Gets or sets a list of attribute Ids associated with the product
+        /// </summary>
+        public List<int> ProductAttributeIds { get; set; }
     }
 }
