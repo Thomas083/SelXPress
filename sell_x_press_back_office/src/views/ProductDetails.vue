@@ -12,11 +12,11 @@
                 </div>
             </div>
             <div :onChange="$emit('inputForm', formData)" class="product-details">
-                <input-component label="Title :" id="input-title" name="input-title" type="text" placeholder="Enter your product title..."
+                <input-component :value="formData.name" label="Title :" id="input-title" name="input-title" type="text" placeholder="Enter your product title..."
                     @input="updateData($event, 'name')" />
-                <input-component label="Price :" id="input-price" name="input-price" type="number" placeholder="...€"
+                <input-component :value="formData.price" label="Price :" id="input-price" name="input-price" type="number" placeholder="...€"
                     @input="updateData($event, 'price')" />
-                <input-component label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
+                <input-component :value="formData.stock" label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
                     @input="updateData($event, 'stock')" />
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
                 <Select2
@@ -26,7 +26,7 @@
                 />
                 <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
                 <Select2
-                    v-model="formData.categoryId"
+                    v-model="product.category.id"
                     :options="categoryOptions" 
                     :settings="{ placeholder: 'Select the category', width: '100%'}"
                 />
@@ -37,13 +37,13 @@
         <div class="description-container">
             <h1>Description</h1>
             <div :onChange="$emit('inputForm', formData)">
-                <textarea class="product-description" rows="10" cols="100" id="input-description" name="input-description"
+                <textarea :value="formData.description" class="product-description" rows="10" cols="100" id="input-description" name="input-description"
                     placeholder="Write the product description here..."
                     @change="updateData($event.target.value, 'description')"></textarea>
             </div>
         </div>
         <div class="save-btn-container">
-            <button class="btn btn-primary save-btn" @click="addProduct">Add Product</button>
+            <button class="btn btn-primary save-btn" @click="saveProduct">Save</button>
         </div>
     </div>
 </template>
@@ -62,6 +62,19 @@ export default {
     },
     data() {
         return {
+            product: {
+                name: '',
+                price: 0,
+                description: '',
+                picture: '',
+                category: {
+                    id: 0,
+                    name: '',
+                    tags: []
+                },
+                stock: 0,
+                productAttributes: null
+            },
             formData: {
                 name: "",
                 price: 0,
@@ -76,15 +89,8 @@ export default {
         };
     },
     methods: {
-        addProduct() {
-            POST(ENDPOINTS.POST_PRODUCT, this.formData, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-                createToast({ title: 'Product created sucessfuly', description: `You sucessfuly created the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch((error) => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-
-            });
+        saveProduct() {
+            console.dir(this.formData)
         },
 
         updateData(e, key) {
@@ -106,6 +112,15 @@ export default {
         },
     },
     created () {
+        GET(ENDPOINTS.GET_ONE_PRODUCT + `/${this.$route.params.id}`, JSON.parse(localStorage.getItem('user')).token)
+        .then((response) => {
+            console.dir(response)
+            this.product = response.data
+            this.formData = response.data
+        })
+        .catch((error) => {
+            console.dir(error)
+        })
         GET(ENDPOINTS.GET_ALL_ATTRIBUTES)
             .then((response) => {
                 this.attributeOptions = response.data.map(item => {
