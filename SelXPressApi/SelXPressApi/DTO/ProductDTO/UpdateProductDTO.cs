@@ -1,4 +1,6 @@
-﻿namespace SelXPressApi.DTO.ProductDTO
+﻿using SelXPressApi.Models;
+
+namespace SelXPressApi.DTO.ProductDTO
 {
     /// <summary>
     /// Data Transfer Object for updating a product.
@@ -29,5 +31,10 @@
         /// Gets or sets the updated stock quantity of the product.
         /// </summary>
         public int Stock { get; set; }
+
+        /// <summary>
+        /// Gets or sets the updated category of the product.
+        /// </summary>
+        public Category Category { get; set; }
     }
 }
