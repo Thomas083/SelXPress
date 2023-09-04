@@ -1,13 +1,13 @@
 <template>
   <div class="home-container">
-    <categories-list @categoryChoose="updateCategory($event)"/>
+    <categories-list @categoryChoose="updateCategory($event)" />
     <div class="products-cards-container">
       <div class="search-product">
-        <h1 class="products-category" id="category">Category: {{ category}}</h1>
+        <h1 class="products-category" id="category">Category: {{ category }}</h1>
         <filter-product />
       </div>
       <div class="products-cards">
-        <product-card v-for="product in products" :key="product.id" :product="product" />
+        <product-card v-for="product in products" :key="product.id" :product="product" @deletedItem="refreshProduct" />
       </div>
     </div>
   </div>
@@ -18,6 +18,8 @@
 import CategoriesList from "@/components/categories/CategoriesList.vue"
 import ProductCard from "@/components/products/ProductsCard.vue"
 import FilterProduct from "@/components/filter/FilterProduct.vue"
+import { GET } from "@/api/axios"
+import { ENDPOINTS } from "@/api/endpoints"
 
 export default {
   name: 'HomeView',
@@ -116,13 +118,59 @@ export default {
     }
   },
   methods: {
-    updateCurrentPage(newPage) {
-      this.currentPage = newPage;
-    },
-    updateCategory(categoryChoose) {
-      this.category = categoryChoose.name
-    },
-}
+    refreshProduct() {
+      GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+        .then((response) => {
+          if (response.data.role.id === 3) {
+            GET(ENDPOINTS.GET_ALL_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
+              .then((response) => {
+                this.products = response.data
+              })
+              .catch((error) => {
+                console.dir(error)
+              });
+          }
+          else {
+            GET(ENDPOINTS.GET_MY_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
+              .then((response) => {
+                this.products = response.data
+              })
+              .catch((error) => {
+                console.dir(error)
+              });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  },
+  created() {
+    GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+      .then((response) => {
+        if (response.data.role.id === 3) {
+          GET(ENDPOINTS.GET_ALL_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.products = response.data
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
+        }
+        else {
+          GET(ENDPOINTS.GET_MY_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+              this.products = response.data
+            })
+            .catch((error) => {
+              console.dir(error)
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
 }
 </script>
 
