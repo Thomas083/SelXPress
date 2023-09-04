@@ -6,7 +6,7 @@
                 <div class="product-ref">Ref : {{ product.id }}</div>
                 <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
-                    <button class="btn btn-primary update-btn">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
+                    <button class="btn btn-primary update-btn" @click="goToDetails(product.id, product.name)">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
                     <button class="btn btn-primary delete-btn">Delete <img class="delete-img" src="@/assets/Card/bouton-supprimer.png" alt="..." /></button>
                 </div>
             </div>
@@ -28,6 +28,9 @@ export default {
     formatCreatedAt(createdAt) {
       const formattedDate = format(new Date(createdAt), 'dd/MM/yyyy');
       return formattedDate;
+    },
+    goToDetails(id, name) {
+      this.$router.push({ path: `product/${id}/${name}`})
     }
   }
 }

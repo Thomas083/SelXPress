@@ -5,6 +5,7 @@ import RegisterView from '../views/identification/RegisterView.vue'
 import ForgotView from '../views/identification/ForgotView.vue'
 import UserView from "../views/UserView.vue"
 import AdminView from "../views/AdminView.vue"
+import ProductDetails from '../views/ProductDetails.vue'
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: AdminView
+  },
+  {
+    path: '/product/:id/:name',
+    name: 'product',
+    component: ProductDetails
   },
 
 ]
