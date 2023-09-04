@@ -27,7 +27,7 @@
                     <tr v-for="(attribute, key, index) in attributes">
                         <td scope="row" class="action-btns">
                             <button class="btn btn-primary btn-admin"
-                                v-on:click="sendUpdateData(index, attribute.name, attribute.type)">
+                                v-on:click="sendUpdateData(attribute)">
                                 Update
                                 <img src="../../assets/Admin/bouton-modifier.png" alt="modify" />
                             </button>
@@ -37,9 +37,9 @@
                             </button>
                         </td>
                         <td>{{ attribute.id }}</td>
-                        <td><input-component :value='attribute.name' @input="updateData(attribute.id, 'name', $event)" />
+                        <td><input-component :value='attribute.name' @input="attribute.name = String($event)" />
                         </td>
-                        <td><input-component :value="attribute.type" @input="updateData(attribute.id, 'type', $event)" /></td>
+                        <td><input-component :value="attribute.type" @input="attribute.type = String($event)" /></td>
                         <td><img class="attribute-img" src="../../assets/Admin/attribut.png"
                                 v-on:click="setSelectedAttributeIndex(attribute.id)" /></td>
                     </tr>
@@ -131,16 +131,13 @@ export default {
             if (this.selectedAttributeIndex === index - 1) this.selectedAttributeIndex = null;
             else this.selectedAttributeIndex = index - 1;
         },
-        updateData(index, key, value) {
-            this.attributes[index][key] = value;
-        },
         updateAttributeData(index_attribute, index_data, key, value) {
             this.attributes[index_attribute].attributeData[index_data - 1][key] = value;
         },
-        sendUpdateData(id, name, type) {
-            PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${id}`, { name: name, type: type }, JSON.parse(localStorage.getItem('user')).token)
+        sendUpdateData(data) {
+            PUT(ENDPOINTS.UPDATE_ATTRIBUTE + `/${data.id}`, data, JSON.parse(localStorage.getItem('user')).token)
                 .then(() => {
-                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${id} attribute` }, { type: 'success', position: 'bottom-right' });
+                    createToast({ title: 'Updated Succesfuly', description: `You updated successfuly the ${data.id} attribute` }, { type: 'success', position: 'bottom-right' });
                 })
                 .catch(() => {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
@@ -230,7 +227,15 @@ export default {
             .catch((error) => {
                 console.dir(error)
             });
-    }
+    },
+    watch: {
+        attributes: {
+            deep: true,
+            handler(newValue, oldValue) {
+                console.log(newValue)
+            }
+        }
+    },
 }
 </script>
 
