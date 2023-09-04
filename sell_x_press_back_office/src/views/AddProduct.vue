@@ -53,6 +53,7 @@
 import InputComponent from "@/components/global/InputComponent.vue";
 import { GET, POST } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
+import { createToast } from "mosha-vue-toastify";
 
 export default {
     name: "AddProduct",
@@ -78,10 +79,11 @@ export default {
         addProduct() {
             POST(ENDPOINTS.POST_PRODUCT, this.formData, JSON.parse(localStorage.getItem('user')).token)
             .then((response) => {
-                console.log('Product added', response);
+                createToast({ title: 'Product created sucessfuly', description: `You sucessfuly created the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
             })
             .catch((error) => {
-                console.dir(error)
+                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+
             });
         },
 
