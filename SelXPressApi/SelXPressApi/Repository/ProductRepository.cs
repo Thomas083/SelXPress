@@ -50,6 +50,7 @@ namespace SelXPressApi.Repository
         /// <returns><c>true</c> if the product was created successfully, otherwise <c>false</c>.</returns>
         public async Task<bool> CreateProduct(CreateProductDTO createProduct, string email)
         {
+	        var category = await _context.Categories.Where(c => c.Id == createProduct.CategoryId).FirstAsync();
             var newProduct = new Product
             {
 				Name = createProduct.Name,
@@ -57,14 +58,24 @@ namespace SelXPressApi.Repository
 				Price = createProduct.Price,
                 Picture = createProduct.Picture,
                 Stock = createProduct.Stock,
-                Category = createProduct.Category,
-                ProductAttributes = new List<ProductAttribute>(),
-                User = await _context.Users.FirstAsync(u => u.Email == email)
+                Category = category,
+                ProductAttributes = new List<ProductAttribute>()
 			};
 
-            for (int i = 0; i < createProduct.ProductAttributes.Count; i++)
+            var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+            List<SellerProduct> sellerProducts = new List<SellerProduct>();
+            SellerProduct sellerProduct = new SellerProduct()
             {
-				var productAttribute = await _context.ProductAttributes.FindAsync(createProduct.ProductAttributes[i].Id);
+	            Product = newProduct,
+	            User = user,
+	            UserId = user.Id
+            };
+            
+            sellerProducts.Add(sellerProduct);
+            newProduct.SellerProducts = sellerProducts;
+            for (int i = 0; i < createProduct.ProductAttributeIds.Count; i++)
+            {
+				var productAttribute = await _context.ProductAttributes.FindAsync(createProduct.ProductAttributeIds[i]);
                 if (productAttribute != null)
 				    newProduct.ProductAttributes.Add(productAttribute);
 			}
