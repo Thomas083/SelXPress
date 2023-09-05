@@ -125,7 +125,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments made by the user with ID : " + id, "COM-1403");
+				throw new NotFoundException($"There is no comments of the user with the ID : {id}", "COM-1403");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -153,7 +153,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments for the product with ID : " + id, "COM-1404");
+				throw new NotFoundException($"There is no comments of the product with the ID : {id}", "COM-1404");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
