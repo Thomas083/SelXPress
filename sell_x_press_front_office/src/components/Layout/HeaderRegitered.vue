@@ -22,7 +22,6 @@
             <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
-            <p class="circle-number">{{ numberProductCart }}</p>
         </div>
     </header>
 </template>
@@ -42,7 +41,6 @@ export default {
                 categoryId: 0
             },
             categories: null,
-            numberProductCart: 0
         }
     },
     methods: {
@@ -92,14 +90,6 @@ export default {
         GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
             .then((response) => {
                 this.user = response.data.username
-                GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
-                    .then((response) => {
-                       this.numberProductCart = response.data.length;
-                    })
-                    .catch((error) => {
-                        console.dir(error);
-                        0;
-                    });
             })
             .catch((error) => {
                 console.dir(error);
@@ -224,19 +214,6 @@ p {
 
 .order-logo {
     height: 15vh;
-}
-
-.circle-number {
-    background-color: var(--main-orange);
-    border-radius: 30px;
-    padding: 0.5rem;
-    margin-top: 1vh;
-    color: var(--main-white);
-    font-family: url(../../font/Inter/static/Inter-SemiBold.ttf);
-    font-size: 2rem;
-    height: 5vh;
-    display: flex;
-    align-items: center;
 }
 
 @media screen and (max-width: 1080px) {
