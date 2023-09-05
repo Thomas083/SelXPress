@@ -10,8 +10,8 @@
         <div class="customer-review-container">
             <h1>Customer Review</h1>
             <div class="rating-review-container">
-                <rating-review :comments="product.comments"/>
-                <customer-review :comments="product.comments" :productId="product.id"/>
+                <rating-review :commentsIds="commentsIds"/>
+                <!-- <customer-review :comments="product.comments" :productId="product.id"/> -->
             </div>
         </div>
         
@@ -40,6 +40,7 @@ export default {
     data() {
         return {
             product: null,
+            commentsIds: []
         }
     },
     computed: {
@@ -47,10 +48,13 @@ export default {
             return this.product ? this.product : '';
         }
     },
-    mounted() {
+    created() {
         GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
             .then((response) => {
                 this.product = response.data;
+                for (let i = 0; i < this.product.comments.length; i++) {
+                    this.commentsIds.push(this.product.comments[i].id)                    
+                }   
             })
             .catch((error) => {
                 console.dir(error);

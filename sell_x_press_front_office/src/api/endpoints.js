@@ -26,6 +26,7 @@ export const ENDPOINTS = {
 
     // COMMENTS
     GET_ALL_COMMENT: '/api/Comment', //(GET)
+    GET_ONE_COMMENT: '/api/Comment', // (GET) + add comment id
     CREATE_COMMENT: '/api/Comment', //(POST)
 
     // CART

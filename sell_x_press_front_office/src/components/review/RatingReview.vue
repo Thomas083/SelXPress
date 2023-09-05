@@ -7,7 +7,7 @@
             <div v-for="index in (5 - product_rating)" :key="index">
                 <img src="../../assets/Product/star.png" alt="stars" />
             </div>
-            <span class="rating">{{ product_rating }} out of 5</span>
+            <span class="rating">{{ product_rating }} out of 5 </span>
         </div>
         <div class="number-review">{{ number_review }} customer review</div>
         <div v-for="(value, index) in 5" class="ratings-table">
@@ -17,16 +17,19 @@
                     :style="{ backgroundColor: '#F17720', width: Math.floor((star_rating[5 - index] / (number_review)) * 100) + '%' }">
                 </div>
             </div>
-            <span>{{Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
+            <span>{{ Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
         </div>
     </div>
 </template>
 
 <script>
+import { ENDPOINTS } from '@/api/endpoints';
+import { GET } from '@/api/axios';
+
 export default {
     name: 'RatingReview',
     props: {
-        comments: {
+        commentsIds: {
             type: Array,
             required: true,
         },
@@ -48,11 +51,17 @@ export default {
         calculateProductRating() {
             let totalStars = 0;
             let totalReviews = 0;
-
-            for (let i = 1; i <= 5; i++) {
-                totalStars += i * this.star_rating[i];
-                totalReviews += this.star_rating[i];
-            }
+            console.dir(this.star_rating)
+            console.log(Object.entries(this.star_rating))
+            // this.star_rating.forEach((value, key) => {
+            //     totalStars += key * value;
+            //     totalReviews += value;
+            // });
+            // for (let i = 1; i <= 5; i++) {
+            //     console.log(this.star_rating[i])
+            //     totalStars += i * this.star_rating[i];
+            //     totalReviews += this.star_rating[i];
+            // }
 
             if (totalReviews > 0) {
                 this.product_rating = Math.floor(totalStars / totalReviews);
@@ -61,33 +70,45 @@ export default {
             }
         },
     },
-    mounted() {
-        if (this.comments) {
-            this.number_review = this.comments.length;
-            for (let i = 0; i < this.comments.length; i++) {
-                switch (this.comments[i].mark.rate) {
-                    case 5:
-                        this.star_rating[5] += 1;
-                        break;
-                    case 4:
-                        this.star_rating[4] += 1;
-                        break;
-                    case 3:
-                        this.star_rating[3] += 1;
-                        break;
-                    case 2:
-                        this.star_rating[2] += 1;
-                        break;
-                    case 1:
-                        this.star_rating[1] += 1;
-                        break;
-                    default:
-                        break;
+    watch: {
+        commentsIds: {
+            immediate: true,
+            handler(newValue) {
+                console.dir(newValue)
+                this.number_review = newValue.length;
+                console.dir(this.number_review)
+                for (let i = 0; i < this.number_review; i++) {
+                    GET(ENDPOINTS.GET_ONE_COMMENT + `/${newValue[i]}`)
+                        .then((response) => {
+                            console.dir(response.data)
+                            switch (response.data.mark.rate) {
+                                case 5:
+                                    this.star_rating[5] += 1;
+                                    break;
+                                case 4:
+                                    this.star_rating[4] += 1;
+                                    break;
+                                case 3:
+                                    this.star_rating[3] += 1;
+                                    break;
+                                case 2:
+                                    this.star_rating[2] += 1;
+                                    break;
+                                case 1:
+                                    this.star_rating[1] += 1;
+                                    break;
+                                default:
+                                    break;
+                            };
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        })
                 };
-            };
-            this.calculateProductRating();
-        };
-    },
+                this.calculateProductRating();
+            }
+        }
+    }
 }
 </script>
 
