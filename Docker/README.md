@@ -21,3 +21,7 @@ swagger: https://localhost:7094/swagger/
 smtp: http://localhost:2500
 smtp-webUI: http://localhost:8080
 smtp-database: http://localhost:8085
+
+For testing in local the smtp server, simply execute the python file "testing_smtp.py"
+
+
