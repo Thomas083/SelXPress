@@ -70,6 +70,7 @@ export default {
     },
     methods: {
         saveProduct() {
+            this.formData.productAttributeIds = this.formData.productAttributeIds.map(attribute => parseInt(attribute));
             PUT(ENDPOINTS.UPDATE_PRODUCT + `/${this.$route.params.id}`, this.formData, JSON.parse(localStorage.getItem('user')).token)
                 .then(() => {
                     createToast({ title: 'Product updated sucessfuly', description: `You sucessfuly updated the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
