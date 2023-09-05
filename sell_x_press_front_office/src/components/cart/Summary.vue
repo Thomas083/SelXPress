@@ -45,7 +45,6 @@ export default {
           quantity: this.cart[i].quantity
         })     
       };
-      console.dir(this.sendOrder)
       POST(ENDPOINTS.CREATE_ORDER, this.sendOrder, JSON.parse(localStorage.getItem('user')).token)
       .then(() => {
         createToast({ title: 'Order register succesfully', description: 'You sucessfully registered your order' }, { type: 'success', position: 'bottom-right' });
@@ -62,18 +61,6 @@ export default {
     totalPrice() {
       return this.cart.reduce(
         (acc, item) => acc + item.product.price * item.quantity,
-        0
-      );
-    },
-  },
-  watch: {
-    cart(newValue, oldValue) {
-      this.totalQuantity = newValue.reduce(
-        (acc, item) => acc + item.quantity,
-        0
-      );
-      this.totalPrice = newValue.reduce(
-        (acc, item) => acc + item.price * item.quantity,
         0
       );
     },
