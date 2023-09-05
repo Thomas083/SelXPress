@@ -51,19 +51,29 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the order creation was successful, otherwise false.</returns>
 		public async Task<bool> CreateOrder(CreateOrderDTO createOrder)
 		{
+			float totalPrice = 0;
+			List<Cart> cartList = await _context.Carts.Where(c => c.UserId == createOrder.UserId).Include(p => p.Product).ToListAsync();
+			
+			var user = await _context.Users.Where(u => u.Id == createOrder.UserId).FirstAsync();
+			
 			var newOrder = new Order
 			{
-				User = createOrder.User,
-				TotalPrice = createOrder.TotalPrice,
-				CreatedAt = DateTime.UtcNow,
+				User = user,
+				TotalPrice = totalPrice,
+				CreatedAt = DateTime.Now,
 				OrderProducts = new List<OrderProduct>()
 			};
 
-			for (int i = 0; i < createOrder.OrderProducts.Count; i++)
+			for (int i = 0; i < cartList.Count; i++)
 			{
-				var orderProducts = await _context.OrderProducts.FindAsync(createOrder.OrderProducts[i].Id);
-				if (orderProducts != null)
-					newOrder.OrderProducts.Add(orderProducts);
+				var orderProductToAdd = new OrderProduct()
+				{
+					Order = newOrder,
+					OrderId = newOrder.Id,
+					Product = cartList[i].Product,
+					ProductId = cartList[i].ProductId
+				};
+				newOrder.OrderProducts.Add(orderProductToAdd);
 			}
 
 			_context.Orders.Add(newOrder);
