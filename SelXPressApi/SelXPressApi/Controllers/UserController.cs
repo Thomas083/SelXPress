@@ -272,7 +272,7 @@ namespace SelXPressApi.Controllers
 
 			// check if the user with the given id exists
 			if (!await _userRepository.UserExists(id))
-                throw new NotFoundException($"The user with the id : {id} doesn't exist", "USR-1402");
+                throw new NotFoundException($"The user with the ID : {id} doesn't exist", "USR-1402");
 
 			// update the user's information using the repository
 			await _userRepository.UpdateUserById(userUpdate, id);
