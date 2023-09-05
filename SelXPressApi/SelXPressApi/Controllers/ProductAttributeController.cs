@@ -58,7 +58,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any product attributes were found
 			if (productAttributes.Count == 0)
-				throw new NotFoundException("There are no Product Attributes in the database", "PAT-1401");
+				throw new NotFoundException("There are no product attributes in the database", "PAT-1401");
 
 			return Ok(productAttributes);
 		}

@@ -203,7 +203,7 @@ namespace SelXPressApi.Controllers
 			// Create the product using the repository
 			string? email = HttpContext.Response.Headers["EmailHeader"];
 			if (email == null)
-				throw new BadRequestException("You are not connected", "PRO-1104");
+				throw new BadRequestException("You are not connected", "PRO-1103");
 			await _productRepository.CreateProduct(product, email);
 			return StatusCode(201);
 		}
@@ -248,7 +248,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product with the given ID exists
 			if (!await _productRepository.ProductExists(id))
-				throw new NotFoundException("The product with ID : " + id + " doesn't exist", "PRO-1402");
+				throw new NotFoundException($"The product with the ID : {id} doesn't exist", "PRO-1402");
 
 			// Update the product using the repository
 			await _productRepository.UpdateProduct(id, product);
@@ -290,7 +290,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product with the given ID exists
 			if (!await _productRepository.ProductExists(id))
-				throw new NotFoundException("The product with ID : " + id + " doesn't exist", "PRO-1402");
+				throw new NotFoundException($"The product with the ID : {id} doesn't exist", "PRO-1402");
 
 			// Delete the product using the repository
 			await _productRepository.DeleteProduct(id);
