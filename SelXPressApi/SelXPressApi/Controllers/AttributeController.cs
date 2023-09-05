@@ -58,7 +58,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any attributes were found
 			if (attributes.Count == 0)
-				throw new NotFoundException("There are no attributes in the database, please try again", "ATT-1401");
+				throw new NotFoundException("There is no Attribute in the database, please try again", "ATT-1401");
 
 			return Ok(attributes);
 		}
@@ -79,7 +79,7 @@ namespace SelXPressApi.Controllers
         {
 			// Check if the attribute with the given ID exists
 			if (!await _attributeRepository.AttributeExists(id))
-				throw new NotFoundException("The attribute with ID " + id + " doesn't exist", "ATT-1402");
+				throw new NotFoundException($"The attribute with ID : {id} doesn't exist", "ATT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -117,7 +117,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided attribute data is complete
 			if (attribute == null || attribute.Name == null || attribute.Type == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "ATT-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "ATT-1102");
 
 			// Create the attribute using the repository
 			await _attributeRepository.CreateAttribute(attribute);
@@ -157,11 +157,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided attribute update data is complete
 			if (attributeUpdate == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "ATT-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "ATT-1102");
 
 			// Check if the attribute with the given ID exists
 			if (!await _attributeRepository.AttributeExists(id))
-				throw new NotFoundException("The attribute with ID " + id + " doesn't exist", "ATT-1402");
+				throw new NotFoundException($"The attribute with ID : {id} doesn't exist", "ATT-1402");
 
 			// Update the attribute using the repository
 			await _attributeRepository.UpdateAttribute(id, attributeUpdate);
@@ -200,7 +200,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the attribute with the given ID exists
 			if (!await _attributeRepository.AttributeExists(id))
-				throw new NotFoundException("The attribute with ID " + id + " doesn't exist", "ATT-1402");
+				throw new NotFoundException($"The attribute with ID : {id} doesn't exist", "ATT-1402");
 
 			// Delete the attribute using the repository
 			await _attributeRepository.DeleteAttribute(id);
