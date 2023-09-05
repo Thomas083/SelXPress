@@ -86,7 +86,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute was found
 			if (productAttribute == null)
-				throw new NotFoundException("The product attribute with the ID : " + id + " doesn't exist", "PAT-1402");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			return Ok(productAttribute);
 		}
@@ -167,7 +167,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the ID : " + id + " doesn't exist", "PAT-1402");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Update the product attribute using the repository
 			var result = await _productAttributeRepository.UpdateProductAttribute(id, updateProductAttribute);
@@ -210,7 +210,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Delete the product attribute using the repository
 			await _productAttributeRepository.DeleteProductAttribute(id);

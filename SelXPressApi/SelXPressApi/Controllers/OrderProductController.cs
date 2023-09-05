@@ -67,7 +67,7 @@ namespace SelXPressApi.Controllers
 
 			// If there are no order products in the database, throw a NotFoundException.
 			if (orderProducts.Count == 0)
-				throw new NotFoundException("No order products found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order products as an Ok response.
 			return Ok(orderProducts);
@@ -113,7 +113,7 @@ namespace SelXPressApi.Controllers
 
 			// If no order products are found for the user, throw a NotFoundException.
 			if (orderProducts.Count == 0)
-				throw new NotFoundException("No order products found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order products as an Ok response.
 			return Ok(orderProducts);
@@ -150,7 +150,7 @@ namespace SelXPressApi.Controllers
 
 			// If the order product is not found, throw a NotFoundException.
 			if (orderProduct == null)
-				throw new NotFoundException("No order products found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order product as an Ok response.
 			return Ok(orderProduct);
