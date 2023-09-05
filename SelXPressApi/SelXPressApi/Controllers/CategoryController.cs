@@ -5,6 +5,7 @@ using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Controllers
 {
@@ -77,7 +78,7 @@ namespace SelXPressApi.Controllers
 		{
 			// Check if the category with the given ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the ID : " + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : {id} doesn't exist", "CAT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -158,10 +159,10 @@ namespace SelXPressApi.Controllers
 
 			// Check if the category with the specified ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the ID : " + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : { id } doesn't exist", "CAT-1402");
 
-			// Update the category
-			await _categoryRepository.UpdateCategory(categoryUpdate, id);
+            // Update the category
+            await _categoryRepository.UpdateCategory(categoryUpdate, id);
 
 			return Ok();
 		}
@@ -194,7 +195,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the category with the specified ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the ID :" + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : {id} doesn't exist", "CAT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
