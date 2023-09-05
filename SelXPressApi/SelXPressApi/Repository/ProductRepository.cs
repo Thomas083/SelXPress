@@ -178,15 +178,21 @@ namespace SelXPressApi.Repository
 	            var category = await _context.Categories.Where(c => c.Id == updateProductDTO.CategoryId).FirstAsync();
 	            product.Category = category;
 	            //récupérer la liste des products attributes
-	            
+	            await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
 	            List<ProductAttribute> productAttributeList = new List<ProductAttribute>();
-	            for (int i = 0; i < updateProductDTO.ProductAttributeIds.Count; i++)
+	            for (int i = 0; i < updateProductDTO.AttributeIds.Count; i++)
 	            {
-		            var attributeProductToAdd = await _context.ProductAttributes
-			            .Where(pa => pa.Id == updateProductDTO.ProductAttributeIds[i]).FirstAsync();
+		            var attribute = await _context.Attributes.Where(a => a.Id == updateProductDTO.AttributeIds[i]).FirstAsync();
+		            var attributeProductToAdd = new ProductAttribute()
+		            {
+			            Product = product,
+			            ProductId = product.Id,
+			            Attribute = attribute,
+			            AttributeId = attribute.Id
+		            };
 		            productAttributeList.Add(attributeProductToAdd);
 	            }
-	            await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
+	           
 	            product.ProductAttributes = productAttributeList;
 	            _context.Products.Update(product);
 	            await _context.SaveChangesAsync();

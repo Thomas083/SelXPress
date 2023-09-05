@@ -40,6 +40,6 @@ namespace SelXPressApi.DTO.ProductDTO
         /// <summary>
         /// Gets or sets a list of attribute Ids associated with the product
         /// </summary>
-        public List<int> ProductAttributeIds { get; set; }
+        public List<int> AttributeIds { get; set; }
     }
 }
