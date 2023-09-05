@@ -137,7 +137,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if there are no marks associated with the specified user.
 			if (marks.Count == 0)
-				throw new NotFoundException($"There is no marks for the user with the id : {id}", "MRK-1403");
+				throw new NotFoundException($"There is no marks for the user with the ID : {id}", "MRK-1403");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
@@ -167,7 +167,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if there are no marks associated with the specified product.
 			if (marks.Count == 0)
-				throw new NotFoundException($"There is no marks for the product with the id : {id}", "MRK-1404");
+				throw new NotFoundException($"There is no marks for the product with the ID : {id}", "MRK-1404");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
