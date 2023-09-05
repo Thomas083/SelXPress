@@ -163,33 +163,32 @@ namespace SelXPressApi.Repository
             if (!await ProductExists(id))
                 return false;
             var product = await _context.Products.FindAsync(id);
-            if (updateProductDTO != null)
+            if (product != null)
             {
-	            _mapper.Map(updateProductDTO, product);
-	            // await _context.Products.Where(p => p.Id == id)
-		           //  .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateProductDTO.Name));
-	            // await _context.Products.Where(p => p.Id == id)
-		           //  .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Price, x => updateProductDTO.Price));
-	            // await _context.Products.Where(p => p.Id == id)
-		           //  .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Description, x => updateProductDTO.Description));
-	            // await _context.Products.Where(p => p.Id == id)
-		           //  .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Picture, x => updateProductDTO.Picture));
-	            // await _context.Products.Where(p => p.Id == id)
-		           //  .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Stock, x => updateProductDTO.Stock));
-	            // var category = await _context.Categories.Where(c => c.Id == updateProductDTO.CategoryId).Include(c => c.Tags).FirstAsync();
-	            // await _context.Products.Where(p => p.Id == id).
-	            // List<ProductAttribute> productAttributes = new List<ProductAttribute>();
-	            // for (int i = 0; i < updateProductDTO.ProductAttributeIds.Count; i++)
-	            // {
-		           //  var productAttribute = await _context.ProductAttributes.FindAsync(updateProductDTO.ProductAttributeIds[i]);
-		           //  if (productAttribute != null)
-			          //   productAttributes.Add(productAttribute);
-	            // }
+	            //_mapper.Map(updateProductDTO, product);
+	            product.Name = updateProductDTO.Name;
+	            product.Price = updateProductDTO.Price;
+	            product.Description = updateProductDTO.Description;
+	            product.Picture = updateProductDTO.Picture;
+	            product.Stock = updateProductDTO.Stock;
+	            var category = await _context.Categories.Where(c => c.Id == updateProductDTO.CategoryId).FirstAsync();
+	            product.Category = category;
+	            //récupérer la liste des products attributes
+	            await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
+	            List<ProductAttribute> productAttributeList = new List<ProductAttribute>();
+	            for (int i = 0; i < updateProductDTO.ProductAttributeIds.Count; i++)
+	            {
+		            var attributeProductToAdd = await _context.ProductAttributes
+			            .Where(pa => pa.Id == updateProductDTO.ProductAttributeIds[i]).FirstAsync();
+		            productAttributeList.Add(attributeProductToAdd);
+	            }
+	            product.ProductAttributes = productAttributeList;
+	            _context.Products.Update(product);
+	            await _context.SaveChangesAsync();
+	            return true;
 
-	            // await _context.Products.Where(p => p.Id == id).ExecuteUpdateAsync(p1 =>
-		           //  p1.SetProperty(x => x.ProductAttributes, x => productAttributes));
             }
-            return await _commonMethods.Save(); ;
+            return await _commonMethods.Save();
         }
 
         public async Task<List<AllProductDTO>> GetProductByUser(string email)
