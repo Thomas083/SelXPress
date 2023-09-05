@@ -134,6 +134,7 @@ namespace SelXPressApi.Repository
 			var query = _context.Products
 				.Include(p => p.Category)
 				.Include(p => p.ProductAttributes)
+				.Include(c => c.Comments)
 				.OrderBy(p => p.Id);
 
 			var products = await query.ToListAsync();
@@ -153,6 +154,7 @@ namespace SelXPressApi.Repository
             return _mapper.Map<AllProductDTO>(await _context.Products
                 			.Include(p => p.Category)
                             .Include(p => p.ProductAttributes)
+			                .Include(c => c.Comments)
                             .FirstOrDefaultAsync(p => p.Id == id));
         }
 
