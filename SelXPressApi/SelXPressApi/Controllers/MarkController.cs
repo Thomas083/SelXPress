@@ -95,7 +95,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID " + id + " doesn't exist", "MRK-1002");
+				throw new NotFoundException("The mark with the ID : " + id + " doesn't exist", "MRK-1002");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
@@ -254,7 +254,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID: " + id + " doesn't exist", "MRK-1402");
+				throw new NotFoundException("The mark with the ID : " + id + " doesn't exist", "MRK-1402");
 
 			// Update the mark's details using the provided data and ID.
 			await _markRepository.UpdateMarkById(updateMarkDto, id);
@@ -290,7 +290,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID: " + id + " doesn't exist", "MRK-1402");
+				throw new NotFoundException("The mark with the ID : " + id + " doesn't exist", "MRK-1402");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)

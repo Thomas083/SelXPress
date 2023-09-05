@@ -40,15 +40,15 @@ namespace SelXPressApi.Controllers
 			_productRepository = productRepository;
 			_authorizationMiddleware = authorizationMiddleware;
 		}
-		#region
-		/// <summary>
-		/// Get all comments from the database.
-		/// </summary>
-		/// <returns>Returns a list of all comments</returns>
-		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
-		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
-		/// <exception cref="NotFoundException">Thrown when no comments are found in the database.</exception>
-		[HttpGet]
+        #region Get Methods
+        /// <summary>
+        /// Get all comments from the database.
+        /// </summary>
+        /// <returns>Returns a list of all comments</returns>
+        /// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+        /// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+        /// <exception cref="NotFoundException">Thrown when no comments are found in the database.</exception>
+        [HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<CommentDTO>))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
@@ -87,7 +87,7 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetCommentById(int id)
 		{
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException("The comment with the ID : " + id + " doesn't exist", "COM-1402");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
@@ -125,7 +125,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments made by the user with ID: " + id, "COM-1403");
+				throw new NotFoundException("There are no comments made by the user with ID : " + id, "COM-1403");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -153,7 +153,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments for the product with ID: " + id, "COM-1404");
+				throw new NotFoundException("There are no comments for the product with ID : " + id, "COM-1404");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -204,9 +204,9 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user and product exist
 			if (user == null)
-				throw new NotFoundException("The user with ID " + createCommentDto.UserId + " doesn't exist", "COM-1405");
+				throw new NotFoundException("The user with ID : " + createCommentDto.UserId + " doesn't exist", "COM-1405");
 			if (product == null)
-				throw new NotFoundException("The product with ID " + createCommentDto.ProductId + " doesn't exist", "COM-1406");
+				throw new NotFoundException("The product with ID : " + createCommentDto.ProductId + " doesn't exist", "COM-1406");
 
 			// Create the comment using the repository
 			await _commentRepository.CreateComment(createCommentDto);
@@ -251,7 +251,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the comment with the given ID exists
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with ID " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException("The comment with ID : " + id + " doesn't exist", "COM-1402");
 
 			// Update the comment using the repository
 			await _commentRepository.UpdateCommentById(updateCommentDto, id);
@@ -291,7 +291,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the comment with the given ID exists
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with ID " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException("The comment with ID : " + id + " doesn't exist", "COM-1402");
 
 			// Delete the comment using the repository
 			await _commentRepository.DeleteCommentById(id);

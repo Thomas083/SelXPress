@@ -102,7 +102,7 @@ namespace SelXPressApi.Controllers
 
 			// If the email is missing or empty, throw a BadRequestException.
 			if (string.IsNullOrEmpty(email))
-				throw new BadRequestException("The email is missing in the request header", "ODP-1102");
+				throw new BadRequestException("The email is missing in the request header", "ODP-1103");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
@@ -224,7 +224,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the order product with the given id exists.
 			if (!await _orderProductRepository.OrderProductExists(id))
-				throw new NotFoundException("The order product with the id : " + id + " doesn't exist ", "ODP-1401");
+				throw new NotFoundException("The order product with the ID : " + id + " doesn't exist", "ODP-1402");
 
 			// Update the order product with the provided data.
 			await _orderProductRepository.UpdateOrderProduct(id, order);
@@ -263,7 +263,7 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occured", "ODP-1101");
 
 			if (!await _orderProductRepository.OrderProductExists(id))
-				throw new NotFoundException("The order product with the id : " + id + " doesn't exist ", "ODP-1401");
+				throw new NotFoundException("The order product with the ID : " + id + " doesn't exist ", "ODP-1402");
 
 			await _orderProductRepository.DeleteOrderProduct(id);
 			return Ok();

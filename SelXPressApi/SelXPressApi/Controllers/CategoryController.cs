@@ -60,9 +60,7 @@ namespace SelXPressApi.Controllers
 			// Return the list of categories
 			return Ok(categories);
 		}
-		#endregion
 
-		#region Get Method
 		/// <summary>
 		/// Get a category based on its ID.
 		/// </summary>
@@ -79,7 +77,7 @@ namespace SelXPressApi.Controllers
 		{
 			// Check if the category with the given ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException("The category with the ID : " + id + " doesn't exist", "CAT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)

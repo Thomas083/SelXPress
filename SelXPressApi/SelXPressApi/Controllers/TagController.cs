@@ -75,7 +75,7 @@ namespace SelXPressApi.Controllers
 		{
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"Tag with ID : {id} does not exist", "TAG-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided tag data is complete
 			if (newTag.Name == null)
-				throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "TAG-1102");
 
 			// Create the tag using the repository
 			await _tagRepository.CreateTag(newTag);
@@ -156,7 +156,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"Tag with ID : {id} does not exist", "TAG-1402");
 
 			// Update the tag using the repository
 			await _tagRepository.UpdateTag(id, tagUpdate);
@@ -195,7 +195,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"Tag with ID : {id} does not exist", "TAG-1402");
 
 			// Delete the tag using the repository
 			await _tagRepository.DeleteTag(id);
