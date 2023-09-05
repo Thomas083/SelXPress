@@ -23,92 +23,22 @@
 </template>
 
 <script>
-import { ENDPOINTS } from '@/api/endpoints';
-import { GET } from '@/api/axios';
-
 export default {
     name: 'RatingReview',
     props: {
-        commentsIds: {
-            type: Array,
+        star_rating: {
+            type: Object,
+            required: true,
+        },
+        number_review: {
+            type: Number,
+            required: true,
+        },
+        product_rating: {
+            type: Number,
             required: true,
         },
     },
-    data() {
-        return {
-            number_review: 0,
-            product_rating: 0,
-            star_rating: {
-                5: 0,
-                4: 0,
-                3: 0,
-                2: 0,
-                1: 0,
-            },
-        }
-    },
-    methods: {
-        calculateProductRating() {
-            let totalStars = 0;
-            let totalReviews = 0;
-            console.dir(this.star_rating)
-            console.log(Object.entries(this.star_rating))
-            // this.star_rating.forEach((value, key) => {
-            //     totalStars += key * value;
-            //     totalReviews += value;
-            // });
-            // for (let i = 1; i <= 5; i++) {
-            //     console.log(this.star_rating[i])
-            //     totalStars += i * this.star_rating[i];
-            //     totalReviews += this.star_rating[i];
-            // }
-
-            if (totalReviews > 0) {
-                this.product_rating = Math.floor(totalStars / totalReviews);
-            } else {
-                this.product_rating = 0;
-            }
-        },
-    },
-    watch: {
-        commentsIds: {
-            immediate: true,
-            handler(newValue) {
-                console.dir(newValue)
-                this.number_review = newValue.length;
-                console.dir(this.number_review)
-                for (let i = 0; i < this.number_review; i++) {
-                    GET(ENDPOINTS.GET_ONE_COMMENT + `/${newValue[i]}`)
-                        .then((response) => {
-                            console.dir(response.data)
-                            switch (response.data.mark.rate) {
-                                case 5:
-                                    this.star_rating[5] += 1;
-                                    break;
-                                case 4:
-                                    this.star_rating[4] += 1;
-                                    break;
-                                case 3:
-                                    this.star_rating[3] += 1;
-                                    break;
-                                case 2:
-                                    this.star_rating[2] += 1;
-                                    break;
-                                case 1:
-                                    this.star_rating[1] += 1;
-                                    break;
-                                default:
-                                    break;
-                            };
-                        })
-                        .catch((error) => {
-                            console.dir(error)
-                        })
-                };
-                this.calculateProductRating();
-            }
-        }
-    }
 }
 </script>
 

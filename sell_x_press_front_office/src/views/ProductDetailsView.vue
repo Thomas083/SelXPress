@@ -10,11 +10,11 @@
         <div class="customer-review-container">
             <h1>Customer Review</h1>
             <div class="rating-review-container">
-                <rating-review :commentsIds="commentsIds"/>
+                <rating-review :star_rating="star_rating" :number_review="number_review" :product_rating="product_rating" />
                 <!-- <customer-review :comments="product.comments" :productId="product.id"/> -->
             </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -40,8 +40,33 @@ export default {
     data() {
         return {
             product: null,
-            commentsIds: []
+            star_rating: {
+                5: 0,
+                4: 0,
+                3: 0,
+                2: 0,
+                1: 0,
+            },
+            number_review: 0,
+            product_rating: 0,
         }
+    },
+    methods: {
+        calculateProductRating() {
+            let totalStars = 0;
+            let totalReviews = 0;
+
+            Object.keys(this.star_rating).forEach((key) => {
+                totalStars += Number(key) * this.star_rating[key];
+                totalReviews += this.star_rating[key];
+            });
+
+            if (totalReviews > 0) {
+                this.product_rating = Math.floor(totalStars / totalReviews);
+            } else {
+                this.product_rating = 0;
+            }
+        },
     },
     computed: {
         product() {
@@ -52,9 +77,36 @@ export default {
         GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
             .then((response) => {
                 this.product = response.data;
+                this.number_review = this.product.comments.length
                 for (let i = 0; i < this.product.comments.length; i++) {
-                    this.commentsIds.push(this.product.comments[i].id)                    
-                }   
+                    GET(ENDPOINTS.GET_ONE_COMMENT + `/${this.product.comments[i].id}`)
+                        .then((response) => {
+                            this.product.comments[i].mark = response.data.mark
+                            switch (this.product.comments[i].mark.rate) {
+                                case 5:
+                                    this.star_rating[5] += 1;
+                                    break;
+                                case 4:
+                                    this.star_rating[4] += 1;
+                                    break;
+                                case 3:
+                                    this.star_rating[3] += 1;
+                                    break;
+                                case 2:
+                                    this.star_rating[2] += 1;
+                                    break;
+                                case 1:
+                                    this.star_rating[1] += 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            this.calculateProductRating()
+                        })
+                        .catch((error) => {
+                            console.dir(error)
+                        })
+                };
             })
             .catch((error) => {
                 console.dir(error);
@@ -112,5 +164,4 @@ img {
     flex-direction: row;
     gap: 3rem;
 }
-
 </style>
