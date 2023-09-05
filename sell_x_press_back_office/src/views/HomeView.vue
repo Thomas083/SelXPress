@@ -31,90 +31,7 @@ export default {
   data() {
     return {
       category: 'All',
-      products: [
-        {
-          id: 1,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: '2023-08-22T11:15:50.635Z',
-        }, {
-          id: 2,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        }, {
-          id: 3,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 4,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 5,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 6,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 7,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 8,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 9,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 10,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 11,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 12,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 13,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-        {
-          id: 13,
-          name: "SAMODA, Child, Baleine, T-Shirt",
-          price: '16,99',
-          createdAt: "2023-08-22T11:15:50.635Z",
-        },
-      ]
+      products: []
     }
   },
   methods: {
@@ -146,30 +63,7 @@ export default {
     }
   },
   created() {
-    GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
-      .then((response) => {
-        if (response.data.role.id === 3) {
-          GET(ENDPOINTS.GET_ALL_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-              this.products = response.data
-            })
-            .catch((error) => {
-              console.dir(error)
-            });
-        }
-        else {
-          GET(ENDPOINTS.GET_MY_PRODUCT, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-              this.products = response.data
-            })
-            .catch((error) => {
-              console.dir(error)
-            });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.refreshProduct()
   },
 }
 </script>
