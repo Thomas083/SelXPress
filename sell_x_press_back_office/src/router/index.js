@@ -7,7 +7,6 @@ import UserView from "../views/UserView.vue"
 import AdminView from "../views/AdminView.vue"
 import ProductDetails from '../views/ProductDetails.vue'
 import AddProduct from "../views/AddProduct.vue"
-import ProductDetails from '../views/ProductDetails.vue'
 
 const routes = [
   {
