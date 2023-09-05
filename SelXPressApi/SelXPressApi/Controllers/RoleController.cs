@@ -138,7 +138,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the role with the given ID exists
 			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the ID : " + id + " doesn't exist", "RLE-1402");
+				throw new NotFoundException($"The role with the ID : {id} doesn't exist", "RLE-1402");
 
 			// Update the role using the repository
 			await _roleRepository.UpdateRoleByID(id, updateRole);
@@ -173,7 +173,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the role with the given ID exists
 			if (!await _roleRepository.RoleExists(id))
-				throw new NotFoundException("The role with the ID : " + id + " doesn't exist", "RLE-1402");
+				throw new NotFoundException($"The role with the ID : {id} doesn't exist", "RLE-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
