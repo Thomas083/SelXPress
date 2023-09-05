@@ -95,6 +95,10 @@ namespace SelXPressApi.Repository
             {
                 var product = await _context.Products.FindAsync(id);
                 _context.Products.Remove(product);
+                await _context.Carts.Where(c => c.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.OrderProducts.Where(op => op.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.SellerProducts.Where(sp => sp.ProductId == product.Id).ExecuteDeleteAsync();
                 return await _commonMethods.Save();
             }
             return false;
