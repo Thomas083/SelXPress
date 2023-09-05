@@ -19,7 +19,7 @@
                 <input-component :value="formData.stock" label="Stock :" id="input-stock" name="input-stock" type="number"
                     placeholder="0" @input="updateData($event, 'stock')" />
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
-                <Select2 v-model="formData.productAttributeIds" :options="attributeOptions"
+                <Select2 v-model="formData.attributeIds" :options="attributeOptions"
                     :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }" />
                 <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
                 <Select2 v-model="formData.categoryId" :options="categoryOptions"
@@ -61,7 +61,7 @@ export default {
                 description: "",
                 picture: "",
                 categoryId: 0,
-                productAttributeIds: [],
+                attributeIds: [],
                 stock: 0,
             },
             attributeOptions: null,
@@ -70,10 +70,11 @@ export default {
     },
     methods: {
         saveProduct() {
-            this.formData.productAttributeIds = this.formData.productAttributeIds.map(attribute => parseInt(attribute));
+            this.formData.attributeIds = this.formData.attributeIds.map(attribute => parseInt(attribute));
             PUT(ENDPOINTS.UPDATE_PRODUCT + `/${this.$route.params.id}`, this.formData, JSON.parse(localStorage.getItem('user')).token)
                 .then(() => {
                     createToast({ title: 'Product updated sucessfuly', description: `You sucessfuly updated the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
+                    this.$router.push({path: `/product/${this.$route.params.id}/${this.formData.name}`})
                 })
                 .catch(() => {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
@@ -108,7 +109,7 @@ export default {
                 this.formData.price = response.data.price;
                 this.formData.categoryId = response.data.category.id;
                 for (let i = 0; i < response.data.productAttributes.length; i++) {
-                    this.formData.productAttributeIds.push(response.data.productAttributes[i].attributeId)
+                    this.formData.attributeIds.push(response.data.productAttributes[i].attributeId)
 
                 }
             })
