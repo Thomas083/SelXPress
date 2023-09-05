@@ -6,15 +6,18 @@
                 <div class="product-ref">Ref : {{ product.id }}</div>
                 <div class="product-price">{{ product.price }} €</div>
                 <div class="product-footer-container">
-                    <button class="btn btn-primary update-btn">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
-                    <button class="btn btn-primary delete-btn">Delete <img class="delete-img" src="@/assets/Card/bouton-supprimer.png" alt="..." /></button>
+                    <button class="btn btn-primary update-btn" @click="goToDetails(product.id, product.name)">Update <img class="modify-img" src="@/assets/Card/modify.png" alt="..." /></button>
+                    <button class="btn btn-primary delete-btn" @click="deleteProduct(product.id, product.name)">Delete <img class="delete-img" src="@/assets/Card/bouton-supprimer.png" alt="..." /></button>
                 </div>
             </div>
         </div>
 </template>
 
 <script>
+import { DELETE, GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
 import { format } from 'date-fns';
+import { createToast } from 'mosha-vue-toastify';
 
 export default {
   name: 'ProductCard',
@@ -28,6 +31,16 @@ export default {
     formatCreatedAt(createdAt) {
       const formattedDate = format(new Date(createdAt), 'dd/MM/yyyy');
       return formattedDate;
+    },
+    goToDetails(id, name) {
+      this.$router.push({ path: `product/${id}/${name}`})
+    },
+    deleteProduct(id, name) {
+        DELETE(ENDPOINTS.DELETE_PRODUCT + `/${id}`, JSON.parse(localStorage.getItem('user')).token)
+        .then(() => {
+            this.$emit('deletedItem', true);
+            createToast({ title: 'Deleted Success', description: `You sucessfuly deleted the ${name} product` }, { type: 'success', position: 'bottom-right' });
+        })
     }
   }
 }

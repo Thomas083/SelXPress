@@ -11,39 +11,31 @@
                     <input id="file-input" type="file" style="display: none" @change="handleFileSelection" />
                 </div>
             </div>
-            <div :onChange="$emit('inputForm', formData)" class="product-details">
-                <input-component label="Title :" id="input-title" name="input-title" type="text" placeholder="Enter your product title..."
-                    @input="updateData($event, 'name')" />
-                <input-component label="Price :" id="input-price" name="input-price" type="number" placeholder="...€"
-                    @input="updateData($event, 'price')" />
-                <input-component label="Stock :" id="input-stock" name="input-stock" type="number" placeholder="0"
-                    @input="updateData($event, 'stock')" />
+            <div class="product-details">
+                <input-component :value="formData.name" label="Title :" id="input-title" name="input-title" type="text"
+                    placeholder="Enter your product title..." @input="updateData($event, 'name')" />
+                <input-component :value="formData.price" label="Price :" id="input-price" name="input-price" type="number"
+                    placeholder="...€" @input="updateData($event, 'price')" />
+                <input-component :value="formData.stock" label="Stock :" id="input-stock" name="input-stock" type="number"
+                    placeholder="0" @input="updateData($event, 'stock')" />
                 <label class="col-md-2 control-label" style="text-align: right;">Attributes:</label>
-                <Select2
-                    v-model="formData.productAttributeIds"
-                    :options="attributeOptions" 
-                    :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }"
-                />
+                <Select2 v-model="formData.attributeIds" :options="attributeOptions"
+                    :settings="{ placeholder: 'Select all the attributes', width: '100%', multiple: true }" />
                 <label class="col-md-2 control-label" style="text-align: right;">Category:</label>
-                <Select2
-                    v-model="formData.categoryId"
-                    :options="categoryOptions" 
-                    :settings="{ placeholder: 'Select the category', width: '100%'}"
-                />
+                <Select2 v-model="formData.categoryId" :options="categoryOptions"
+                    :settings="{ placeholder: 'Select the category', width: '100%' }" />
 
             </div>
         </div>
         <div class="separation-line"></div>
         <div class="description-container">
             <h1>Description</h1>
-            <div :onChange="$emit('inputForm', formData)">
-                <textarea class="product-description" rows="10" cols="100" id="input-description" name="input-description"
-                    placeholder="Write the product description here..."
-                    @change="updateData($event.target.value, 'description')"></textarea>
-            </div>
+            <textarea :value="formData.description" class="product-description" rows="10" cols="100" id="input-description"
+                name="input-description" placeholder="Write the product description here..."
+                @change="updateData($event.target.value, 'description')"></textarea>
         </div>
         <div class="save-btn-container">
-            <button class="btn btn-primary save-btn" @click="addProduct">Add Product</button>
+            <button class="btn btn-primary save-btn" @click="saveProduct">Save</button>
         </div>
     </div>
 </template>
@@ -54,9 +46,10 @@ import InputComponent from "@/components/global/InputComponent.vue";
 import { GET, POST } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 import { createToast } from "mosha-vue-toastify";
+import { PUT } from "@/api/axios";
 
 export default {
-    name: "AddProduct",
+    name: "ProductDetails",
     components: {
         InputComponent,
     },
@@ -67,23 +60,25 @@ export default {
                 price: 0,
                 description: "",
                 picture: "",
-                categoryId: null,
+                categoryId: 0,
+                attributeIds: [],
                 stock: 0,
-                productAttributeIds: [],
             },
             attributeOptions: null,
             categoryOptions: null,
         };
     },
     methods: {
-        addProduct() {
-            POST(ENDPOINTS.POST_PRODUCT, this.formData, JSON.parse(localStorage.getItem('user')).token)
-            .then((response) => {
-                createToast({ title: 'Product created sucessfuly', description: `You sucessfuly created the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
-            })
-            .catch((error) => {
-                createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
-            });
+        saveProduct() {
+            this.formData.attributeIds = this.formData.attributeIds.map(attribute => parseInt(attribute));
+            PUT(ENDPOINTS.UPDATE_PRODUCT + `/${this.$route.params.id}`, this.formData, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Product updated sucessfuly', description: `You sucessfuly updated the ${this.formData.name} product` }, { type: 'success', position: 'bottom-right' });
+                    this.$router.push({path: `/product/${this.$route.params.id}/${this.formData.name}`})
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                });
         },
 
         updateData(e, key) {
@@ -104,14 +99,31 @@ export default {
             }
         },
     },
-    created () {
+    created() {
+        GET(ENDPOINTS.GET_ONE_PRODUCT + `/${this.$route.params.id}`, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.formData.name = response.data.name;
+                this.formData.description = response.data.description;
+                this.formData.picture = response.data.picture;
+                this.formData.stock = response.data.stock;
+                this.formData.price = response.data.price;
+                this.formData.categoryId = response.data.category.id;
+                for (let i = 0; i < response.data.productAttributes.length; i++) {
+                    this.formData.attributeIds.push(response.data.productAttributes[i].attributeId)
+
+                }
+            })
+            .catch((error) => {
+                console.dir(error)
+            })
         GET(ENDPOINTS.GET_ALL_ATTRIBUTE)
             .then((response) => {
                 this.attributeOptions = response.data.map(item => {
                     return {
                         id: item.id,
                         text: item.name
-                    }});
+                    }
+                });
             })
             .catch((error) => {
                 console.dir(error)
@@ -122,7 +134,8 @@ export default {
                     return {
                         id: item.id,
                         text: item.name
-                    }});
+                    }
+                });
             });
     },
 };

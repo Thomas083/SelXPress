@@ -35,6 +35,10 @@ export default {
         goToAddProduct() {
             this.$router.push({ path: '/add-product' });
         },
+        logOut() {
+            localStorage.clear();
+            window.location.reload();
+        },
     },
     mounted() {
         GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
