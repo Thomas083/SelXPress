@@ -201,7 +201,10 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
 
 			// Create the product using the repository
-			await _productRepository.CreateProduct(product);
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			if (email == null)
+				throw new BadRequestException("You are not connected", "PRO-1104");
+			await _productRepository.CreateProduct(product, email);
 			return StatusCode(201);
 		}
 		#endregion

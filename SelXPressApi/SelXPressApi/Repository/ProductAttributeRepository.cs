@@ -85,7 +85,10 @@ namespace SelXPressApi.Repository
 		/// <returns>A list of all product attributes.</returns>
 		public async Task<List<ProductAttribute>> GetAllProductAttributes()
 		{
-			var productAttributes = await _context.ProductAttributes.ToListAsync();
+			var productAttributes = await _context.ProductAttributes
+				.Include(p => p.Product)
+				.Include(a => a.Attribute)
+				.ToListAsync();
 			return productAttributes;
 		}
 
@@ -97,6 +100,8 @@ namespace SelXPressApi.Repository
 		public async Task<ProductAttribute?> GetProductAttributeById(int id)
 		{
 			var productAttribute = await _context.ProductAttributes
+				.Include(a => a.Attribute)
+				.Include(p => p.Product)
 				.FirstOrDefaultAsync(pa => pa.Id == id);
 
 			return productAttribute;

@@ -65,6 +65,8 @@ namespace SelXPressApi.Helper
 
             // Mapping OrderProduct model to OrderProductDTO
             CreateMap<OrderProduct, OrderProductDTO>();
+
+            CreateMap<UpdateProductDTO, Product>();
         }
     }
 }

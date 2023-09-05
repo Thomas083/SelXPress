@@ -30,7 +30,7 @@ namespace SelXPressApi.DTO.ProductDTO
         /// <summary>
         /// Gets or sets the ID of the category to which the product belongs.
         /// </summary>
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
 
         /// <summary>
         /// Gets or sets the stock quantity of the product.
@@ -40,6 +40,8 @@ namespace SelXPressApi.DTO.ProductDTO
         /// <summary>
         /// Gets or sets a list of attribute IDs associated with the product.
         /// </summary>
-        public List<ProductAttribute> ProductAttributes { get; set; } // New property for attribute IDs
+        public List<int> ProductAttributeIds { get; set; } // New property for attribute IDs
+        
+        
     }
 }

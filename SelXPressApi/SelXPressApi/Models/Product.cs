@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SelXPressApi.Models;
@@ -11,6 +12,7 @@ public class Product
     /// <summary>
     /// Id of the product
     /// </summary>
+    [Key]
     public int Id { get; set; }
 
     /// <summary>
