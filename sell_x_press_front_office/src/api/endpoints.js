@@ -37,4 +37,7 @@ export const ENDPOINTS = {
     // ORDER
     GET_MY_ORDER: '/api/Order/me', // (GET)
     CREATE_ORDER: '/api/Order', //(POST)
+
+    // ATTRIBUTE
+    GET_ONE_ATTRIBUTE: '/api/Attribute', // (GET) + add id attribute
 }

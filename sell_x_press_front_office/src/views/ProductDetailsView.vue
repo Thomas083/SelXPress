@@ -2,7 +2,7 @@
     <div class="product-details-container">
         <div class="img-details-container">
             <image-details :product="product" />
-            <product-details :product="product" />
+            <product-details :product="product" :attributes="attributes" />
         </div>
         <div class="separation-line"></div>
         <description-details :description="product.description" />
@@ -11,7 +11,7 @@
             <h1>Customer Review</h1>
             <div class="rating-review-container">
                 <rating-review :star_rating="star_rating" :number_review="number_review" :product_rating="product_rating" />
-                <customer-review :comments="comments" :productId="product.id" @refreshComments="getAllInfo" />
+                <customer-review :comments="comments" :productId="product.id" />
             </div>
         </div>
     </div>
@@ -40,6 +40,7 @@ export default {
         return {
             product: null,
             comments: [],
+            attributes: [],
             star_rating: {
                 5: 0,
                 4: 0,
@@ -77,8 +78,9 @@ export default {
                 .then((response_product) => {
                     this.product = response_product.data;
                     this.number_review = response_product.data.comments.length
-                    this.comments = [];
-                    for (let i = 0; i <= this.number_review; i++) {
+                    this.attributes = []
+                    this.comments = []
+                    for (let i = 0; i < this.number_review; i++) {
                         GET(ENDPOINTS.GET_ONE_COMMENT + `/${response_product.data.comments[i].id}`)
                             .then((response_comment) => {
                                 this.comments.push(response_comment.data)
@@ -107,11 +109,18 @@ export default {
                                 console.dir(error)
                             })
                     };
+                    for (let i = 0; i < response_product.data.productAttributes.length; i++) {
+                        GET(ENDPOINTS.GET_ONE_ATTRIBUTE + `/${this.product.productAttributes[i].attributeId}`)
+                            .then((response_attribute) => {
+                                this.attributes.push(response_attribute.data)
+                            })
+                            .catch((error) => { console.dir(error) })
+                    }
                 })
                 .catch((error) => {
                     console.dir(error);
                 });
-        }
+        },
     },
     created() {
         this.getAllInfo()
