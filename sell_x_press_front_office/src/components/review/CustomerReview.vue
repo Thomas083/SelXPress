@@ -13,10 +13,10 @@
             </div>
             <button class="btn btn-primary add-review-btn" @click="addReview()">Add your review</button>
         </div>
-        <div v-for="comment in comments">
+        <div v-for="comment in filteredComments">
             <div class="review-img-editor-container">
                 <img src="@/assets/Product/client.png" alt="editor" />
-                <h3>{{ comment.user }}</h3>
+                <h3>{{ comment.user.username }}</h3>
             </div>
             <div class="star-rating-container review">
                 <div v-for="index  in comment.mark.rate" :key="index">
@@ -67,6 +67,13 @@ export default {
             hoveredStars: 0,
         }
     },
+    computed: {
+        filteredComments() {
+            const commentCopy = [...this.comments]
+            commentCopy.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)) 
+            return commentCopy
+        }
+    },
     methods: {
         setHoveredStars(index) {
             this.hoveredStars = index;
@@ -76,6 +83,7 @@ export default {
         },
         addReview() {
             this.sendReviewData.rate = this.hoveredStars;
+            this.sendReviewData.productId = this.productId;
             if (!localStorage.getItem('user')) createToast(`You need to be connected to add a review on this product`, { type: 'danger', position: 'bottom-right' })
             else if (this.sendReviewData.rate == 0) createToast(`You need to select at least one star please !`, { type: 'danger', position: 'bottom-right' })
             else {
@@ -85,6 +93,7 @@ export default {
                     POST(ENDPOINTS.CREATE_COMMENT, this.sendReviewData, JSON.parse(localStorage.getItem('user')).token)
                         .then(() => {
                             createToast({ title: 'Comment created successfully', description: `Your ${this.sendReviewData.title} comment is sucessfully created` }, { type: 'success', position: 'bottom-right' })
+                            window.location.reload()
                         })
                         .catch(() => {
                             createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' })
@@ -99,9 +108,6 @@ export default {
             if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
             else return '';
         },
-    },
-    mounted () {
-        this.sendReviewData.productId = this.productId;
     },
 }
 </script>

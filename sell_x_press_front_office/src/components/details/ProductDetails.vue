@@ -15,15 +15,11 @@
         <div v-for="(attribute, index) in attributes" :key="index" class="attributes-container">
             <div class="attribute-name">{{ attribute.name }}:</div>
             <div v-if="attribute.name === 'color'" class="attributes-container">
-                <div class="color-attribute" v-for="(data, index) in attribute.data"
-                    :class="{ 'color-attribute-selected': isAttributeSelected(attribute.name, data.value) }"
-                    @click="setAttribute(attribute.name, data.value)" :style="{ backgroundColor: data.value }">
+                <div class="color-attribute" v-for="data in attribute.attributeData" :style="{ backgroundColor: data.value }">
                 </div>
             </div>
             <div v-else class="attributes-container">
-                <div class="attribute" v-for="(data, index) in attribute.data"
-                    :class="{ 'attribute-selected': isAttributeSelected(attribute.name, data.value) }"
-                    @click="setAttribute(attribute.name, data.value)">
+                <div class="attribute" v-for="data in attribute.attributeData">
                     {{ data.value }}
                 </div>
             </div>
@@ -43,72 +39,21 @@ export default {
             type: Object,
             required: true 
         },
+        attributes: {
+            type: Array,
+            required: true
+        }
     },
     data() {
         return {
-            addProductAttributes: {
-                attributes: [],
-            },
             addProduct: {
                 productId: null,
                 quantity: 1
             },
             seller: 'ARTINABS',
-            attribute_selected: [
-                { name: 'color', selected: false },
-                { name: 'size', selected: false }
-            ],
-            attributes: [
-                {
-                    name: 'color',
-                    data: [
-                        { 'name': 'blue', 'value': '#0000FF' },
-                        { 'name': 'red', 'value': '#FF0000' },
-                        { 'name': 'green', 'value': '#00FF00' }
-                    ]
-                },
-                {
-                    name: 'size',
-                    data: [
-                        { 'name': 'extra_small', 'value': 'xs' },
-                        { 'name': 'small', 'value': 's' },
-                        { 'name': 'medium', 'value': 'm' },
-                        { 'name': 'large', 'value': 'l' },
-                        { 'name': 'extra_large', 'value': 'xl' }
-                    ]
-                },
-            ],
         }
     },
     methods: {
-        setAttribute(attribute_name, attribute_value) {
-            const existingAttributeIndex = this.addProductAttributes.attributes.findIndex(
-                (data) => data.name === attribute_name
-            );
-
-            if (existingAttributeIndex !== -1) {
-                if (this.addProductAttributes.attributes[existingAttributeIndex].value === attribute_value) {
-                    this.addProductAttributes.attributes.splice(existingAttributeIndex, 1);
-                    this.attribute_selected[attribute_name] = false;
-                } else {
-                    this.addProductAttributes.attributes[existingAttributeIndex].value = attribute_value;
-                }
-            } else {
-                this.addProductAttributes.attributes.push({ name: attribute_name, value: attribute_value });
-            }
-
-            this.attribute_selected[attribute_name] = true;
-        },
-
-        isAttributeSelected(attribute_name, attribute_value) {
-            return (
-                this.attribute_selected[attribute_name] &&
-                this.addProductAttributes.attributes.some(
-                    (data) => data.name === attribute_name && data.value === attribute_value
-                )
-            );
-        },
-
         addToCart() {
             this.addProduct.productId = this.product.id;
             if (localStorage.getItem('user')) {
