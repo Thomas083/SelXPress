@@ -16,7 +16,7 @@
         <div v-for="comment in comments">
             <div class="review-img-editor-container">
                 <img src="@/assets/Product/client.png" alt="editor" />
-                <h3>{{ comment.user }}</h3>
+                <h3>{{ comment.user.username }}</h3>
             </div>
             <div class="star-rating-container review">
                 <div v-for="index  in comment.mark.rate" :key="index">
@@ -76,6 +76,7 @@ export default {
         },
         addReview() {
             this.sendReviewData.rate = this.hoveredStars;
+            this.sendReviewData.productId = this.productId;
             if (!localStorage.getItem('user')) createToast(`You need to be connected to add a review on this product`, { type: 'danger', position: 'bottom-right' })
             else if (this.sendReviewData.rate == 0) createToast(`You need to select at least one star please !`, { type: 'danger', position: 'bottom-right' })
             else {
@@ -89,6 +90,8 @@ export default {
                         .catch(() => {
                             createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' })
                         });
+                    // this.$emit('refreshComments')
+                    window.location.reload()
                 })
                 .catch((error) => {
                     console.dir(error)
@@ -99,9 +102,6 @@ export default {
             if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
             else return '';
         },
-    },
-    mounted () {
-        this.sendReviewData.productId = this.productId;
     },
 }
 </script>

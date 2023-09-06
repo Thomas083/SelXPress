@@ -89,22 +89,22 @@ export default {
             .catch((error) => {
                 console.dir(error)
             });
-        // GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
-        //     .then((response) => {
-        //         this.user = response.data.username
-        //         GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
-        //             .then((response) => {
-        //                this.numberProductCart = response.data.length;
-        //             })
-        //             .catch((error) => {
-        //                 console.dir(error);
-        //                 0;
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.dir(error);
-        //         0;
-        //     });
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.user = response.data.username
+                // GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
+                //     .then((response) => {
+                //        this.numberProductCart = response.data.length;
+                //     })
+                //     .catch((error) => {
+                //         console.dir(error);
+                //         0;
+                //     });
+            })
+            .catch((error) => {
+                console.dir(error);
+                0;
+            });
     },
 };
 </script>

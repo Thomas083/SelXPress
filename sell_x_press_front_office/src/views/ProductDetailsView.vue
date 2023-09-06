@@ -11,10 +11,9 @@
             <h1>Customer Review</h1>
             <div class="rating-review-container">
                 <rating-review :star_rating="star_rating" :number_review="number_review" :product_rating="product_rating" />
-                <!-- <customer-review :comments="product.comments" :productId="product.id"/> -->
+                <customer-review :comments="comments" :productId="product.id" @refreshComments="getAllInfo" />
             </div>
         </div>
-
     </div>
 </template>
 
@@ -40,6 +39,7 @@ export default {
     data() {
         return {
             product: null,
+            comments: [],
             star_rating: {
                 5: 0,
                 4: 0,
@@ -49,6 +49,11 @@ export default {
             },
             number_review: 0,
             product_rating: 0,
+        }
+    },
+    computed: {
+        product() {
+            return this.product ? this.product : ''
         }
     },
     methods: {
@@ -67,50 +72,49 @@ export default {
                 this.product_rating = 0;
             }
         },
-    },
-    computed: {
-        product() {
-            return this.product ? this.product : '';
+        getAllInfo() {
+            GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
+                .then((response_product) => {
+                    this.product = response_product.data;
+                    this.number_review = response_product.data.comments.length
+                    this.comments = [];
+                    for (let i = 0; i <= this.number_review; i++) {
+                        GET(ENDPOINTS.GET_ONE_COMMENT + `/${response_product.data.comments[i].id}`)
+                            .then((response_comment) => {
+                                this.comments.push(response_comment.data)
+                                switch (response_comment.data.mark.rate) {
+                                    case 5:
+                                        this.star_rating[5] += 1;
+                                        break;
+                                    case 4:
+                                        this.star_rating[4] += 1;
+                                        break;
+                                    case 3:
+                                        this.star_rating[3] += 1;
+                                        break;
+                                    case 2:
+                                        this.star_rating[2] += 1;
+                                        break;
+                                    case 1:
+                                        this.star_rating[1] += 1;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                this.calculateProductRating()
+                            })
+                            .catch((error) => {
+                                console.dir(error)
+                            })
+                    };
+                })
+                .catch((error) => {
+                    console.dir(error);
+                });
         }
     },
     created() {
-        GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
-            .then((response) => {
-                this.product = response.data;
-                this.number_review = this.product.comments.length
-                for (let i = 0; i < this.product.comments.length; i++) {
-                    GET(ENDPOINTS.GET_ONE_COMMENT + `/${this.product.comments[i].id}`)
-                        .then((response) => {
-                            this.product.comments[i].mark = response.data.mark
-                            switch (this.product.comments[i].mark.rate) {
-                                case 5:
-                                    this.star_rating[5] += 1;
-                                    break;
-                                case 4:
-                                    this.star_rating[4] += 1;
-                                    break;
-                                case 3:
-                                    this.star_rating[3] += 1;
-                                    break;
-                                case 2:
-                                    this.star_rating[2] += 1;
-                                    break;
-                                case 1:
-                                    this.star_rating[1] += 1;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            this.calculateProductRating()
-                        })
-                        .catch((error) => {
-                            console.dir(error)
-                        })
-                };
-            })
-            .catch((error) => {
-                console.dir(error);
-            });
+        this.getAllInfo()
     }
 }
 
@@ -163,5 +167,79 @@ img {
     display: flex;
     flex-direction: row;
     gap: 3rem;
+}
+
+.review_publication_date {
+    color: var(--main-grey-separation);
+    text-align: start;
+}
+
+.add-review-btn {
+    margin-left: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.add-review {
+    border-radius: 1rem;
+    padding: 1rem;
+    border-color: var(--main-black);
+}
+
+.review-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review img {
+    height: 1rem;
+}
+
+.review-title {
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.review-comment {
+    margin-top: 1rem;
+    text-align: justify;
+}
+
+.add-review-title {
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.review-img-editor-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.add-review-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+img {
+    height: 3rem;
+}
+
+.star-rating-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.star-rating-container img {
+    height: 1rem;
 }
 </style>
