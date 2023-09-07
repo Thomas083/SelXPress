@@ -71,11 +71,20 @@ namespace SelXPressApi.Repository
 					Order = newOrder,
 					OrderId = newOrder.Id,
 					Product = cartList[i].Product,
-					ProductId = cartList[i].ProductId
+					ProductId = cartList[i].ProductId,
+					Quantity = cartList[i].Quantity
 				};
+				totalPrice = totalPrice + orderProductToAdd.Product.Price;
+				if (orderProductToAdd.Quantity > 1)
+				{
+					for (int j = 1; j < orderProductToAdd.Quantity; j++)
+					{
+						totalPrice = totalPrice + orderProductToAdd.Product.Price;
+					}
+				}
 				newOrder.OrderProducts.Add(orderProductToAdd);
 			}
-
+			newOrder.TotalPrice = totalPrice;
 			_context.Orders.Add(newOrder);
 
 			return await _commonMethods.Save();
