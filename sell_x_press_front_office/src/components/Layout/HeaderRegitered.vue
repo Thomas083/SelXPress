@@ -61,7 +61,7 @@ export default {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'danger', position: 'bottom-right' });
+            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'info', position: 'bottom-right' });
             else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all` });
             else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}` })
         }
