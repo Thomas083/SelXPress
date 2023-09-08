@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="cart-summary">
-            <cart-summary :cart="cart" />
+            <cart-summary :cart="cart" @refreshCart="getMyCart" />
         </div>
     </div>
 </template>
@@ -47,10 +47,9 @@ export default {
                     .catch((error) => {
                         console.dir(error)
                     });            
-        }
-    },
-    created() {
-        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+        },
+        getMyCart() {
+            GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
             .then((response) => {
                 GET(ENDPOINTS.GET_MY_CART + `/${response.data.id}/user`, JSON.parse(localStorage.getItem('user')).token)
                     .then((response) => {
@@ -63,6 +62,10 @@ export default {
             .catch((error) => {
                 console.dir(error)
             });
+        }
+    },
+    created() {
+        this.getMyCart()
     },
 }
 </script>

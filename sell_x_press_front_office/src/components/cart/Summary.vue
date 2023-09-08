@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { POST } from '@/api/axios';
+import { GET, POST } from '@/api/axios';
 import { ENDPOINTS } from '@/api/endpoints';
 import { createToast } from 'mosha-vue-toastify';
 
@@ -45,8 +45,9 @@ export default {
           quantity: this.cart[i].quantity
         })     
       };
-      POST(ENDPOINTS.CREATE_ORDER, this.sendOrder, JSON.parse(localStorage.getItem('user')).token)
+      POST(ENDPOINTS.CREATE_ORDER, {userId: this.sendOrder.userId}, JSON.parse(localStorage.getItem('user')).token)
       .then(() => {
+        this.$emit('refreshCart')
         createToast({ title: 'Order register succesfully', description: 'You sucessfully registered your order' }, { type: 'success', position: 'bottom-right' });
       })
       .catch(() => {
