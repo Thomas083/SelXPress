@@ -86,7 +86,7 @@ namespace SelXPressApi.Repository
 			}
 			newOrder.TotalPrice = totalPrice;
 			_context.Orders.Add(newOrder);
-
+			await _context.Carts.Where(c => c.UserId == createOrder.UserId).ExecuteDeleteAsync();
 			return await _commonMethods.Save();
 		}
 
