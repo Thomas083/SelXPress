@@ -126,9 +126,12 @@ namespace SelXPressApi.Repository
 		/// </summary>
 		/// <param name="id">The unique identifier of the order.</param>
 		/// <returns>The order with the specified identifier, or null if not found.</returns>
-		public async Task<Order?> GetOrderById(int id)
+		public async Task<Order> GetOrderById(int id)
 		{
-			return await _context.Orders.FindAsync(id);
+			return await _context.Orders.Where(o => o.Id == id)
+				.Include(o => o.User)
+				.Include(o => o.OrderProducts)
+				.FirstAsync();
 		}
 
 		/// <summary>
