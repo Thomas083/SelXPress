@@ -29,6 +29,7 @@
 <script>
 import { GET } from '@/api/axios';
 import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
 
 export default {
     name: "HeaderRegistered",
