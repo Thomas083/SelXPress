@@ -116,6 +116,7 @@ namespace SelXPressApi.Repository
 			var orders = await _context.Orders
 				.Include(o => o.User)
 				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
 				.ToListAsync();
 
 			return orders;
@@ -131,6 +132,7 @@ namespace SelXPressApi.Repository
 			return await _context.Orders.Where(o => o.Id == id)
 				.Include(o => o.User)
 				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
 				.FirstAsync();
 		}
 
@@ -164,7 +166,11 @@ namespace SelXPressApi.Repository
 			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
 			{
 				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
-				var orders = await _context.Orders.Where(o => o.User == user).ToListAsync();
+				var orders = await _context.Orders.Where(o => o.User == user)
+					.Include(o => o.User)
+					.Include(o => o.OrderProducts)
+					.ThenInclude(op => op.Product)
+					.ToListAsync();
 				return orders;
 			}
 
