@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.Controllers;
 using SelXPressApi.DTO.UserDTO;
+using SelXPressApi.Exceptions;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
@@ -54,71 +55,106 @@ public class GetUsersTest
     {
         var users = new List<User>()
         {
-            new User {Id = 1, Email = "maxenceLeroy@epitech.eu"},
-            new User {Id = 2}
-        }
-        var usersMapped = new List<UserDto>()
-        {
-            new UserDto { Id = 1, Email = "maxence.leroy@epitech.eu" },
-            new UserDto { Id = 2, Email = "testmoica@gmail.com" }
+            new User() { Id = 1, Email = "maxence.leroy@epitech.eu" },
+            new User() { Id = 2, Email = "ugo.bertrand@epitech.eu" }
         };
 
+        var usersMapped = new List<UserDto>()
+        {
+            new UserDto() { Id = 1, Email = "maxence.leroy@epitech.eu" },
+            new UserDto() { Id = 2, Email = "ugo.bertrand@epitech.eu" }
+        };
         A.CallTo(() => _userRepository.GetAllUsers()).Returns(users);
-    }
+        A.CallTo(() => _mapper.Map<List<UserDto>>(A<List<User>>._)).Returns(usersMapped);
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(true);
 
-    /// <summary>
-    /// Test to check if the status of the request is equals to 400 (BadRequest)
-    /// </summary>
-    [Fact]
-    public void UserController_GetUsers_Status400()
-    {
-        //todo
-    }
+        var result = await _userController.GetUsers();
 
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var model = Assert.IsType<List<UserDto>>(okResult.Value);
+        Assert.Equal(2, model.Count);
+    }
+    
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status401_TokenIsInvalid()
+    public async void UserController_GetUsers_Status401_TokenIsInvalid()
     {
-        //todo
+
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUsers());
+        
+        Assert.Equal("The token is not valid, please try again with another token", exception.Message);
+        Assert.Equal("SRV-1702", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status401_TokenIsMissing()
+    public async void UserController_GetUsers_Status401_TokenIsMissing()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUsers());
         
+        Assert.Equal("An error occured while the decoding of the jwt token", exception.Message);
+        Assert.Equal("SRV-1701", exception.Code);
+
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the email in the token is not in the database
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status401_EmailIsNotInTheDatabase()
+    public async void UserController_GetUsers_Status401_EmailIsNotInTheDatabase()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new NotFoundException("The email address is not in the database","SRV-1401"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.GetUsers());
+        
+        Assert.Equal("The email address is not in the database", exception.Message);
+        Assert.Equal("SRV-1401", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 403 because the user is not authorized to do this operation
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status403()
+    public async void UserController_GetUsers_Status403()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(false);
+
+        var exception = await Assert.ThrowsAsync<ForbiddenRequestException>(() => _userController.GetUsers());
+        
+        Assert.Equal("You are not authorized to access this data", exception.Message);
+        Assert.Equal("USR-2001", exception.Code );
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 404 because there is no users in the database
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status404()
+    public async void UserController_GetUsers_Status404()
     {
-        //todo
+        var users = new List<User>()
+        {
+            new User() { Id = 1, Email = "maxence.leroy@epitech.eu" },
+            new User() { Id = 2, Email = "ugo.bertrand@epitech.eu" }
+        };
+        A.CallTo(() => _userRepository.GetAllUsers()).Returns(users);
+        A.CallTo(() => _mapper.Map<List<UserDto>>(A<List<User>>._)).Returns(new List<UserDto>());
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(true);
+
+        // var exception = Assert.ThrowsAsync<NotFoundException>(() =>)
     }
 
     /// <summary>
@@ -129,38 +165,5 @@ public class GetUsersTest
     {
         //todo
     }
-
-    public List<User> CreateUser()
-    {
-        List<User> listUser = new List<User>();
-        User userCustomer1 = new User
-        {
-            Username = "LeBirz",
-            Email = "ugo.bertrand@epitech.eu",
-        };
-
-        User userCustomer2 = new User
-        {
-            Username = "Elsharion",
-            Email = "david.vacossin@epitech.eu",
-        };
-
-        User userSeller = new User
-        {
-            Username = "Aliak",
-            Email = "thomas.debray@epitech.eu",
-        };
-
-        User userOperator = new User
-        {
-            Username = "Maxence_Leroy",
-            Email = "maxence.leroy@epitech.eu",
-        };
-        listUser.Add(userCustomer1);
-        listUser.Add(userCustomer2);
-        listUser.Add(userOperator);
-        listUser.Add(userSeller);
-
-        return listUser;
-    }
+    
 }
