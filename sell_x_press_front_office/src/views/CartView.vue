@@ -56,6 +56,7 @@ export default {
                         this.cart = response.data
                     })
                     .catch((error) => {
+                        this.cart = []
                         console.dir(error)
                     });
             })
