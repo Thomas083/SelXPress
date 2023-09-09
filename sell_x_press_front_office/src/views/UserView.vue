@@ -40,7 +40,7 @@ export default {
         resetPassword() {
             sendPasswordResetEmail(auth, JSON.parse(localStorage.getItem('user')).email)
             .then(() => {
-                createToast("An Email was sent to reset your password", {type: 'success', position: 'bottom-right'});
+                createToast(`An Email to ${JSON.parse(localStorage.getItem('user')).email} was sent to reset your password`, {type: 'success', position: 'bottom-right'});
             })
             .catch(() => {
                     createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });

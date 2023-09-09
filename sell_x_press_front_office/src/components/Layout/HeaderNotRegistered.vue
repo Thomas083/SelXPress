@@ -22,7 +22,6 @@
             <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
-            <p class="circle-number">0</p>
         </div>
     </header>
 </template>
@@ -30,13 +29,14 @@
 <script>
 import { GET } from '@/api/axios';
 import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
 
 
 export default {
     name: "HeaderNotRegistered",
     data() {
         return {
-            selectedOption: 'All',
+            selectedOption: 'Select a category',
             formData: {
                 search: '',
                 categoryId: 0
@@ -55,13 +55,15 @@ export default {
             this.$router.push({ path: '/register' });
         },
         goToCart() {
-            this.$router.push({ path: '/cart' });
+            createToast('You need to be connected to see your cart', { type: 'warning', position: 'bottom-right' });
         },
         setCatagoryData() {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`})
+            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'info', position: 'bottom-right' });
+            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all`});
+            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`});
         }
     },
     computed: {
@@ -70,7 +72,7 @@ export default {
             if (newList !== null) {
                 newList.unshift({
                     id: 0,
-                    name: 'All',
+                    name: 'Select a category',
                     tags: []
                 });
                 return newList

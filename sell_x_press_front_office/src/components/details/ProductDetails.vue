@@ -1,7 +1,7 @@
 <template>
     <div class="product-details">
         <h2 class="product-title">{{ product.name }}</h2>
-        <div class="product-seller">Sold by: <span class="product-seller-name">{{ seller }}</span></div>
+        <div class="product-seller">Sold by: <span class="product-seller-name">SelXPress</span></div>
         <div class="product-price-cart-container">
             <div class="product-price">
                 <h2 class="price">{{ product.price }} €</h2>
@@ -15,15 +15,11 @@
         <div v-for="(attribute, index) in attributes" :key="index" class="attributes-container">
             <div class="attribute-name">{{ attribute.name }}:</div>
             <div v-if="attribute.name === 'color'" class="attributes-container">
-                <div class="color-attribute" v-for="(data, index) in attribute.data"
-                    :class="{ 'color-attribute-selected': isAttributeSelected(attribute.name, data.value) }"
-                    @click="setAttribute(attribute.name, data.value)" :style="{ backgroundColor: data.value }">
+                <div class="color-attribute" v-for="data in attribute.attributeData" :style="{ backgroundColor: data.value }">
                 </div>
             </div>
             <div v-else class="attributes-container">
-                <div class="attribute" v-for="(data, index) in attribute.data"
-                    :class="{ 'attribute-selected': isAttributeSelected(attribute.name, data.value) }"
-                    @click="setAttribute(attribute.name, data.value)">
+                <div class="attribute" v-for="data in attribute.attributeData">
                     {{ data.value }}
                 </div>
             </div>
@@ -32,6 +28,10 @@
 </template>
 
 <script>
+import { POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
+
 export default {
     name: 'ProductDetails',
     props: {
@@ -39,70 +39,32 @@ export default {
             type: Object,
             required: true 
         },
+        attributes: {
+            type: Array,
+            required: true
+        }
     },
     data() {
         return {
             addProduct: {
-                attributes: [],
+                productId: null,
+                quantity: 1
             },
-            seller: 'ARTINABS',
-            attribute_selected: [
-                { name: 'color', selected: false },
-                { name: 'size', selected: false }
-            ],
-            attributes: [
-                {
-                    name: 'color',
-                    data: [
-                        { 'name': 'blue', 'value': '#0000FF' },
-                        { 'name': 'red', 'value': '#FF0000' },
-                        { 'name': 'green', 'value': '#00FF00' }
-                    ]
-                },
-                {
-                    name: 'size',
-                    data: [
-                        { 'name': 'extra_small', 'value': 'xs' },
-                        { 'name': 'small', 'value': 's' },
-                        { 'name': 'medium', 'value': 'm' },
-                        { 'name': 'large', 'value': 'l' },
-                        { 'name': 'extra_large', 'value': 'xl' }
-                    ]
-                },
-            ],
         }
     },
     methods: {
-        setAttribute(attribute_name, attribute_value) {
-            const existingAttributeIndex = this.addProduct.attributes.findIndex(
-                (data) => data.name === attribute_name
-            );
-
-            if (existingAttributeIndex !== -1) {
-                if (this.addProduct.attributes[existingAttributeIndex].value === attribute_value) {
-                    this.addProduct.attributes.splice(existingAttributeIndex, 1);
-                    this.attribute_selected[attribute_name] = false;
-                } else {
-                    this.addProduct.attributes[existingAttributeIndex].value = attribute_value;
-                }
-            } else {
-                this.addProduct.attributes.push({ name: attribute_name, value: attribute_value });
-            }
-
-            this.attribute_selected[attribute_name] = true;
-        },
-
-        isAttributeSelected(attribute_name, attribute_value) {
-            return (
-                this.attribute_selected[attribute_name] &&
-                this.addProduct.attributes.some(
-                    (data) => data.name === attribute_name && data.value === attribute_value
-                )
-            );
-        },
-
         addToCart() {
-            console.dir(this.addProduct)
+            this.addProduct.productId = this.product.id;
+            if (localStorage.getItem('user')) {
+                POST(ENDPOINTS.CREATE_CART, this.addProduct, JSON.parse(localStorage.getItem('user')).token)
+                .then(() => {
+                    createToast({ title: 'Add to cart successful', description: 'Your cart was successfully added' }, { type: 'success', position: 'bottom-right' });
+                })
+                .catch(() => {
+                    createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+                })
+            } else createToast(`You need to be connected to add a product to cart !`, { type: 'danger', position: 'bottom-right' });
+
         },
     },
 }

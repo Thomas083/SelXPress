@@ -6,7 +6,7 @@
     </div>
     <button
       class="btn btn-primary go-to-payment-btn"
-      v-on:click="resetPassword"
+      v-on:click="goToPayement()"
     >
       Go to Payment
     </button>
@@ -14,6 +14,10 @@
 </template>
 
 <script>
+import { GET, POST } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
+
 export default {
   name: "CartSummary",
   props: {
@@ -22,25 +26,42 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      sendOrder: {
+        totalPrice: '',
+        userId: '',
+        orderProducts: []
+      }
+    }
+  },
+  methods: {
+    goToPayement() {
+      this.sendOrder.totalPrice = this.totalPrice
+      this.sendOrder.userId = this.cart[0].userId
+      for (let i = 0; i < this.cart.length; i++) {
+        this.sendOrder.orderProducts.push({
+          productId: this.cart[i].productId,
+          quantity: this.cart[i].quantity
+        })     
+      };
+      POST(ENDPOINTS.CREATE_ORDER, {userId: this.sendOrder.userId}, JSON.parse(localStorage.getItem('user')).token)
+      .then(() => {
+        this.$emit('refreshCart')
+        createToast({ title: 'Order register succesfully', description: 'You sucessfully registered your order' }, { type: 'success', position: 'bottom-right' });
+      })
+      .catch(() => {
+        createToast(`An error occured... Please try again`, { type: 'danger', position: 'bottom-right' });
+      })
+    }
+  },
   computed: {
     totalQuantity() {
       return this.cart.reduce((acc, item) => acc + item.quantity, 0);
     },
     totalPrice() {
       return this.cart.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      );
-    },
-  },
-  watch: {
-    cart(newValue, oldValue) {
-      this.totalQuantity = newValue.reduce(
-        (acc, item) => acc + item.quantity,
-        0
-      );
-      this.totalPrice = newValue.reduce(
-        (acc, item) => acc + item.price * item.quantity,
+        (acc, item) => acc + item.product.price * item.quantity,
         0
       );
     },

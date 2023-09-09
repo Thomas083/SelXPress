@@ -2,7 +2,7 @@
     <div class="product-details-container">
         <div class="img-details-container">
             <image-details :product="product" />
-            <product-details :product="product" />
+            <product-details :product="product" :attributes="attributes" />
         </div>
         <div class="separation-line"></div>
         <description-details :description="product.description" />
@@ -10,61 +10,8 @@
         <div class="customer-review-container">
             <h1>Customer Review</h1>
             <div class="rating-review-container">
-                <div class="rating-container">
-                    <div class="star-rating-container">
-                        <div v-for="index  in product_rating" :key="index">
-                            <img src="../assets/Product/yellow_star.png" alt="yellow stars" />
-                        </div>
-                        <div v-for="index in (5 - product_rating)" :key="index">
-                            <img src="../assets/Product/star.png" alt="stars" />
-                        </div>
-                        <span class="rating">{{ product_rating }} out of 5</span>
-                    </div>
-                    <div class="number-review">{{ number_review }} customer review</div>
-                    <div v-for="(value, index) in 5" class="ratings-table">
-                        <span>{{ 5 - (index) }} star</span>
-                        <div class="level-rating">
-                            <div class="level-rating"
-                                :style="{ backgroundColor: '#F17720', width: Math.floor((star_rating[5 - index] / (number_review)) * 100) + '%' }">
-                            </div>
-                        </div>
-                        <span>{{ Math.floor((star_rating[5 - index] / (number_review)) * 100) }}%</span>
-                    </div>
-                </div>
-                <div class="review-container">
-                    <input-component id="input-title" name="input-title" class="add-review-title" type="text"
-                        placeholder="Enter your title..." @input="updateData($event, 'title')" />
-                    <textarea class="add-review" rows="5" id="input-description" name="input-description"
-                        placeholder="Write your review here..."
-                        @change="updateData($event.target.value, 'message')"></textarea>
-                    <div class="add-review-container">
-                        <div v-for="index in 5" :key="index">
-                            <img v-if="index <= hoveredStars" src="../assets/Product/yellow_star.png" alt="yellow stars"
-                                @mouseover="hoveredStars = index" :style="{ cursor: 'pointer' }"
-                                @click="setHoveredStars(index)" />
-                            <img v-else src="../assets/Product/star.png" alt="stars" @mouseover="hoveredStars = index"
-                                :style="{ cursor: 'pointer' }" @click="setHoveredStars(index)" />
-                        </div>
-                        <button class="btn btn-primary add-review-btn" @click="addReview()">Add your review</button>
-                    </div>
-                    <div v-for="(review, index) in reviews">
-                        <div class="review-img-editor-container">
-                            <img src="@/assets/Product/client.png" alt="editor" />
-                            <h3>{{ review.editor }}</h3>
-                        </div>
-                        <div class="star-rating-container review">
-                            <div v-for="index  in review.rating" :key="index">
-                                <img src="../assets/Product/yellow_star.png" alt="yellow stars" />
-                            </div>
-                            <div v-for="index in (5 - review.rating)" :key="index">
-                                <img src="../assets/Product/star.png" alt="stars" />
-                            </div>
-                            <div class="review-title">{{ review.title }}</div>
-                        </div>
-                        <div class="review_publication_date">Published on: {{ review.publication_date }}</div>
-                        <div class="review-comment">{{ review.comment }}</div>
-                    </div>
-                </div>
+                <rating-review :star_rating="star_rating" :number_review="number_review" :product_rating="product_rating" />
+                <customer-review :comments="comments" :productId="product.id" />
             </div>
         </div>
     </div>
@@ -74,81 +21,109 @@
 
 import { GET } from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
-import InputComponent from "@/components/global/InputComponent.vue";
 import ImageDetails from "@/components/details/ImageDetails.vue";
 import ProductDetails from "@/components/details/ProductDetails.vue";
 import DescriptionDetails from "@/components/details/DescriptionDetails.vue";
-
+import RatingReview from "@/components/review/RatingReview.vue";
+import CustomerReview from "@/components/review/CustomerReview.vue";
 
 export default {
     name: 'ProductDetailsView',
     components: {
-        InputComponent,
         ImageDetails,
         ProductDetails,
-        DescriptionDetails
+        DescriptionDetails,
+        RatingReview,
+        CustomerReview,
     },
     data() {
         return {
             product: null,
-            number_review: '430',
-            product_rating: 4,
+            comments: [],
+            attributes: [],
             star_rating: {
-                5: 270,
-                4: 100,
-                3: 30,
+                5: 0,
+                4: 0,
+                3: 0,
                 2: 0,
-                1: 30,
+                1: 0,
             },
-            hoveredStars: 0,
-            reviews: [
-                {
-                    title: 'Awesome product !',
-                    editor: 'Elsharion',
-                    rating: 4,
-                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
-                    publication_date: '20/06/2023',
-                },
-                {
-                    title: 'Terrible.',
-                    editor: 'Thomas',
-                    rating: 2,
-                    comment: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda obcaecati sunt quasi odit labore commodi fugit ducimus nostrum asperiores aperiam laboriosam, ab repellat dolore, nisi fuga? Iure, obcaecati. Repellendus, beatae?',
-                    publication_date: '22/06/2023',
-                },
-            ],
-            sendReviewData: {
-                title: '',
-                message: '',
-                author: '',
-                rating: 0,
-            }
-        }
-    },
-    methods: {
-        setHoveredStars(index) {
-            this.hoveredStars = index;
-        },
-        updateData(e, key) {
-            this.sendReviewData = Object.assign(this.sendReviewData, { [key]: e });
-        },
-        addReview() {
-            this.sendReviewData.rating = this.hoveredStars;
+            number_review: 0,
+            product_rating: 0,
         }
     },
     computed: {
         product() {
-            return this.product ? this.product : '';
+            return this.product ? this.product : ''
         }
     },
-    mounted() {
-        GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
-            .then((response) => {
-                this.product = response.data;
-            })
-            .catch((error) => {
-                console.dir(error);
+    methods: {
+        calculateProductRating() {
+            let totalStars = 0;
+            let totalReviews = 0;
+
+            Object.keys(this.star_rating).forEach((key) => {
+                totalStars += Number(key) * this.star_rating[key];
+                totalReviews += this.star_rating[key];
             });
+
+            if (totalReviews > 0) {
+                this.product_rating = Math.floor(totalStars / totalReviews);
+            } else {
+                this.product_rating = 0;
+            }
+        },
+        getAllInfo() {
+            GET(ENDPOINTS.GET_ONE_PRODUCT + this.$route.params.id)
+                .then((response_product) => {
+                    this.product = response_product.data;
+                    this.number_review = response_product.data.comments.length
+                    this.attributes = []
+                    this.comments = []
+                    for (let i = 0; i < this.number_review; i++) {
+                        GET(ENDPOINTS.GET_ONE_COMMENT + `/${response_product.data.comments[i].id}`)
+                            .then((response_comment) => {
+                                this.comments.push(response_comment.data)
+                                switch (response_comment.data.mark.rate) {
+                                    case 5:
+                                        this.star_rating[5] += 1;
+                                        break;
+                                    case 4:
+                                        this.star_rating[4] += 1;
+                                        break;
+                                    case 3:
+                                        this.star_rating[3] += 1;
+                                        break;
+                                    case 2:
+                                        this.star_rating[2] += 1;
+                                        break;
+                                    case 1:
+                                        this.star_rating[1] += 1;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                this.calculateProductRating()
+                            })
+                            .catch((error) => {
+                                console.dir(error)
+                            })
+                    };
+                    for (let i = 0; i < response_product.data.productAttributes.length; i++) {
+                        GET(ENDPOINTS.GET_ONE_ATTRIBUTE + `/${this.product.productAttributes[i].attributeId}`)
+                            .then((response_attribute) => {
+                                this.attributes.push(response_attribute.data)
+                            })
+                            .catch((error) => { console.dir(error) })
+                    }
+                })
+                .catch((error) => {
+                    console.dir(error);
+                });
+        },
+    },
+    created() {
+        this.getAllInfo()
     }
 }
 
@@ -181,21 +156,9 @@ export default {
     }
 }
 
-.review_publication_date {
-    color: var(--main-grey-separation);
-    text-align: start;
-}
-
 .separation-line {
     border: 1px var(--main-grey-separation) solid;
     width: 100%;
-}
-
-.add-review-btn {
-    margin-left: 2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 img {
@@ -215,53 +178,16 @@ img {
     gap: 3rem;
 }
 
-.rating-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-}
-
-.number-review {
+.review_publication_date {
     color: var(--main-grey-separation);
-    font-size: 1rem;
+    text-align: start;
 }
 
-.star-rating-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: flex-end;
-}
-
-.star-rating-container img {
-    height: 2rem;
-}
-
-.ratings-table {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-}
-
-.level-rating {
-    border: none;
-    background-color: var(--main-grey-separation);
-    height: 2vh;
-    width: 12vw;
-}
-
-.rating {
-    margin-left: 1rem;
-    font-size: 1.5rem;
-}
-
-.add-review-container {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+.add-review-btn {
+    margin-left: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .add-review {
@@ -273,15 +199,6 @@ img {
 .review-container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-}
-
-.review-img-editor-container {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-end;
     gap: 1rem;
 }
 
@@ -302,5 +219,36 @@ img {
 .add-review-title {
     border-radius: 1rem;
     padding: 0.5rem;
+}
+
+.review-img-editor-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.add-review-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+img {
+    height: 3rem;
+}
+
+.star-rating-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.star-rating-container img {
+    height: 1rem;
 }
 </style>

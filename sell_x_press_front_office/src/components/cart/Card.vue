@@ -2,19 +2,13 @@
   <div class="cart-card-container">
     <img
       class="img"
-      src="@/assets/categories-product-maquette-1.jpg"
+      :src="img"
       alt="Product image"
     />
     <div class="title">
       <p><b style="font-weight: bold;">{{ name }}</b></p>
       <p>
         {{ description }}
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
       </p>
     </div>
     <div>
@@ -48,6 +42,7 @@
 
 <script>
 import InputComponent from "@/components/global/InputComponent.vue";
+
 export default {
   name: "CartCard",
   components: {
@@ -65,11 +60,11 @@ export default {
   },
   data() {
     return {
-      productId: this.cart.id,
-      name: this.cart.name,
-      price: this.cart.price,
-      img: this.cart.img,
-      description: this.cart.description,
+      productId: this.cart.productId,
+      name: this.cart.product.name,
+      price: this.cart.product.price,
+      img: this.cart.product.picture,
+      description: this.cart.product.description,
       quantity: this.cart.quantity,
     };
   },

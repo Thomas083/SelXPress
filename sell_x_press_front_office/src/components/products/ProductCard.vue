@@ -2,9 +2,9 @@
     <div class="products">
             <div class="product-container">
                 <div class="product-img-container">
-                    <img class="product-img" src="@/assets/categories-product-maquette-1.jpg" alt="..."/>
+                    <img class="product-img" :src="product.picture" alt="..."/>
                 </div>
-                <div class="product-date">{{ product.publication_date }}</div>
+                <div class="product-date">{{ formatCreatedAt(product.createdAt) }}</div>
                 <div class="product-title">{{ product.name }}</div>
                 <div class="product-description">{{ product.description }}</div>
                 <div class="product-price">{{ product.price }} €</div>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns';
 
 export default {
   name: 'ProductCard',
@@ -29,7 +30,11 @@ export default {
   methods: {
     goToProductDetails(id, name) {
         this.$router.push({ path: `/product/${id}/${name}` });
-    }
+    },
+    formatCreatedAt(createdAt) {
+            if (createdAt) return format(new Date(createdAt), 'dd/MM/yyyy');
+            else return '';
+        },
   },
 }
 

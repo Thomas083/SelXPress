@@ -15,6 +15,8 @@
 import ProductCard from "@/components/products/ProductCard.vue";
 import TagsList from "@/components/tags/TagsList.vue";
 import PaginationComponent from "@/components/pagination/PaginationComponent.vue";
+import { GET } from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
 
 export default {
     name: 'ProductListView',
@@ -27,62 +29,61 @@ export default {
         return {
             productsPerPage: 4,
             currentPage: 1,
-            products: [
-                {
-                    id: 1,
-                    publication_date: '20/06/2023',
-                    name: 'SAMODA, Child, Baleine, T-Shirt',
-                    description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
-                    price: '16,99',
-                    author: 'SAMODA'
-                },
-                {
-                    id: 2,
-                    publication_date: '20/06/2023',
-                    name: 'SAMODA, Child, Baleine, T-Shirt',
-                    description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
-                    price: '16,99',
-                    author: 'SAMODA'
-                },
-                {
-                    id: 3,
-                    publication_date: '20/06/2023',
-                    name: 'SAMODA, Child, Baleine, T-Shirt',
-                    description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
-                    price: '16,99',
-                    author: 'SAMODA'
-                },
-                {
-                    id: 4,
-                    publication_date: '20/06/2023',
-                    name: 'SAMODA, Child, Baleine, T-Shirt',
-                    description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
-                    price: '16,99',
-                    author: 'SAMODA'
-                },
-                {
-                    id: 5,
-                    publication_date: '20/06/2024',
-                    name: 'SAMODA, Child, Baleine, T-Shirt',
-                    description: 'T-Shirt for youngest with small whale, Available in sizes 6 to 1...',
-                    price: '16,99',
-                    author: 'SAMODA'
-                },
-            ]
+            products: [],
         }
     },
     computed: {
         displayedProducts() {
-            const startIndex = (this.currentPage - 1) * this.productsPerPage;
-            const endIndex = startIndex + this.productsPerPage;
-            return this.products.slice(startIndex, endIndex);
+            if (this.$route.params.name && this.$route.params.name !== 'all') {
+                var newProductList = this.setProductlist(this.$route.params.name)
+                const startIndex = (this.currentPage - 1) * this.productsPerPage;
+                const endIndex = startIndex + this.productsPerPage;
+                return newProductList.slice(startIndex, endIndex);
+            } else {
+                const startIndex = (this.currentPage - 1) * this.productsPerPage;
+                const endIndex = startIndex + this.productsPerPage;
+                return this.products.slice(startIndex, endIndex);
+            }
         },
     },
     methods: {
         updateCurrentPage(newPage) {
             this.currentPage = newPage;
         },
-    }
+        setProductlist(searchTerm) {
+            if (!searchTerm) {
+                return this.tempProduct;
+            } else {
+                searchTerm = searchTerm.toLowerCase();
+                return this.products.filter(product => {
+                    const nameMatches = product.name.toLowerCase().includes(searchTerm);
+                    const descriptionMatches = product.description.toLowerCase().includes(searchTerm);
+                    return nameMatches || descriptionMatches;
+                });
+            }
+        }
+    },
+    watch: {
+        '$route.params.id': function (newId, oldId) {
+            if (newId !== oldId) {
+                this.products = [];
+                GET(ENDPOINTS.GET_ALL_PRODUCTS)
+                    .then((response) => {
+                        for (let i = 0; i < response.data.length; i++) {
+                            if (response.data[i].category.id == this.$route.params.id) this.products.push(response.data[i])
+                        };
+                    });
+            }
+        }
+    },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_PRODUCTS)
+            .then((response) => {
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].category.id == this.$route.params.id) this.products.push(response.data[i])
+                };
+            });
+    },
 }
 
 </script>

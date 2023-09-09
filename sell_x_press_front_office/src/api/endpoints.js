@@ -23,4 +23,21 @@ export const ENDPOINTS = {
     GET_ALL_CATEGORY_PRODUCTS: '/api/Product/:name', //(GET)
     GET_ONE_PRODUCT: '/api/Product/', //(GET) and add + this.$route.params.id
     UPDATE_PRODUCT: '/api/Product/', //(PUT) and add + this.$route.params.id
+
+    // COMMENTS
+    GET_ALL_COMMENT: '/api/Comment', //(GET)
+    GET_ONE_COMMENT: '/api/Comment', // (GET) + add comment id
+    CREATE_COMMENT: '/api/Comment', //(POST)
+
+    // CART
+    GET_ALL_CART: '/api/Cart', //(GET)
+    GET_MY_CART: '/api/Cart', //(GET)
+    CREATE_CART: '/api/Cart/me', //(POST)
+
+    // ORDER
+    GET_MY_ORDER: '/api/Order/me', // (GET)
+    CREATE_ORDER: '/api/Order', //(POST)
+
+    // ATTRIBUTE
+    GET_ONE_ATTRIBUTE: '/api/Attribute', // (GET) + add id attribute
 }
