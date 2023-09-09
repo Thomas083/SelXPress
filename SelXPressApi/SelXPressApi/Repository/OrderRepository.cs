@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.OrderDTO;
@@ -126,6 +126,7 @@ namespace SelXPressApi.Repository
 			var orders = await _context.Orders
 				.Include(o => o.User)
 				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
 				.ToListAsync();
 
 			return orders;
@@ -141,6 +142,7 @@ namespace SelXPressApi.Repository
 			return await _context.Orders.Where(o => o.Id == id)
 				.Include(o => o.User)
 				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
 				.FirstAsync();
 		}
 
@@ -181,9 +183,12 @@ namespace SelXPressApi.Repository
 			{
 				// Retrieve the user with the specified email address
 				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
-
 				// Retrieve and return the list of orders associated with the user
-				var orders = await _context.Orders.Where(o => o.User == user).ToListAsync();
+				var orders = await _context.Orders.Where(o => o.User == user)
+					.Include(o => o.User)
+					.Include(o => o.OrderProducts)
+					.ThenInclude(op => op.Product)
+					.ToListAsync();
 				return orders;
 			}
 
