@@ -7,7 +7,20 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.Repository
 {
-    public class CartRepository : ICartRepository
+	/// <summary>
+	/// Repository class for managing Carts and their data in the SelXPressApi application.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class CartRepository : ICartRepository
     {
         private readonly DataContext _context;
         private readonly ICommonMethods _commonMethods;
@@ -15,8 +28,8 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the CartRepository class.
 		/// </summary>
-		/// <param name="context">The DataContext.</param>
-		/// <param name="commonMethods">Common methods helper.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
 		public CartRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;

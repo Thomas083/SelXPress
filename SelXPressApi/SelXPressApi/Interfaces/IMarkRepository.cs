@@ -3,6 +3,19 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.Interfaces
 {
+	/// <summary>
+	/// Defines the contract for interacting with the mark-related data in the repository.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public interface IMarkRepository
 	{
 		/// <summary>

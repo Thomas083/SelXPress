@@ -8,6 +8,16 @@ namespace SelXPressApi.Interfaces
 	/// <summary>
 	/// Interface defining methods for managing shopping carts and their items.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public interface ICartRepository
 	{
 		/// <summary>

@@ -8,10 +8,24 @@ namespace SelXPressApi.Helper
 	/// <summary>
 	/// Class for seeding initial data into the DataContext.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class Seed
 	{
 		private readonly DataContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Seed"/> class.
+		/// </summary>
+		/// <param name="dataContext">The database context used for data seeding.</param>
 		public Seed(DataContext dataContext)
 		{
 			_context = dataContext;

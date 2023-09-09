@@ -3,10 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SelXPressApi.Models
 {
-    /// <summary>
-    /// Model of the attribute table.
-    /// </summary>
-    public class Attribute
+	/// <summary>
+	/// Model of the Attribute table. 
+    /// <see cref="DTO.AttributeDTO"/>
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class Attribute
     {
         /// <summary>
         /// The ID of the attribute.

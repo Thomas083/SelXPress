@@ -11,8 +11,18 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository for managing product attributes.
+	/// Repository for managing Product Attributes.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class ProductAttributeRepository : IProductAttributeRepository
     {
         private readonly DataContext _context;
@@ -22,9 +32,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductAttributeRepository"/> class.
 		/// </summary>
-		/// <param name="context">The database context.</param>
-		/// <param name="commonMethods">Common methods interface.</param>
-		/// <param name="mapper">Automapper instance for object mapping.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public ProductAttributeRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;

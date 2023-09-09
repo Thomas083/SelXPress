@@ -3,6 +3,16 @@
 /// <summary>
 /// Class use for return an error with the HTTP status at 403
 /// </summary>
+/// <seealso  cref="Models"/>
+/// <seealso  cref="DTO"/>
+/// <seealso  cref="Controllers"/>
+/// <seealso  cref="Repository"/>
+/// <seealso  cref="Helper"/>
+/// <seealso  cref="DocumentationErrorTemplate"/>
+/// <seealso  cref="Exceptions"/>
+/// <seealso  cref="Interfaces"/>
+/// <seealso  cref="Middleware"/>
+/// <seealso  cref="Data"/>
 public class ForbiddenErrorTemplate
 {
     /// <summary>

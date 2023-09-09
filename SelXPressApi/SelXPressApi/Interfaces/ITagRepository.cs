@@ -5,10 +5,20 @@ using System.Threading.Tasks;
 
 namespace SelXPressApi.Interfaces
 {
-    /// <summary>
-    /// Repository interface for managing tags.
-    /// </summary>
-    public interface ITagRepository
+	/// <summary>
+	/// Repository interface for managing tags.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public interface ITagRepository
     {
         /// <summary>
         /// Get all tags with associated categories.

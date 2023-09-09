@@ -11,10 +11,20 @@ using System.Threading.Tasks;
 
 namespace SelXPressApi.Repository
 {
-    /// <summary>
-    /// Repository for performing CRUD operations on products.
-    /// </summary>
-    public class ProductRepository : IProductRepository
+	/// <summary>
+	/// Repository for performing CRUD operations on Products.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class ProductRepository : IProductRepository
     {
         private readonly DataContext _context;
         private readonly ICommonMethods _commonMethods;
@@ -23,9 +33,9 @@ namespace SelXPressApi.Repository
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductRepository"/> class.
         /// </summary>
-        /// <param name="context">The database context.</param>
-        /// <param name="commonMethods">Common methods provider.</param>
-        /// <param name="mapper">Automapper instance.</param>
+        /// <param name="context">The database context. <see cref="DataContext"/></param>
+        /// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+        /// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
         public ProductRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
         {
             _context = context;
@@ -204,21 +214,37 @@ namespace SelXPressApi.Repository
             return await _commonMethods.Save();
         }
 
-        public async Task<List<AllProductDTO>> GetProductByUser(string email)
-        {
-	        if (await _context.Users.Where(u => u.Email == email).AnyAsync())
-	        {
-		        var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
-		        var sellerProduct = await _context.SellerProducts.Where(sp => sp.UserId == user.Id).ToListAsync();
-		        var products = new List<Product>();
-		        for (int i = 0; i < sellerProduct.Count; i++)
-		        {
-			        var productToAdd = await _context.Products.Where(p => p.Id == sellerProduct[i].ProductId).FirstAsync();
-			        products.Add(productToAdd);
-		        }
+		/// <summary>
+		/// Retrieves a list of products associated with a user based on their email address.
+		/// </summary>
+		/// <param name="email">The email address of the user for whom to retrieve products.</param>
+		/// <returns>A list of products associated with the specified user's email address, or an empty list if the user does not exist or has no products.</returns>
+		public async Task<List<AllProductDTO>> GetProductByUser(string email)
+		{
+			// Check if a user with the specified email address exists in the database
+			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
+			{
+				// Retrieve the user with the specified email address
+				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+
+				// Retrieve a list of seller products associated with the user
+				var sellerProducts = await _context.SellerProducts.Where(sp => sp.UserId == user.Id).ToListAsync();
+
+				var products = new List<Product>();
+
+				// Iterate through the seller products and retrieve the corresponding products
+				for (int i = 0; i < sellerProducts.Count; i++)
+				{
+					var productToAdd = await _context.Products.Where(p => p.Id == sellerProducts[i].ProductId).FirstAsync();
+					products.Add(productToAdd);
+				}
+
+				// Use AutoMapper to map the list of products to a list of AllProductDTOs
 				return _mapper.Map<List<AllProductDTO>>(products);
 			}
-	        return new List<AllProductDTO>();
-        }
-    }
+
+			return new List<AllProductDTO>(); // Return an empty list if the user does not exist or has no products
+		}
+
+	}
 }

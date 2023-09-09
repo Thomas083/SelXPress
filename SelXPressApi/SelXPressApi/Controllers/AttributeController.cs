@@ -12,8 +12,20 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing attributes.
+	/// API controller for managing Attributes. 
+	/// Here you can access to DTO <see cref="AttributeDTO"/>. 
+	/// The model <see cref="Models.Attribute"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AttributeController : ControllerBase
@@ -25,9 +37,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AttributeController"/> class.
 		/// </summary>
-		/// <param name="attributeRepository">The attribute repository to retrieve and manage attributes.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="attributeRepository">The attribute repository to retrieve and manage attributes. <see cref="IAttributeRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="Middleware.IAuthorizationMiddleware"/></param>
 		public AttributeController(IAttributeRepository attributeRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_attributeRepository = attributeRepository;

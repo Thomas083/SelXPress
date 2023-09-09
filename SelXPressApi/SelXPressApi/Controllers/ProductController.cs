@@ -16,8 +16,20 @@ using SelXPressApi.Repository;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing product.
+	/// API controller for managing Product. 
+	/// Here you can access to DTO <see cref="ProductDTO"/> and <see cref="AllProductDTO"/>. 
+	/// The model <see cref="Models.Product"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProductController : ControllerBase
@@ -29,10 +41,10 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="productRepository">The product repository to retrieve and manage products.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="context">The data context for accessing the database.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="productRepository">The product repository to retrieve and manage products. <see cref="IProductRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="context">The data context for accessing the database. <see cref="DataContext"/></param>
 		public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper, DataContext context)
 		{
 			_authorizationMiddleware = authorizationMiddleware;

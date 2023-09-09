@@ -9,10 +9,21 @@ using Newtonsoft.Json;
 
 namespace SelXPressApi.DTO.ProductDTO
 {
-    /// <summary>
-    /// Data Transfer Object for representing product information.
-    /// </summary>
-    public class ProductDTO
+	/// <summary>
+	/// Data Transfer Object for representing Product information. 
+	/// Here you can access to model <see cref="Models.Product"/>. 
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class ProductDTO
     {
         /// <summary>
         /// Gets or sets the unique identifier of the product.

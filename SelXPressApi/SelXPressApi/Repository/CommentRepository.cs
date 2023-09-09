@@ -7,11 +7,29 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.Repository
 {
+	/// <summary>
+	/// Repository class for managing Comments and their data in the SelXPressApi application.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class CommentRepository : ICommentRepository
 	{
 		private readonly DataContext _context;
 		private readonly ICommonMethods _commonMethods;
 
+		/// <summary>
+		/// Initializes a new instance of the CommentRepository class.
+		/// </summary>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
 		public CommentRepository(DataContext context, ICommonMethods commonMethods)
 		{
 			_context = context;
@@ -21,6 +39,7 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Retrieves a list of all comments along with associated marks, users, and products.
 		/// </summary>
+		/// <returns>A list of comments with associated data.</returns>
 		public async Task<List<Comment>> GetAllComments()
 		{
 			return await _context.Comments.Join(_context.Marks, comment => comment.Mark.Id, mark => mark.Id,

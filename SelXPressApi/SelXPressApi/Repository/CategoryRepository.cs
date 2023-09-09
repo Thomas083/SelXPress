@@ -10,12 +10,30 @@ using System.Threading.Tasks;
 
 namespace SelXPressApi.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+	/// <summary>
+	/// Repository class for managing Categories and their data in the SelXPressApi application.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class CategoryRepository : ICategoryRepository
     {
         private readonly DataContext _context;
         private readonly ICommonMethods _commonMethods;
 
-        public CategoryRepository(DataContext context, ICommonMethods commonMethods)
+		/// <summary>
+		/// Initializes a new instance of the CategoryRepository class.
+		/// </summary>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		public CategoryRepository(DataContext context, ICommonMethods commonMethods)
         {
             _context = context;
             _commonMethods = commonMethods;

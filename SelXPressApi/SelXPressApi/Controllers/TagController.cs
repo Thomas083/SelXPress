@@ -9,8 +9,20 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing tag.
+	/// API controller for managing Tag. 
+	/// Here you can access to DTO <see cref="TagDto"/>. 
+	/// The model <see cref="Models.Tag"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
     [ApiController]
     public class TagController : ControllerBase

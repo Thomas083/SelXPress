@@ -2,10 +2,22 @@
 
 namespace SelXPressApi.DTO.ProductDTO
 {
-    /// <summary>
-    /// Data Transfer Object for creating a new product.
-    /// </summary>
-    public class CreateProductDTO
+	/// <summary>
+	/// Data Transfer Object for creating a new Product. 
+	/// Here you can access to model <see cref="Models.Product"/>. 
+	/// The main DTO is <see cref="ProductDTO"/>.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class CreateProductDTO
     {
         /// <summary>
         /// Gets or sets the name of the product.

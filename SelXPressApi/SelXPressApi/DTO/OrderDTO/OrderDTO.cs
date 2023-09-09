@@ -3,6 +3,20 @@ using SelXPressApi.DTO.OrderDTOProductDTO;
 
 namespace SelXPressApi.DTO.OrderDTO
 {
+	/// <summary>
+	/// Represents a data transfer object (DTO) for an Order. 
+	/// Here you can access to model <see cref="Models.Order"/>. 
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class OrderDTO
 	{
 		/// <summary>

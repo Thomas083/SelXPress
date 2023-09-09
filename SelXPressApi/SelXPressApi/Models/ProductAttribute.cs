@@ -2,10 +2,21 @@
 
 namespace SelXPressApi.Models
 {
-    /// <summary>
-    /// Represents a model for the ProductAttribute table.
-    /// </summary>
-    public class ProductAttribute
+	/// <summary>
+	/// Represents a model for the ProductAttribute table. 
+	/// <see cref="DTO.ProductAttributeDTO"/>
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class ProductAttribute
     {
         /// <summary>
         /// Gets or sets the ID of the ProductAttribute.

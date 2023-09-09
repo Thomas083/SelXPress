@@ -11,8 +11,18 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository for managing tags.
+	/// Repository for managing Tags.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class TagRepository : ITagRepository
 	{
 		private readonly DataContext _context;
@@ -21,8 +31,8 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TagRepository"/> class.
 		/// </summary>
-		/// <param name="context">The database context.</param>
-		/// <param name="commonMethods">Common methods provider.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
 		public TagRepository(DataContext context, ICommonMethods commonMethods)
 		{
 			_context = context;

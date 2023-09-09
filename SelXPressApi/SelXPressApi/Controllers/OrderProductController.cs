@@ -12,8 +12,20 @@ using SelXPressApi.DTO.OrderDTOProductDTO;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing order product.
+	/// API controller for managing Order Product. 
+	/// Here you can acess to DTO <see cref="OrderProductDTO"/>. 
+	/// The model <see cref="Models.OrderProduct"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class OrderProductController : ControllerBase
@@ -25,9 +37,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderProductController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="orderProductRepository">The order product repository to retrieve and manage order product</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="orderProductRepository">The order product repository to retrieve and manage order product. <see cref="IOrderProductRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		public OrderProductController(IAuthorizationMiddleware authorizationMiddleware, IOrderProductRepository orderProductRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
@@ -232,7 +244,6 @@ namespace SelXPressApi.Controllers
 			// Return a response indicating successful update.
 			return Ok();
 		}
-
 		#endregion
 
 		#region DeleteMethod
