@@ -51,23 +51,42 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the order creation was successful, otherwise false.</returns>
 		public async Task<bool> CreateOrder(CreateOrderDTO createOrder)
 		{
+			float totalPrice = 0;
+			List<Cart> cartList = await _context.Carts.Where(c => c.UserId == createOrder.UserId).Include(p => p.Product).ToListAsync();
+			
+			var user = await _context.Users.Where(u => u.Id == createOrder.UserId).FirstAsync();
+			
 			var newOrder = new Order
 			{
-				User = createOrder.User,
-				TotalPrice = createOrder.TotalPrice,
-				CreatedAt = DateTime.UtcNow,
+				User = user,
+				TotalPrice = totalPrice,
+				CreatedAt = DateTime.Now,
 				OrderProducts = new List<OrderProduct>()
 			};
 
-			for (int i = 0; i < createOrder.OrderProducts.Count; i++)
+			for (int i = 0; i < cartList.Count; i++)
 			{
-				var orderProducts = await _context.OrderProducts.FindAsync(createOrder.OrderProducts[i].Id);
-				if (orderProducts != null)
-					newOrder.OrderProducts.Add(orderProducts);
+				var orderProductToAdd = new OrderProduct()
+				{
+					Order = newOrder,
+					OrderId = newOrder.Id,
+					Product = cartList[i].Product,
+					ProductId = cartList[i].ProductId,
+					Quantity = cartList[i].Quantity
+				};
+				totalPrice = totalPrice + orderProductToAdd.Product.Price;
+				if (orderProductToAdd.Quantity > 1)
+				{
+					for (int j = 1; j < orderProductToAdd.Quantity; j++)
+					{
+						totalPrice = totalPrice + orderProductToAdd.Product.Price;
+					}
+				}
+				newOrder.OrderProducts.Add(orderProductToAdd);
 			}
-
+			newOrder.TotalPrice = totalPrice;
 			_context.Orders.Add(newOrder);
-
+			await _context.Carts.Where(c => c.UserId == createOrder.UserId).ExecuteDeleteAsync();
 			return await _commonMethods.Save();
 		}
 
@@ -107,9 +126,12 @@ namespace SelXPressApi.Repository
 		/// </summary>
 		/// <param name="id">The unique identifier of the order.</param>
 		/// <returns>The order with the specified identifier, or null if not found.</returns>
-		public async Task<Order?> GetOrderById(int id)
+		public async Task<Order> GetOrderById(int id)
 		{
-			return await _context.Orders.FindAsync(id);
+			return await _context.Orders.Where(o => o.Id == id)
+				.Include(o => o.User)
+				.Include(o => o.OrderProducts)
+				.FirstAsync();
 		}
 
 		/// <summary>

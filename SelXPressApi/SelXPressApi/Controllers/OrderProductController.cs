@@ -60,14 +60,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "ODP-1101");
+				throw new BadRequestException("The model is wrong, a bad request occurred", "ODP-1101");
 
 			// Retrieve all order products from the repository.
 			var orderProducts = await _orderProductRepository.GetAllOrderProducts();
 
 			// If there are no order products in the database, throw a NotFoundException.
 			if (orderProducts.Count == 0)
-				throw new NotFoundException("No order products found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order products as an Ok response.
 			return Ok(orderProducts);
@@ -102,18 +102,18 @@ namespace SelXPressApi.Controllers
 
 			// If the email is missing or empty, throw a BadRequestException.
 			if (string.IsNullOrEmpty(email))
-				throw new BadRequestException("The email is missing in the request header", "ODP-1102");
+				throw new BadRequestException("The email is missing in the request header", "ODP-1104");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "ODP-1101");
+				throw new BadRequestException("The model is wrong, a bad request occurred", "ODP-1101");
 
 			// Retrieve order products associated with the specified user's email.
 			var orderProducts = await _orderProductRepository.GetOrderProductsByUser(email);
 
 			// If no order products are found for the user, throw a NotFoundException.
 			if (orderProducts.Count == 0)
-				throw new NotFoundException("No order products found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order products as an Ok response.
 			return Ok(orderProducts);
@@ -143,14 +143,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "ODP-1101");
+				throw new BadRequestException("The model is wrong, a bad request occurred", "ODP-1101");
 
 			// Retrieve the order product by its ID.
 			var orderProduct = await _orderProductRepository.GetOrderProductById(id);
 
 			// If the order product is not found, throw a NotFoundException.
 			if (orderProduct == null)
-				throw new NotFoundException("No order product found in the database, please try again", "ODP-1401");
+				throw new NotFoundException("There are no order products found in the database, please try again", "ODP-1401");
 
 			// Return the retrieved order product as an Ok response.
 			return Ok(orderProduct);
@@ -224,7 +224,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the order product with the given id exists.
 			if (!await _orderProductRepository.OrderProductExists(id))
-				throw new NotFoundException("The order product with the id : " + id + " doesn't exist ", "ODP-1401");
+				throw new NotFoundException($"The order product with the ID : {id} doesn't exist", "ODP-1402");
 
 			// Update the order product with the provided data.
 			await _orderProductRepository.UpdateOrderProduct(id, order);
@@ -263,7 +263,7 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occured", "ODP-1101");
 
 			if (!await _orderProductRepository.OrderProductExists(id))
-				throw new NotFoundException("The order product with the id : " + id + " doesn't exist ", "ODP-1401");
+				throw new NotFoundException($"The order product with the ID : {id} doesn't exist", "ODP-1402");
 
 			await _orderProductRepository.DeleteOrderProduct(id);
 			return Ok();

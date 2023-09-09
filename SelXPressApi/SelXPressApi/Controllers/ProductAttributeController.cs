@@ -58,7 +58,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any product attributes were found
 			if (productAttributes.Count == 0)
-				throw new NotFoundException("There are no Product Attributes in the database", "PAT-1401");
+				throw new NotFoundException("There are no product attributes in the database", "PAT-1401");
 
 			return Ok(productAttributes);
 		}
@@ -86,7 +86,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute was found
 			if (productAttribute == null)
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			return Ok(productAttribute);
 		}
@@ -163,17 +163,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided product attribute update data is complete
 			if (updateProductAttribute == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "PAT-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "PAT-1102");
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Update the product attribute using the repository
 			var result = await _productAttributeRepository.UpdateProductAttribute(id, updateProductAttribute);
-
-			if (!result)
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
 
 			return Ok();
 		}
@@ -213,7 +210,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Delete the product attribute using the repository
 			await _productAttributeRepository.DeleteProductAttribute(id);

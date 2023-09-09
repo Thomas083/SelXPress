@@ -98,7 +98,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Retrieve order from the repository
 			var order = await _orderRepository.GetOrderById(id);
@@ -121,7 +121,7 @@ namespace SelXPressApi.Controllers
 			string? email = HttpContext.Response.Headers["EmailHeader"];
 			var orders = await _orderRepository.GetOrderByUser(email);
 			if (orders.Count == 0)
-				throw new NotFoundException("There is no orders for this user", "ORD-");
+				throw new NotFoundException("There is no orders for this user", "ORD-1403");
 			
 			return Ok(orders);
 		}
@@ -191,7 +191,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Update order
 			await _orderRepository.UpdateOrder(id, order);
@@ -227,7 +227,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Delete order
 			await _orderRepository.DeleteOrder(id);

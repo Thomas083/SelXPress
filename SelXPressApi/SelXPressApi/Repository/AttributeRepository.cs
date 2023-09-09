@@ -42,6 +42,8 @@ namespace SelXPressApi.Repository
             {
                 Name = createAttribute.Name,
                 Type = createAttribute.Type,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
             _context.Attributes.Add(newAttribute);
             return await _commonMethods.Save();
@@ -99,11 +101,19 @@ namespace SelXPressApi.Repository
 
             if (attribute != null)
             {
-                if (updateAttribute.Name != null && attribute.Name != updateAttribute.Name)
-                    _context.Attributes.Where(a => a.Id == id).ExecuteUpdate(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
-
-                if (updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
-                    _context.Attributes.Where(a => a.Id == id).ExecuteUpdate(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
+	            if (updateAttribute.Name != null && attribute.Name != updateAttribute.Name)
+	            {
+		            await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
+		            await _context.Attributes.Where(a => a.Id == id)
+			            .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.UpdatedAt, x => DateTime.Now));
+	            }
+                
+	            if (updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
+	            {
+		            await  _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
+		            await _context.Attributes.Where(a => a.Id == id)
+			            .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.UpdatedAt, x => DateTime.Now));
+	            }
 
                 return await _commonMethods.Save();
             }

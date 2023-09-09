@@ -97,7 +97,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given email exists
 			if (!await _userRepository.UserExistsEmail(email))
-				throw new NotFoundException("The user with the email: " + email + " doesn't exist", "USR-1403");
+				throw new NotFoundException($"The user with the email: {email} doesn't exist", "USR-1403");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace SelXPressApi.Controllers
 			else
 			{
 				// The authentication failed, throw an exception
-				throw new BadRequestException("The user could not be created, please try again", "USR-1103");
+				throw new BadRequestException("The user could not be created, please try again", "USR-1104");
 			}
 
             return StatusCode(201);
@@ -232,7 +232,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given email exists
 			if (!await _userRepository.UserExistsEmail(email))
-				throw new NotFoundException("The user with the email : " + email + " doesn't exist", "USR-1403");
+				throw new NotFoundException($"The user with the email : {email} doesn't exist", "USR-1403");
 
 			// Update the user's information using the repository
 			await _userRepository.UpdateUser(userUpdate, email);
@@ -272,7 +272,7 @@ namespace SelXPressApi.Controllers
 
 			// check if the user with the given id exists
 			if (!await _userRepository.UserExists(id))
-                throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1403");
+                throw new NotFoundException($"The user with the ID : {id} doesn't exist", "USR-1402");
 
 			// update the user's information using the repository
 			await _userRepository.UpdateUserById(userUpdate, id);
@@ -307,7 +307,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given ID exists
 			if (!await _userRepository.UserExists(id))
-				throw new NotFoundException("The user with the ID: " + id + " doesn't exist", "USR-1402");
+				throw new NotFoundException($"The user with the ID : {id} doesn't exist", "USR-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)

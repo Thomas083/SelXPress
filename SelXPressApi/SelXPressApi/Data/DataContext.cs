@@ -29,6 +29,7 @@ namespace SelXPressApi.Data
 		public DbSet<Product> Products { get; set; }
 		public DbSet<ProductAttribute> ProductAttributes { get; set; }
 		public DbSet<Role> Roles { get; set; }
+		public DbSet<SellerProduct> SellerProducts { get; set; }
 		public DbSet<Tag> Tags { get; set; }
 		public DbSet<User> Users { get; set; }
 
@@ -40,7 +41,7 @@ namespace SelXPressApi.Data
 		{
 			// Configure many-to-many relationship between Order and Product
 			modelBuilder.Entity<OrderProduct>()
-				.HasKey(op => new { op.OrderId, op.ProductId });
+				.HasKey(op => op.Id);
 			modelBuilder.Entity<OrderProduct>()
 				.HasOne(o => o.Order)
 				.WithMany(op => op.OrderProducts)
@@ -52,7 +53,7 @@ namespace SelXPressApi.Data
 
 			// Configure many-to-many relationship between User and Product
 			modelBuilder.Entity<Cart>()
-				.HasKey(c => new { c.ProductId, c.UserId });
+				.HasKey(c => c.Id);
 			modelBuilder.Entity<Cart>()
 				.HasOne(p => p.Product)
 				.WithMany(c => c.Carts)
@@ -64,7 +65,7 @@ namespace SelXPressApi.Data
 
 			// Configure many-to-many relationship between Product and Attribute
 			modelBuilder.Entity<ProductAttribute>()
-				.HasKey(pa => new { pa.ProductId, pa.AttributeId });
+				.HasKey(pa => pa.Id);
 			modelBuilder.Entity<ProductAttribute>()
 				.HasOne(pa => pa.Attribute)
 				.WithMany(a => a.ProductAttributes)
@@ -79,6 +80,18 @@ namespace SelXPressApi.Data
 				.HasMany(a => a.AttributeData)
 				.WithOne(ad => ad.Attribute)
 				.HasForeignKey(ad => ad.AttributeId);
+			
+			// Configure User and product relationship with the SellerProduct Entity
+			modelBuilder.Entity<SellerProduct>()
+				.HasKey(sp => sp.Id);
+			modelBuilder.Entity<SellerProduct>()
+				.HasOne(p => p.Product)
+				.WithMany(p => p.SellerProducts)
+				.HasForeignKey(p => p.ProductId);
+			modelBuilder.Entity<SellerProduct>()
+				.HasOne(u => u.User)
+				.WithMany(u => u.SellerProducts)
+				.HasForeignKey(u => u.UserId);
 		}
 	}
 }

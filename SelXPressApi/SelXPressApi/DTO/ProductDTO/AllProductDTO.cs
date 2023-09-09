@@ -1,6 +1,7 @@
 ﻿using SelXPressApi.DTO.CartDTO;
 using SelXPressApi.DTO.CommentDTO;
 using SelXPressApi.DTO.OrderDTOProductDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.DTO.ProductDTO
 {
@@ -54,6 +55,6 @@ namespace SelXPressApi.DTO.ProductDTO
 		/// <summary>
 		/// Gets or sets the comments related to the product.
 		/// </summary>
-		public ICollection<CommentRateDTO> Comments { get; set; }
+		public ICollection<Comment> Comments { get; set; }
 	}
 }

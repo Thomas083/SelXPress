@@ -78,7 +78,7 @@ namespace SelXPressApi.Controllers
         {
 			// Check if the attribute with the given ID exists
             if(!await _attributeDataRepository.AttributeDataExists(id))
-				throw new NotFoundException("The AttributeData with the id : " + id + " doesn't exist", "ATD-1402");
+				throw new NotFoundException($"The AttributeData with the ID : {id} doesn't exist", "ATD-1402");
 
 			// Check if the model state is valid
             if (!ModelState.IsValid)
@@ -158,7 +158,7 @@ namespace SelXPressApi.Controllers
             
 			// Check if the attribute data with the given ID exists
             if(!await _attributeDataRepository.AttributeDataExists(id))
-				throw new NotFoundException("The AttributeData with the id : " + id + " doesn't exist", "ATD-1402");
+				throw new NotFoundException($"The AttributeData with the ID : {id} doesn't exist", "ATD-1402");
             
 			// Update the attribute using the repository
             await _attributeDataRepository.UpdateAttributeData(id, attributeData);
@@ -193,7 +193,7 @@ namespace SelXPressApi.Controllers
             
 			// Check if the attribute data with the given ID exists
             if(!await _attributeDataRepository.AttributeDataExists(id))
-				throw new NotFoundException("The AttributeData with the id : " + id + " doesn't exist", "ATD-1402");
+				throw new NotFoundException($"The AttributeData with the ID : {id} doesn't exist", "ATD-1402");
             
 			// Check if the model state is valid
             if (!ModelState.IsValid)

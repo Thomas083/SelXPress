@@ -66,7 +66,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any carts were found
 			if (carts.Count == 0)
-				throw new NotFoundException("There are no shopping carts in the database, please try again", "CRT-1401");
+				throw new NotFoundException("There is no carts in the database, please try again", "CRT-1401");
 
 			return Ok(carts);
 		}
@@ -99,7 +99,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the cart with the given ID exists
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Retrieve the cart by its ID
 			var cart = await _cartRepository.GetCartById(id);
@@ -138,7 +138,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any cart were found
 			if (carts.Count == 0)
-				throw new NotFoundException("There are no shopping carts for the user with the id : " + id, "CRT-1403");
+				throw new NotFoundException($"There are no shopping carts for the user with the ID : {id}", "CRT-1403");
 
 			return Ok(carts);
 		}
@@ -252,7 +252,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if a shopping cart with the provided ID exists in the database.
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Check if the model state is valid (data annotations on the DTO).
 			if (!ModelState.IsValid)
@@ -305,7 +305,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if a shopping cart with the provided ID exists in the database.
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Delete the shopping cart with the provided ID using the repository.
 			await _cartRepository.DeleteCart(id);

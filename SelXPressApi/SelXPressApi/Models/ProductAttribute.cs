@@ -1,4 +1,6 @@
-﻿namespace SelXPressApi.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace SelXPressApi.Models
 {
     /// <summary>
     /// Represents a model for the ProductAttribute table.

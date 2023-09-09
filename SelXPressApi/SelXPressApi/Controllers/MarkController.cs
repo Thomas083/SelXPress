@@ -56,14 +56,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Retrieve all marks from the repository.
 			var marks = await _markRepository.GetAllMark();
 
 			// If no marks are found, throw a NotFoundException.
 			if (marks.Count == 0)
-				throw new NotFoundException("No marks found in the database, please try again", "MRK-1401");
+				throw new NotFoundException("There is no marks in the database", "MRK-1401");
 
 			// Return the list of marks.
 			return Ok(marks);
@@ -95,11 +95,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID " + id + " doesn't exist", "MRK-1002");
+				throw new NotFoundException("The mark with the ID : " + id + " doesn't exist", "MRK-1002");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1402");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Retrieve the mark with the specified ID from the repository.
 			var mark = await _markRepository.GetMarkById(id);
@@ -137,11 +137,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if there are no marks associated with the specified user.
 			if (marks.Count == 0)
-				throw new NotFoundException("There are no marks for the user with the ID : " + id, "MRK-1403");
+				throw new NotFoundException($"There is no marks for the user with the ID : {id}", "MRK-1403");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Return the list of marks associated with the specified user.
 			return Ok(marks);
@@ -167,11 +167,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if there are no marks associated with the specified product.
 			if (marks.Count == 0)
-				throw new NotFoundException("There are no marks for the product with the ID : " + id, "MRK-1404");
+				throw new NotFoundException($"There is no marks for the product with the ID : {id}", "MRK-1404");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Return the list of marks associated with the specified product.
 			return Ok(marks);
@@ -208,7 +208,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Create a new mark based on the provided data.
 			await _markRepository.CreateMark(markDto);
@@ -250,11 +250,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID: " + id + " doesn't exist", "MRK-1402");
+				throw new NotFoundException($"The mark with the ID : {id} doesn't exist", "MRK-1402");
 
 			// Update the mark's details using the provided data and ID.
 			await _markRepository.UpdateMarkById(updateMarkDto, id);
@@ -290,11 +290,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the mark with the specified ID exists.
 			if (!await _markRepository.MarkExists(id))
-				throw new NotFoundException("The mark with the ID: " + id + " doesn't exist", "MRK-1402");
+				throw new NotFoundException($"The mark with the ID : {id} doesn't exist", "MRK-1402");
 
 			// Check if the model state is valid.
 			if (!ModelState.IsValid)
-				throw new BadRequestException("The request model is invalid", "MRK-1101");
+				throw new BadRequestException("The model is wrong, a bad request occured", "MRK-1101");
 
 			// Delete the mark from the database using the provided ID.
 			await _markRepository.DeleteMarkById(id);
