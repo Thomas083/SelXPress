@@ -130,7 +130,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if there are products in the database
 			if (products == null)
-				throw new NotFoundException("There are no products in the database", "PRO-1401");
+				throw new NotFoundException("There are no products in the database, please try again", "PRO-1401");
 
 			return Ok(products);
 		}
@@ -176,7 +176,7 @@ namespace SelXPressApi.Controllers
 			string? email = HttpContext.Response.Headers["EmailHeader"];
 			var products = await _productRepository.GetProductByUser(email);
 			if (products.Count == 0)
-				throw new NotFoundException("There is no products for the current user", "PRO-1403");
+				throw new NotFoundException("There is no products for the current user", "PRO-");
 			return Ok(products);
 		}
 		#endregion
@@ -214,7 +214,7 @@ namespace SelXPressApi.Controllers
 			// Create the product using the repository
 			string? email = HttpContext.Response.Headers["EmailHeader"];
 			if (email == null)
-				throw new BadRequestException("You are not connected", "PRO-1103");
+				throw new BadRequestException("You are not connected", "PRO-1104");
 			await _productRepository.CreateProduct(product, email);
 			return StatusCode(201);
 		}
@@ -255,11 +255,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided product update data is complete
 			if (product == null)
-				throw new BadRequestException("There are missing fields, please try again with some data", "PRO-1102");
+				throw new BadRequestException("Some fields are missing, please try again with complete data", "PRO-1102");
 
 			// Check if the product with the given ID exists
 			if (!await _productRepository.ProductExists(id))
-				throw new NotFoundException($"The product with the ID : {id} doesn't exist", "PRO-1402");
+				throw new NotFoundException("The product with ID " + id + " doesn't exist", "PRO-1402");
 
 			// Update the product using the repository
 			await _productRepository.UpdateProduct(id, product);
@@ -301,7 +301,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product with the given ID exists
 			if (!await _productRepository.ProductExists(id))
-				throw new NotFoundException($"The product with the ID : {id} doesn't exist", "PRO-1402");
+				throw new NotFoundException("The product with ID " + id + " doesn't exist", "PRO-1402");
 
 			// Delete the product using the repository
 			await _productRepository.DeleteProduct(id);
