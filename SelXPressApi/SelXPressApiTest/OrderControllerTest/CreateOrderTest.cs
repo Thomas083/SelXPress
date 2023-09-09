@@ -25,6 +25,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 201
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_201()
     {
         //todo
@@ -33,6 +34,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 400 (BadRequest)
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_400()
     {
         //todo
@@ -41,6 +43,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_401_TokenIsMissing()
     {
         //todo
@@ -49,6 +52,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_401_TokenIsInvalid()
     {
         //todo
@@ -57,6 +61,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the email is not in the database
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_401_EmailIsNotInTheDatabase()
     {
         //todo
@@ -65,6 +70,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 403
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_403()
     {
         //todo
@@ -73,6 +79,7 @@ public class CreateOrderTest
     /// <summary>
     /// Test to check if the status of the request is equals to 500 due to an internal server error
     /// </summary>
+    [Fact]
     public void OrderController_CreateOrder_Status_500()
     {
         //todo

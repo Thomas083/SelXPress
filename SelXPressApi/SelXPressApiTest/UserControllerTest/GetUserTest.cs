@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using SelXPressApi.Controllers;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using SelXPressApi.DTO.UserDTO;
+using User = SelXPressApi.Models.User;
+using SelXPressApi.Exceptions;
 
 namespace SelXPressApiTest.UserControllerTest;
 
@@ -17,6 +22,7 @@ public class GetUserTest
     private IMapper _mapper;
     private FirebaseAuthManager _authManager;
     private IAuthorizationMiddleware _authorizationMiddleware;
+    private HttpContext _httpContext;
 
     /// <summary>
     /// Initialize a nex instance of the <see cref="GetUserTest"/> class
@@ -28,46 +34,74 @@ public class GetUserTest
         _mapper = A.Fake<IMapper>();
         _authManager = A.Fake<FirebaseAuthManager>();
         _authorizationMiddleware = A.Fake<IAuthorizationMiddleware>();
+        _httpContext = A.Fake<HttpContext>();
         
         
         //Inject the user controller
         _userController = new UserController(_userRepository,_mapper,_authorizationMiddleware);
+        var controllerContext = new ControllerContext()
+        {
+            HttpContext = _httpContext
+        };
+        _userController.ControllerContext = controllerContext;
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 200
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status200()
+    public async void UserController_GetUser_Status200()
     {
-        //todo
+        var user = new User() { Id = 1, Email = "maxence.leroy@epitech.eu" };
+        var userMapped = new UserDto() { Id = 1, Email = "maxence.leroy@epitech.eu" };
+        A.CallTo(() => _userRepository.UserExistsEmail(user.Email)).Returns(true);
+        
+        A.CallTo(() => _mapper.Map<UserDto>(A<User>._)).Returns(userMapped);
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Response.Headers["EmailHeader"] = user.Email;
+        _userController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = httpContext
+        };
+        
+        var result = await _userController.GetUser();
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.IsType<UserDto>(okResult.Value);
     }
     
-    /// <summary>
-    /// Test to check if the status of the request is equals to 400 (BadRequest)
-    /// </summary>
-    [Fact]
-    public void UserController_GetUser_Status400()
-    {
-        //todo
-    }
-
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status401_TokenIsInvalid()
+    public async void UserController_GetUser_Status401_TokenIsInvalid()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUser());
+        
+        Assert.Equal("An error occured while the decoding of the jwt token", exception.Message);
+        Assert.Equal("SRV-1701", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status401_TokenIsMissing()
+    public async void UserController_GetUser_Status401_TokenIsMissing()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUser());
+        
+        Assert.Equal("The token is not valid, please try again with another token", exception.Message);
+        Assert.Equal("SRV-1702", exception.Code);
+
         
     }
 
@@ -75,35 +109,66 @@ public class GetUserTest
     /// Test to check if the status of the request is equals to 401 because the email in the token is not in the database
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status401_EmailIsNotInTheDatabase()
+    public async void UserController_GetUser_Status401_EmailIsNotInTheDatabase()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new NotFoundException("The email address is not in the database","SRV-1401"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.GetUser());
+        
+        Assert.Equal("The email address is not in the database", exception.Message);
+        Assert.Equal("SRV-1401", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 403 because the user is not authorized to do this operation
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status403()
+    public async void UserController_GetUser_Status403()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(false);
+
+        var exception = await Assert.ThrowsAsync<ForbiddenRequestException>(() => _userController.GetUsers());
+        
+        Assert.Equal("You are not authorized to access this data", exception.Message);
+        Assert.Equal("USR-2001", exception.Code );
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 404 because there is no users in the database
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status404()
+    public async void UserController_GetUser_Status404()
     {
-        //todo
+        var user = new User() { Id = 1, Email = "maxence.leroy@epitech.eu" };
+        var userMapped = new UserDto() { Id = 1, Email = "maxence.leroy@epitech.eu" };
+        A.CallTo(() => _userRepository.UserExistsEmail(user.Email)).Returns(false);
+        
+        A.CallTo(() => _mapper.Map<UserDto>(A<User>._)).Returns(userMapped);
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Response.Headers["EmailHeader"] = user.Email;
+        _userController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = httpContext
+        };
+        
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.GetUser());
+        
+        Assert.Equal("The user with the email: " + user.Email + " doesn't exist", exception.Message);
+        Assert.Equal("USR-1403",exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 500 due to an internal server error
     /// </summary>
     [Fact]
-    public void UserController_GetUser_Status500()
+    public async void UserController_GetUser_Status500()
     {
-        //todo
+        A.CallTo(() => _userRepository.GetAllUsers()).Throws(new Exception("SRV-1000"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => _userRepository.GetAllUsers());
+        
+        Assert.Equal("SRV-1000",exception.Message);
     }
 }

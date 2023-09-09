@@ -23,6 +23,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 200
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_200()
     {
         //todo
@@ -31,6 +32,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 400
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_400()
     {
         //todo
@@ -39,6 +41,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_401_TokenIsMissing()
     {
         //todo
@@ -47,6 +50,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_401_TokenIsInvalid()
     {
         //todo
@@ -55,6 +59,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the email is not in the database
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_401_EmailIsNotInTheDatabase()
     {
         //todo
@@ -63,6 +68,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 403
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_403()
     {
         //todo
@@ -71,6 +77,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 404
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_404()
     {
         //Todo
@@ -79,6 +86,7 @@ public class GetRolesTest
     /// <summary>
     /// Test to check if the status of the request is equals to 500 due to an internal server error
     /// </summary>
+    [Fact]
     public void RoleController_GetRoles_Status_500()
     {
         //todo
