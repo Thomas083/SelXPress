@@ -45,12 +45,11 @@ namespace SelXPressApi.Controllers
 		/// <param name="productRepository">The product repository to retrieve and manage products. <see cref="IProductRepository"/></param>
 		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		/// <param name="context">The data context for accessing the database. <see cref="DataContext"/></param>
-		public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper, DataContext context)
+		public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
 			_productRepository = productRepository;
 			_mapper = mapper;
-			_context = context;
 		}
 
 		#region Get Methods

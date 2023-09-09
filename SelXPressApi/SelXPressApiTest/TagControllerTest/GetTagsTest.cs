@@ -24,6 +24,7 @@ public class GetTagsTest
     /// <summary>
     /// Test to check if the status of the request is equals to 200
     /// </summary>
+    [Fact]
     public void TagController_GetTags_Status_200()
     {
         //todo
@@ -32,6 +33,7 @@ public class GetTagsTest
     /// <summary>
     /// Test to check if the status of the request is equals to 400
     /// </summary>
+    [Fact]
     public void TagController_GetTags_Status_400()
     {
         //todo
@@ -40,6 +42,7 @@ public class GetTagsTest
     /// <summary>
     /// Test to check if the status of the request is equals to 404
     /// </summary>
+    [Fact]
     public void TagController_GetTags_Status_404()
     {
         //todo
@@ -48,6 +51,7 @@ public class GetTagsTest
     /// <summary>
     /// Test to check if the status of the request is equals to 500
     /// </summary>
+    [Fact]
     public void TagController_GetTags_Status_500()
     {
         //todo
