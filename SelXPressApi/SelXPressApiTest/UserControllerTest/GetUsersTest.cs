@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.Controllers;
+using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Helper;
@@ -154,16 +155,22 @@ public class GetUsersTest
         A.CallTo(() => _mapper.Map<List<UserDto>>(A<List<User>>._)).Returns(new List<UserDto>());
         A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(true);
 
-        // var exception = Assert.ThrowsAsync<NotFoundException>(() =>)
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.GetUsers());
+        
+        Assert.Equal("There are no users in the database, please try again", exception.Message);
+        Assert.Equal("USR-1401",exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 500 due to an internal server error
     /// </summary>
     [Fact]
-    public void UserController_GetUsers_Status500()
+    public async void UserController_GetUsers_Status500()
     {
-        //todo
+        A.CallTo(() => _userRepository.GetAllUsers()).Throws(new Exception("SRV-1000"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => _userRepository.GetAllUsers());
+        
+        Assert.Equal("SRV-1000",exception.Message);
     }
     
 }
