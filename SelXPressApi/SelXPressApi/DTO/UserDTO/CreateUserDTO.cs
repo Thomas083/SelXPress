@@ -1,8 +1,20 @@
 ﻿namespace SelXPressApi.DTO.UserDTO
 {
 	/// <summary>
-	/// DTO for creating a new user.
+	/// DTO for creating a new User. 
+	/// Here you can access to model <see cref="Models.User"/>. 
+	/// The main DTO is <see cref="UserDto"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class CreateUserDto
 	{
 		/// <summary>

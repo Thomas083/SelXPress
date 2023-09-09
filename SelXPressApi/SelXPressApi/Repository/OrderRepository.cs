@@ -13,8 +13,18 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository class for managing orders.
+	/// Repository class for managing Orders.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class OrderRepository : IOrderRepository
     {
         private readonly DataContext _context;
@@ -24,9 +34,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRepository"/> class.
 		/// </summary>
-		/// <param name="context">The data context.</param>
-		/// <param name="commonMethods">Common methods instance.</param>
-		/// <param name="mapper">AutoMapper instance.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public OrderRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;
@@ -159,16 +169,26 @@ namespace SelXPressApi.Repository
 			return await _commonMethods.Save();
 		}
 
+		/// <summary>
+		/// Retrieves a list of orders for a user based on their email address.
+		/// </summary>
+		/// <param name="email">The email address of the user for whom to retrieve orders.</param>
+		/// <returns>A list of orders associated with the specified user's email address, or null if the user does not exist.</returns>
 		public async Task<List<Order>> GetOrderByUser(string email)
 		{
+			// Check if a user with the specified email address exists in the database
 			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
 			{
+				// Retrieve the user with the specified email address
 				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+
+				// Retrieve and return the list of orders associated with the user
 				var orders = await _context.Orders.Where(o => o.User == user).ToListAsync();
 				return orders;
 			}
 
-			return null;
+			return null; // Return null if the user does not exist in the database
 		}
+
 	}
 }

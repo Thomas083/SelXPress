@@ -1,8 +1,19 @@
 namespace SelXPressApi.Models;
 
 /// <summary>
-/// Model of the Order table
+/// Model of the Order table. 
+/// <see cref="DTO.OrderDTO"/>
 /// </summary>
+/// <seealso  cref="Models"/>
+/// <seealso  cref="DTO"/>
+/// <seealso  cref="Controllers"/>
+/// <seealso  cref="Repository"/>
+/// <seealso  cref="Helper"/>
+/// <seealso  cref="DocumentationErrorTemplate"/>
+/// <seealso  cref="Exceptions"/>
+/// <seealso  cref="Interfaces"/>
+/// <seealso  cref="Middleware"/>
+/// <seealso  cref="Data"/>
 public class Order
 {
     /// <summary>

@@ -12,8 +12,20 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing users.
+	/// API controller for managing Users. 
+	/// Here you can access to DTO <see cref="UserDto"/>.
+	/// The model <see cref="Models.User"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UserController : ControllerBase
@@ -26,9 +38,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserController"/> class.
 		/// </summary>
-		/// <param name="userRepository">The user repository to retrieve and manage users.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="userRepository">The user repository to retrieve and manage users. <see cref="IUserRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public UserController(IUserRepository userRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_userRepository = userRepository;
@@ -108,7 +120,6 @@ namespace SelXPressApi.Controllers
 			return Ok(user);
 		}
         #endregion
-
 
         #region Post Methods
         /// <summary>
@@ -198,7 +209,6 @@ namespace SelXPressApi.Controllers
 			return Ok(new { Token = token, Email = loginDto.Email });
 		}
 		#endregion
-
 
 		#region Put Methods
 		/// <summary>

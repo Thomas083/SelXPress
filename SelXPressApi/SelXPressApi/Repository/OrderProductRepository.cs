@@ -12,9 +12,18 @@ using System.Linq;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository class for managing orders product.
+	/// Repository class for managing Orders Product.
 	/// </summary>
-
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class OrderProductRepository : IOrderProductRepository
 	{
 		private readonly DataContext _context;
@@ -24,9 +33,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the OrderProductRepository class.
 		/// </summary>
-		/// <param name="context">The data context used to interact with the database.</param>
-		/// <param name="commonMethods">Common methods used for data operations.</param>
-		/// <param name="mapper">An AutoMapper instance for object mapping.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public OrderProductRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;

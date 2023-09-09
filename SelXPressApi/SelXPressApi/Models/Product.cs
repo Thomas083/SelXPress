@@ -5,8 +5,19 @@ namespace SelXPressApi.Models;
 
 
 /// <summary>
-/// Model of the Product table
+/// Model of the Product table .
+/// <see cref="DTO.ProductDTO"/>
 /// </summary>
+/// <seealso  cref="Models"/>
+/// <seealso  cref="DTO"/>
+/// <seealso  cref="Controllers"/>
+/// <seealso  cref="Repository"/>
+/// <seealso  cref="Helper"/>
+/// <seealso  cref="DocumentationErrorTemplate"/>
+/// <seealso  cref="Exceptions"/>
+/// <seealso  cref="Interfaces"/>
+/// <seealso  cref="Middleware"/>
+/// <seealso  cref="Data"/>
 public class Product
 {
     /// <summary>

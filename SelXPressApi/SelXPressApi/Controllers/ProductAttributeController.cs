@@ -12,8 +12,20 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing product attributes.
+	/// API controller for managing Product Attributes. 
+	/// Here you can acess to DTO <see cref="ProductAttributeDTO"/>. 
+	/// The model <see cref="Models.ProductAttribute"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProductAttributeController : ControllerBase
@@ -25,9 +37,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductAttributeController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="productAttributeRepository">The product attribute repository to retrieve and manage product attributes.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="productAttributeRepository">The product attribute repository to retrieve and manage product attributes. <see cref="IProductAttributeRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		public ProductAttributeController(IAuthorizationMiddleware authorizationMiddleware, IProductAttributeRepository productAttributeRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;

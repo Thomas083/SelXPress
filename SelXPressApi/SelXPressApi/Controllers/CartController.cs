@@ -12,8 +12,20 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// Controller for managing shopping carts.
+	/// Controller for managing shopping Carts. 
+	/// Here you can access to DTO <see cref="CartDto"/>. 
+	/// The model <see cref="Cart"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CartController : ControllerBase
@@ -24,8 +36,8 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CartController"/> class.
 		/// </summary>
-		/// <param name="cartRepository">The repository for managing shopping carts.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="cartRepository">The repository for managing shopping carts. <see cref="ICartRepository"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CartController(ICartRepository cartRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
@@ -33,7 +45,6 @@ namespace SelXPressApi.Controllers
 		}
 
 		#region Get Methods
-
 		/// <summary>
 		/// Get all the shopping carts from the database.
 		/// </summary>
@@ -142,11 +153,9 @@ namespace SelXPressApi.Controllers
 
 			return Ok(carts);
 		}
-
 		#endregion
 
 		#region Post Methods
-
 		/// <summary>
 		/// Create a shopping cart by admin.
 		/// </summary>
@@ -220,11 +229,9 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful creation of the shopping cart.
 			return Ok();
 		}
-
 		#endregion
 
 		#region Put Methods
-
 		/// <summary>
 		/// Updates a shopping cart based on its ID.
 		/// </summary>
@@ -268,12 +275,9 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful update of the shopping cart.
 			return Ok();
 		}
-
-
 		#endregion
 
 		#region Delete Methods
-
 		/// <summary>
 		/// Deletes a shopping cart based on its ID.
 		/// </summary>
@@ -313,8 +317,6 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful deletion of the shopping cart.
 			return Ok();
 		}
-
-
 		#endregion
 	}
 }

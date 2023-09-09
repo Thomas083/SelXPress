@@ -11,8 +11,21 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing comments.
+	/// API controller for managing Comments. 
+	/// Here you can access to DTO <see cref="CommentDTO"/>. 
+	/// The model <see cref="Models.Comment"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CommentController : ControllerBase
@@ -26,11 +39,11 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommentController"/> class.
 		/// </summary>
-		/// <param name="commentRepository">The comment repository to retrieve and manage comment</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="userRepository">The user repository to retrieve and manage user</param>
-		/// <param name="productRepository">The product repository to retrieve and manage product</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="commentRepository">The comment repository to retrieve and manage comment <see cref="ICommentRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="userRepository">The user repository to retrieve and manage user. <see cref="IUserRepository"/></param>
+		/// <param name="productRepository">The product repository to retrieve and manage product. <see cref="IProductRepository"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CommentController(ICommentRepository commentRepository, IMapper mapper, IUserRepository userRepository, 
 			IProductRepository productRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
@@ -40,6 +53,7 @@ namespace SelXPressApi.Controllers
 			_productRepository = productRepository;
 			_authorizationMiddleware = authorizationMiddleware;
 		}
+
         #region Get Methods
         /// <summary>
         /// Get all comments from the database.
@@ -161,7 +175,6 @@ namespace SelXPressApi.Controllers
 
 			return Ok(comments);
 		}
-
 		#endregion
 
 		#region Post Methods
@@ -212,7 +225,6 @@ namespace SelXPressApi.Controllers
 			await _commentRepository.CreateComment(createCommentDto);
 			return StatusCode(201);
 		}
-
 		#endregion
 
 		#region Put Methods
@@ -257,7 +269,6 @@ namespace SelXPressApi.Controllers
 			await _commentRepository.UpdateCommentById(updateCommentDto, id);
 			return Ok();
 		}
-
 		#endregion
 
 		#region Delete Methods
@@ -297,7 +308,6 @@ namespace SelXPressApi.Controllers
 			await _commentRepository.DeleteCommentById(id);
 			return Ok();
 		}
-
 		#endregion
 	}
 }

@@ -11,8 +11,21 @@ using SelXPressApi.Models;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing marks.
+	/// API controller for managing Marks. 
+	/// Here you can access to DTO <see cref="CreateMarkDTO"/>. 
+	/// The model <see cref="Models.Mark"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class MarkController : ControllerBase
@@ -22,8 +35,8 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MarkController"/> class.
 		/// </summary>
-		/// <param name="markRepository">The repository for managing marks.</param>
-		/// <param name="authorizationMiddleware">Middleware for authorization checks.</param>
+		/// <param name="markRepository">The repository for managing marks. <see cref="IMarkRepository"/></param>
+		/// <param name="authorizationMiddleware">Middleware for authorization checks. <see cref="IAuthorizationMiddleware"/></param>
 		public MarkController(IMarkRepository markRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_markRepository = markRepository ?? throw new ArgumentNullException(nameof(markRepository));

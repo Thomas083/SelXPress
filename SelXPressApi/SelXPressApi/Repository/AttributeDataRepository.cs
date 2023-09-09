@@ -14,7 +14,17 @@ namespace SelXPressApi.Repository
 {
 	/// <summary>
 	/// Repository for managing AttributeData.
-	/// </summary>
+	/// </summary> 
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class AttributeDataRepository : IAttributeDataRepository
 	{
 		private readonly DataContext _context;
@@ -24,9 +34,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the AttributeDataRepository class.
 		/// </summary>
-		/// <param name="context">The DataContext.</param>
-		/// <param name="commonMethods">Common methods helper.</param>
-		/// <param name="mapper">AutoMapper instance.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public AttributeDataRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;

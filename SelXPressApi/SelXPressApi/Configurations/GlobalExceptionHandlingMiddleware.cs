@@ -5,16 +5,40 @@ using SelXPressApi.Exceptions;
 
 namespace SelXPressApi.Configurations
 {
-    public class GlobalExceptionHandlingMiddleware
+	/// <summary>
+	/// Middleware for global exception handling in the application. 
+	/// This middleware captures and handles various types of exceptions,
+	/// returning appropriate JSON error responses.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class GlobalExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public GlobalExceptionHandlingMiddleware(RequestDelegate next)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GlobalExceptionHandlingMiddleware"/> class.
+		/// </summary>
+		/// <param name="next">The next middleware in the pipeline.</param>
+		public GlobalExceptionHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+		/// <summary>
+		/// Invokes the middleware to handle exceptions and pass the request to the next middleware in the pipeline.
+		/// </summary>
+		/// <param name="context">The HTTP context for the current request.</param>
+		/// <returns>A task representing the asynchronous operation.</returns>
+		public async Task Invoke(HttpContext context)
         {
             try
             {

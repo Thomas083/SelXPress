@@ -10,8 +10,20 @@ using SelXPressApi.Models;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing roles.
+	/// API controller for managing Roles. 
+	/// Here you can access to DTO <see cref="CreateRoleDTO"/>. 
+	/// The model <see cref="Models.Role"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class RoleController : ControllerBase
@@ -22,8 +34,8 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RoleController"/> class.
 		/// </summary>
-		/// <param name="roleRepository">The role repository to retrieve and manage roles.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="roleRepository">The role repository to retrieve and manage roles. <see cref="IRoleRepository"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public RoleController(IRoleRepository roleRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_roleRepository = roleRepository;

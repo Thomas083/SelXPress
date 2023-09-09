@@ -4,10 +4,21 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.DTO.AttributeDTO
 {
-    /// <summary>
-    /// Data Transfer Object for representing an Attribute entity.
-    /// </summary>
-    public class AttributeDTO
+	/// <summary>
+	/// Data Transfer Object for representing an Attribute entity. 
+	/// Here you can access to model <see cref="Models.Attribute"/>. 
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class AttributeDTO
     {
         /// <summary>
         /// The ID of the attribute.

@@ -1,9 +1,20 @@
 ﻿namespace SelXPressApi.DTO.AttributeDataDTO
 {
-    /// <summary>
-    /// Data transfer object representing additional data associated with an attribute.
-    /// </summary>
-    public class AttributeDataDto
+	/// <summary>
+	/// Data transfer object representing additional data associated with an attribute. 
+	/// Here you can access to model <see cref="Models.AttributeData"/>.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class AttributeDataDto
     {
         /// <summary>
         /// Gets or sets the unique identifier for the attribute data.

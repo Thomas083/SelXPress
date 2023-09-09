@@ -1,8 +1,19 @@
 namespace SelXPressApi.Models;
 
 /// <summary>
-/// Model of the Cart table
+/// Model of the Cart table. 
+/// <see cref="DTO.CartDTO"/>
 /// </summary>
+/// <seealso  cref="Models"/>
+/// <seealso  cref="DTO"/>
+/// <seealso  cref="Controllers"/>
+/// <seealso  cref="Repository"/>
+/// <seealso  cref="Helper"/>
+/// <seealso  cref="DocumentationErrorTemplate"/>
+/// <seealso  cref="Exceptions"/>
+/// <seealso  cref="Interfaces"/>
+/// <seealso  cref="Middleware"/>
+/// <seealso  cref="Data"/>
 public class Cart
 {
     /// <summary>

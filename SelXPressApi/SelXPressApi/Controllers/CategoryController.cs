@@ -10,8 +10,21 @@ using SelXPressApi.Models;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing categories.
+	/// API controller for managing Categories. 
+	/// Here you can access to DTO <see cref="CategoryDTO"/>. 
+	/// The model <see cref="Models.Cart"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CategoryController : ControllerBase
@@ -23,9 +36,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CategoryController"/> class.
 		/// </summary>
-		/// <param name="categoryRepository">The category repository to retrieve and manage category.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="categoryRepository">The category repository to retrieve and manage category. <see cref="ICategoryRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CategoryController(ICategoryRepository categoryRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_categoryRepository = categoryRepository;

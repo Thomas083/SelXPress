@@ -14,8 +14,21 @@ using SelXPressApi.Models;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing orders.
+	/// API controller for managing Orders. 
+	/// Here you can acces to DTO <see cref="OrderDTO"/>. 
+	/// The model <see cref="Models.Order"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class OrderController : ControllerBase
@@ -27,9 +40,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="orderRepository">The order repository to retrieve and manage orders.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="orderRepository">The order repository to retrieve and manage orders. <see cref="IOrderRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		public OrderController(IAuthorizationMiddleware authorizationMiddleware, IOrderRepository orderRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
