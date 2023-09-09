@@ -85,4 +85,3 @@ Ce tableau répertorie les codes d'entité associés à des messages d'erreur po
 | SRV (Service)     | SRV-1701  | An error occured while the decoding of the jwt token                  |
 |                   | SRV-1401  | The email address is not in the database                              |
 |                   | SRV-1702  | The token is not valid, please try again with another token           |
-| ----------------- | --------- | --------------------------------------------------------------------- |
