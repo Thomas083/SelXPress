@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.Controllers;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using SelXPressApi.Exceptions;
 
 namespace SelXPressApiTest.UserControllerTest;
 
@@ -17,6 +20,7 @@ public class DeleteUserTest
     private IMapper _mapper;
     private FirebaseAuthManager _authManager;
     private IAuthorizationMiddleware _authorizationMiddleware;
+    private HttpContext _httpContext;
 
     /// <summary>
     /// Initialize a new instance of the <see cref="DeleteUserTest"/>
@@ -28,80 +32,120 @@ public class DeleteUserTest
         _mapper = A.Fake<IMapper>();
         _authManager = A.Fake<FirebaseAuthManager>();
         _authorizationMiddleware = A.Fake<IAuthorizationMiddleware>();
+        _httpContext = A.Fake<HttpContext>();
         
         //Inject the user controller
         _userController = new UserController(_userRepository, _mapper, _authorizationMiddleware);
+        var controllerContext = new ControllerContext()
+        {
+            HttpContext = _httpContext
+        };
+        _userController.ControllerContext = controllerContext;
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 200
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status200()
+    public async void UserController_DeleteUser_Status200()
     {
-        //todo
-    }
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(true);
+        A.CallTo(() => _userRepository.UserExists(1)).Returns(true);
+        A.CallTo(() => _userRepository.DeleteUser(1)).Returns(true);
 
-    /// <summary>
-    /// Test to check if the status of the request is equals to 400
-    /// </summary>
-    [Fact]
-    public void UserController_DeleteUser_Status400()
-    {
-        //todo
-    }
+        var result = await _userController.DeleteUser(1);
 
+        Assert.IsType<OkResult>(result);
+    }
+    
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is missing
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status401_TokenIsMissing()
+    public async void UserController_DeleteUser_Status401_TokenIsMissing()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.DeleteUser(1));
+        
+        Assert.Equal("The token is not valid, please try again with another token", exception.Message);
+        Assert.Equal("SRV-1702", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the token is invalid
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status401_TokenIsInvalid()
+    public async void UserController_DeleteUser_Status401_TokenIsInvalid()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.DeleteUser(1));
+        
+        Assert.Equal("An error occured while the decoding of the jwt token", exception.Message);
+        Assert.Equal("SRV-1701", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 401 because the email is not in the database
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status401_EmailIsNotInTheDatabase()
+    public async void UserController_DeleteUser_Status401_EmailIsNotInTheDatabase()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new NotFoundException("The email address is not in the database","SRV-1401"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.DeleteUser(1));
+        
+        Assert.Equal("The email address is not in the database", exception.Message);
+        Assert.Equal("SRV-1401", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 403 because the user is not authorized to do this operation
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status403()
+    public async void UserController_DeleteUser_Status403()
     {
-        //todo
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(false);
+
+        var exception = await Assert.ThrowsAsync<ForbiddenRequestException>(() => _userController.DeleteUser(1));
+        
+        Assert.Equal("You are not authorized to access this data", exception.Message);
+        Assert.Equal("USR-2001", exception.Code );
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 404
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status404()
+    public async void UserController_DeleteUser_Status404()
     {
-        //todo
+        int id = 1;
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Returns(true);
+        A.CallTo(() => _authorizationMiddleware.CheckRoleIfAdmin(_httpContext)).Returns(true);
+        A.CallTo(() => _userRepository.UserExists(id)).Returns(false);
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(() => _userController.DeleteUser(id));
+        
+        Assert.Equal("The user with the ID: " + id + " doesn't exist", exception.Message);
+        Assert.Equal("USR-1402", exception.Code);
     }
 
     /// <summary>
     /// Test to check if the status of the request is equals to 500 due to an internal server error
     /// </summary>
     [Fact]
-    public void UserController_DeleteUser_Status500()
+    public async void UserController_DeleteUser_Status500()
     {
-        //todo
+        A.CallTo(() => _userRepository.DeleteUser(1)).Throws(new Exception("SRV-1000"));
+        var exception = await Assert.ThrowsAsync<Exception>(() => _userRepository.DeleteUser(1));
+        
+        Assert.Equal("SRV-1000",exception.Message);
     }
 }
