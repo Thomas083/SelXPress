@@ -1,7 +1,7 @@
 <template>
     <div class="product-details">
         <h2 class="product-title">{{ product.name }}</h2>
-        <div class="product-seller">Sold by: <span class="product-seller-name">{{ seller }}</span></div>
+        <div class="product-seller"></div>
         <div class="product-price-cart-container">
             <div class="product-price">
                 <h2 class="price">{{ product.price }} €</h2>
@@ -50,7 +50,6 @@ export default {
                 productId: null,
                 quantity: 1
             },
-            seller: 'ARTINABS',
         }
     },
     methods: {
