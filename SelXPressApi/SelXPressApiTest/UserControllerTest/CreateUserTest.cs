@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SelXPressApi.Controllers;
+using SelXPressApi.DTO.UserDTO;
 using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
@@ -19,6 +21,7 @@ public class CreateUserTest
     private IMapper _mapper;
     private FirebaseAuthManager _authManager;
     private IAuthorizationMiddleware _authorizationMiddleware;
+    private HttpContext _httpContext;
 
     /// <summary>
     /// Initialize a new instance of the <see cref="GetUsersTest"/> class.
@@ -30,9 +33,15 @@ public class CreateUserTest
         _mapper = A.Fake<IMapper>();
         _authManager = A.Fake<FirebaseAuthManager>();
         _authorizationMiddleware = A.Fake<IAuthorizationMiddleware>();
-        
+        _httpContext = A.Fake<HttpContext>();
         //inject the user controller
         _userController = new UserController(_userRepository, _mapper, _authorizationMiddleware);
+
+        var controllerContext = new ControllerContext()
+        {
+            HttpContext = _httpContext
+        };
+        _userController.ControllerContext = controllerContext;
     }
 
     /// <summary>
@@ -41,7 +50,16 @@ public class CreateUserTest
     [Fact]
     public void UserController_CreateUser_Status201()
     {
-        //todo
+        // set the body of the request 
+        CreateUserDto requestBody = new CreateUserDto()
+        {
+            Email = "test@gmail.com",
+            Password = "password",
+            RoleId = 1,
+            Username = "testUsername"
+        };
+        _authorizationMiddleware.CheckIfTokenExists(_httpContext);
+        
     }
 
     /// <summary>
