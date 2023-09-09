@@ -82,23 +82,6 @@ public class GetUsersTest
     [Fact]
     public async void UserController_GetUsers_Status401_TokenIsInvalid()
     {
-
-        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
-            new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702"));
-        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
-
-        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUsers());
-        
-        Assert.Equal("The token is not valid, please try again with another token", exception.Message);
-        Assert.Equal("SRV-1702", exception.Code);
-    }
-
-    /// <summary>
-    /// Test to check if the status of the request is equals to 401 because the token is missing
-    /// </summary>
-    [Fact]
-    public async void UserController_GetUsers_Status401_TokenIsMissing()
-    {
         A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
             new UnauthorizedException("An error occured while the decoding of the jwt token", "SRV-1701"));
         _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
@@ -107,6 +90,25 @@ public class GetUsersTest
         
         Assert.Equal("An error occured while the decoding of the jwt token", exception.Message);
         Assert.Equal("SRV-1701", exception.Code);
+        
+    }
+
+    /// <summary>
+    /// Test to check if the status of the request is equals to 401 because the token is missing
+    /// </summary>
+    [Fact]
+    public async void UserController_GetUsers_Status401_TokenIsMissing()
+    {
+        
+        
+        A.CallTo(() => _authorizationMiddleware.CheckIfTokenExists(_httpContext)).Throws(
+            new UnauthorizedException("The token is not valid, please try again with another token", "SRV-1702"));
+        _userController.ControllerContext = new ControllerContext { HttpContext = _httpContext };
+
+        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() => _userController.GetUsers());
+        
+        Assert.Equal("The token is not valid, please try again with another token", exception.Message);
+        Assert.Equal("SRV-1702", exception.Code);
 
     }
 
