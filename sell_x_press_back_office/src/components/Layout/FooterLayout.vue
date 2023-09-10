@@ -7,7 +7,7 @@
         </div>
         <div class="want_to_buy_it">
             <p>Want to buy it ?</p>
-            <a href="#">Buy on SelXPress</a>
+            <a href="http://localhost:4000">Buy on SelXPress</a>
         </div>
     </footer>
 </template>
