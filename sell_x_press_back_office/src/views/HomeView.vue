@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <categories-list @categoryChoose="updateCategory($event)" />
+    <categories-list/>
     <div class="products-cards-container">
       <div class="search-product">
         <h1 class="products-category" id="category">Category: {{ category }}</h1>

@@ -1,6 +1,6 @@
 <template>
     <div class="categories-container">
-        <div v-for="category in categories" v-on:click="sendCategoryChoose(category)">
+        <div v-for="category in categories">
             <div class="category">{{ category.name }}</div>
             <div class="separation"></div>
         </div>
@@ -8,41 +8,24 @@
 </template>
 
 <script>
+import { GET } from '@/api/axios'
+import { ENDPOINTS } from '@/api/endpoints'
 
 export default {
     name: 'CategoriesList',
     data() {
         return {
-            categories: [
-                {
-                    id: 1,
-                    name: "Ocean",
-                    tags: [
-                        {
-                            id: 1,
-                            name: "Fishing",
-                            categoryId: 1
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "Sport",
-                    tags: [
-                        {
-                            id: 2,
-                            name: "Football",
-                            categoryId: 2
-                        }
-                    ]
-                }
-            ]
+            categories: []
         }
     },
-    methods: {
-        sendCategoryChoose(category) {
-            this.$emit('categoryChoose', category)
-        }
+    created () {
+        GET(ENDPOINTS.GET_ALL_CATEGORY, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
 }
 
