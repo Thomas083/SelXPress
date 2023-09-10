@@ -89,7 +89,7 @@ a:hover {
     border-radius: 15px;
     font-size: 25px;
     padding: 1rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
 }
 
 /* Media queries for mobile screens */

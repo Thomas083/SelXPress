@@ -1,16 +1,29 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SelXPressApi.Models;
 
 
 /// <summary>
-/// Model of the Product table
+/// Model of the Product table .
+/// <see cref="DTO.ProductDTO"/>
 /// </summary>
+/// <seealso  cref="Models"/>
+/// <seealso  cref="DTO"/>
+/// <seealso  cref="Controllers"/>
+/// <seealso  cref="Repository"/>
+/// <seealso  cref="Helper"/>
+/// <seealso  cref="DocumentationErrorTemplate"/>
+/// <seealso  cref="Exceptions"/>
+/// <seealso  cref="Interfaces"/>
+/// <seealso  cref="Middleware"/>
+/// <seealso  cref="Data"/>
 public class Product
 {
     /// <summary>
     /// Id of the product
     /// </summary>
+    [Key]
     public int Id { get; set; }
 
     /// <summary>
@@ -36,7 +49,7 @@ public class Product
     /// <summary>
     /// Date and time of the creation of the product
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Initializer sets CreatedAt to current UTC time
 
     /// <summary>
     /// category of the product
@@ -46,7 +59,7 @@ public class Product
     /// <summary>
     /// Stock of the product
     /// </summary>
-    public Stock Stock { get; set; }
+    public int Stock { get; set; }
 
     /// <summary>
     /// List of the cart where the product is in
@@ -62,5 +75,13 @@ public class Product
     /// List of the attributes of the product
     /// </summary>
     public ICollection<ProductAttribute> ProductAttributes { get; set; }
+    /// <summary>
+    /// List of comments for the product
+    /// </summary>
+    public ICollection<Comment> Comments { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public ICollection<SellerProduct> SellerProducts { get; set; }
 }

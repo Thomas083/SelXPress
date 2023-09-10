@@ -5,8 +5,7 @@
         </div>
         <div class="header-search">
             <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
-                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}
-                </option>
+                <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
             <input v-model="formData.search" class="search-input" type="text" placeholder="Search in SelXpress...">
             <button class="loop" v-on:click="sendSearchData"><img src="../../assets/Header/loop.png" /></button>
@@ -180,7 +179,7 @@ p {
     font-size: 1rem;
     height: 1vh;
     margin-bottom: 0.5rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
     border: none;
 }
 

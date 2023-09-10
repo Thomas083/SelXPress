@@ -1,9 +1,19 @@
 ﻿namespace SelXPressApi.DocumentationErrorTemplate
 {
-    /// <summary>
-    /// Class use for return an error with the HTTP status at 500
-    /// </summary>
-    public class NotFoundErrorTemplate
+	/// <summary>
+	/// Class use for return an error with the HTTP status at 500
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class NotFoundErrorTemplate
     {
         /// <summary>
         /// Message of the exception

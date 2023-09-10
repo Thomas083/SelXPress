@@ -1,10 +1,25 @@
 version: '3'
 
 services:
+  smtp:
+    image: marcopas/docker-mailslurper
+    env_file:
+      - .env
+    restart: always
+    ports: 
+      - "2500:2500"
+      - "8080:8080"
+      - "8085:8085"
+    # volumes:
+    #   - ./smtp-config.json:/opt/mailslurper/config.json
+
   mssql:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
+    env_file:
+      - .env
     ports: 
       - "1433:1433" 
+    restart: always
     environment:
       - ACCEPT_EULA=y
       - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
@@ -14,18 +29,19 @@ services:
   api:
     build: 
       context: ../SelXPressApi/SelXPressApi
+      args:
+        ASPNETCORE_PASSWORD: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
     env_file:
       - .env
     ports:
       - 5288:80
       - 7094:443
     restart: on-failure
-    volumes:
-      - ./https:/https/
     networks:
       - network
     depends_on:
       - mssql
+      - smtp
 
   front:
     build: ../sell_x_press_front_office

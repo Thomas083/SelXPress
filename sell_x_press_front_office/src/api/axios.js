@@ -4,6 +4,7 @@ const instance = axios.create({
   baseURL: 'https://localhost:7094',
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
   },
   timeout: 6000,
   withCredentials: false,

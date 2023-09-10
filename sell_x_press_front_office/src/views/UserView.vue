@@ -106,14 +106,14 @@ export default {
     border-radius: 9px;
     padding: 0.5rem 2rem;
     border: none;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
 }
 
 .save-information-btn {
     border-radius: 9px;
     border: none;
     width: 10vw;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
 }
 
 .history-btn {
