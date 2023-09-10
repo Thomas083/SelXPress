@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.AttributeDataDTO;
@@ -6,6 +6,7 @@ using SelXPressApi.Helper;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Models;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,17 @@ namespace SelXPressApi.Repository
 {
 	/// <summary>
 	/// Repository for managing AttributeData.
-	/// </summary>
+	/// </summary> 
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class AttributeDataRepository : IAttributeDataRepository
 	{
 		private readonly DataContext _context;
@@ -23,9 +34,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the AttributeDataRepository class.
 		/// </summary>
-		/// <param name="context">The DataContext.</param>
-		/// <param name="commonMethods">Common methods helper.</param>
-		/// <param name="mapper">AutoMapper instance.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public AttributeDataRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;
@@ -50,13 +61,17 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the creation is successful; otherwise, false.</returns>
 		public async Task<bool> CreateAttributeData(CreateAttributeDataDTO createAttribute)
 		{
-			var attribute = await _context.Attributes.FindAsync(createAttribute.AttributeId);
-			if (attribute != null)
+			var attribute = await _context.Attributes.Where(a => a.Id == createAttribute.AttributeId).FirstOrDefaultAsync();
+			if (attribute !=  null)
 			{
-				var newAttributeData = _mapper.Map<AttributeData>(createAttribute);
-				newAttributeData.Attribute = attribute;
-
-				await _context.AttributesData.AddAsync(newAttributeData);
+				var newAttributeData = new AttributeData
+				{
+                    Attribute = attribute,
+                    Value = createAttribute.Value,
+					Key = createAttribute.Key,
+					AttributeId	= createAttribute.AttributeId
+                };
+				_context.AttributesData.Add(newAttributeData);
 				return await _commonMethods.Save();
 			}
 			return false;
@@ -104,32 +119,22 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the update was successful; otherwise, false.</returns>
 		public async Task<bool> UpdateAttributeData(int id, UpdateAttributeDataDTO updateAttribute)
 		{
-			if (!await AttributeDataExists(id))
+
+			if (await AttributeDataExists(id))
 				return false;
 
-			AttributeData attributeData = await _context.AttributesData
-				.Include(ad => ad.Attribute) // Include the Attribute relationship
-				.FirstOrDefaultAsync(a => a.Id == id);
+            AttributeData attributeData = await _context.AttributesData.Where(a => a.Id == id).FirstAsync();
 
-			if (attributeData != null)
-			{
-				if (updateAttribute.Key != null && attributeData.Key != updateAttribute.Key)
-					await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Key, x => updateAttribute.Key));
-				if (updateAttribute.Value != null && attributeData.Value != updateAttribute.Value)
-					await _context.AttributesData.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Value, x => updateAttribute.Value));
-
-				if (updateAttribute.AttributeId != 0)
-				{
-					// Ensure the attribute exists before updating the relationship
-					var attribute = await _context.Attributes.FirstOrDefaultAsync(a => a.Id == updateAttribute.AttributeId);
-					if (attribute != null)
-					{
-						attributeData.Attribute = attribute;
-					}
-				}
-			}
-
-			return await _commonMethods.Save();
+            if (attributeData != null && updateAttribute.AttributeId != null)
+                await _context.AttributesData.Where(r => r.Id == id)
+                    .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.AttributeId, x => updateAttribute.AttributeId));
+			if (attributeData != null && updateAttribute.Value != null)
+				await _context.AttributesData.Where(r => r.Id == id)
+					.ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Value, x => updateAttribute.Value));
+			if (attributeData != null && updateAttribute.Key != null)
+				await _context.AttributesData.Where(r => r.Id == id)
+					.ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Key, x => updateAttribute.Key));
+            return await _commonMethods.Save();
 		}
 	}
 }

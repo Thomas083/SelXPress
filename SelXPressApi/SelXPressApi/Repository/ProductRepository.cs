@@ -11,10 +11,20 @@ using System.Threading.Tasks;
 
 namespace SelXPressApi.Repository
 {
-    /// <summary>
-    /// Repository for performing CRUD operations on products.
-    /// </summary>
-    public class ProductRepository : IProductRepository
+	/// <summary>
+	/// Repository for performing CRUD operations on Products.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class ProductRepository : IProductRepository
     {
         private readonly DataContext _context;
         private readonly ICommonMethods _commonMethods;
@@ -23,9 +33,9 @@ namespace SelXPressApi.Repository
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductRepository"/> class.
         /// </summary>
-        /// <param name="context">The database context.</param>
-        /// <param name="commonMethods">Common methods provider.</param>
-        /// <param name="mapper">Automapper instance.</param>
+        /// <param name="context">The database context. <see cref="DataContext"/></param>
+        /// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+        /// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
         public ProductRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
         {
             _context = context;
@@ -48,22 +58,39 @@ namespace SelXPressApi.Repository
         /// </summary>
         /// <param name="createProduct">The product details.</param>
         /// <returns><c>true</c> if the product was created successfully, otherwise <c>false</c>.</returns>
-        public async Task<bool> CreateProduct(CreateProductDTO createProduct)
+        public async Task<bool> CreateProduct(CreateProductDTO createProduct, string email)
         {
-            var productEntity = _mapper.Map<Product>(createProduct);
-
-            // Create ProductAttributes based on the provided AttributeIds
-            if (createProduct.AttributeIds != null && createProduct.AttributeIds.Any())
+	        var category = await _context.Categories.Where(c => c.Id == createProduct.CategoryId).FirstAsync();
+            var newProduct = new Product
             {
-                var productAttributes = createProduct.AttributeIds.Select(attributeId => new ProductAttribute
-                {
-                    AttributeId = attributeId
-                }).ToList();
+				Name = createProduct.Name,
+				Description = createProduct.Description,
+				Price = createProduct.Price,
+                Picture = createProduct.Picture,
+                Stock = createProduct.Stock,
+                Category = category,
+                ProductAttributes = new List<ProductAttribute>()
+			};
 
-                productEntity.ProductAttributes = productAttributes;
-            }
+            var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+            List<SellerProduct> sellerProducts = new List<SellerProduct>();
+            SellerProduct sellerProduct = new SellerProduct()
+            {
+	            Product = newProduct,
+	            User = user,
+	            UserId = user.Id
+            };
+            
+            sellerProducts.Add(sellerProduct);
+            newProduct.SellerProducts = sellerProducts;
+            for (int i = 0; i < createProduct.ProductAttributeIds.Count; i++)
+            {
+				var productAttribute = await _context.ProductAttributes.FindAsync(createProduct.ProductAttributeIds[i]);
+                if (productAttribute != null)
+				    newProduct.ProductAttributes.Add(productAttribute);
+			}
 
-            _context.Products.Add(productEntity);
+            _context.Products.Add(newProduct);
             return await _commonMethods.Save();
         }
 
@@ -78,6 +105,10 @@ namespace SelXPressApi.Repository
             {
                 var product = await _context.Products.FindAsync(id);
                 _context.Products.Remove(product);
+                await _context.Carts.Where(c => c.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.OrderProducts.Where(op => op.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
+                await _context.SellerProducts.Where(sp => sp.ProductId == product.Id).ExecuteDeleteAsync();
                 return await _commonMethods.Save();
             }
             return false;
@@ -113,6 +144,7 @@ namespace SelXPressApi.Repository
 			var query = _context.Products
 				.Include(p => p.Category)
 				.Include(p => p.ProductAttributes)
+				.Include(c => c.Comments)
 				.OrderBy(p => p.Id);
 
 			var products = await query.ToListAsync();
@@ -127,9 +159,13 @@ namespace SelXPressApi.Repository
 		/// </summary>
 		/// <param name="id">The product ID.</param>
 		/// <returns>The product if found, otherwise <c>null</c>.</returns>
-		public async Task<Product?> GetProductById(int id)
+		public async Task<AllProductDTO?> GetProductById(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return _mapper.Map<AllProductDTO>(await _context.Products
+                			.Include(p => p.Category)
+                            .Include(p => p.ProductAttributes)
+			                .Include(c => c.Comments)
+                            .FirstOrDefaultAsync(p => p.Id == id));
         }
 
         /// <summary>
@@ -143,10 +179,72 @@ namespace SelXPressApi.Repository
             if (!await ProductExists(id))
                 return false;
             var product = await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+	            //_mapper.Map(updateProductDTO, product);
+	            product.Name = updateProductDTO.Name;
+	            product.Price = updateProductDTO.Price;
+	            product.Description = updateProductDTO.Description;
+	            product.Picture = updateProductDTO.Picture;
+	            product.Stock = updateProductDTO.Stock;
+	            var category = await _context.Categories.Where(c => c.Id == updateProductDTO.CategoryId).FirstAsync();
+	            product.Category = category;
+	            //récupérer la liste des products attributes
+	            await _context.ProductAttributes.Where(pa => pa.ProductId == product.Id).ExecuteDeleteAsync();
+	            List<ProductAttribute> productAttributeList = new List<ProductAttribute>();
+	            for (int i = 0; i < updateProductDTO.AttributeIds.Count; i++)
+	            {
+		            var attribute = await _context.Attributes.Where(a => a.Id == updateProductDTO.AttributeIds[i]).FirstAsync();
+		            var attributeProductToAdd = new ProductAttribute()
+		            {
+			            Product = product,
+			            ProductId = product.Id,
+			            Attribute = attribute,
+			            AttributeId = attribute.Id
+		            };
+		            productAttributeList.Add(attributeProductToAdd);
+	            }
+	           
+	            product.ProductAttributes = productAttributeList;
+	            _context.Products.Update(product);
+	            await _context.SaveChangesAsync();
+	            return true;
 
-            _mapper.Map(updateProductDTO, product);            
-
-            return await _commonMethods.Save(); ;
+            }
+            return await _commonMethods.Save();
         }
-    }
+
+		/// <summary>
+		/// Retrieves a list of products associated with a user based on their email address.
+		/// </summary>
+		/// <param name="email">The email address of the user for whom to retrieve products.</param>
+		/// <returns>A list of products associated with the specified user's email address, or an empty list if the user does not exist or has no products.</returns>
+		public async Task<List<AllProductDTO>> GetProductByUser(string email)
+		{
+			// Check if a user with the specified email address exists in the database
+			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
+			{
+				// Retrieve the user with the specified email address
+				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+
+				// Retrieve a list of seller products associated with the user
+				var sellerProducts = await _context.SellerProducts.Where(sp => sp.UserId == user.Id).ToListAsync();
+
+				var products = new List<Product>();
+
+				// Iterate through the seller products and retrieve the corresponding products
+				for (int i = 0; i < sellerProducts.Count; i++)
+				{
+					var productToAdd = await _context.Products.Where(p => p.Id == sellerProducts[i].ProductId).FirstAsync();
+					products.Add(productToAdd);
+				}
+
+				// Use AutoMapper to map the list of products to a list of AllProductDTOs
+				return _mapper.Map<List<AllProductDTO>>(products);
+			}
+
+			return new List<AllProductDTO>(); // Return an empty list if the user does not exist or has no products
+		}
+
+	}
 }

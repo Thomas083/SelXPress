@@ -12,8 +12,20 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// Controller for managing shopping carts.
+	/// Controller for managing shopping Carts. 
+	/// Here you can access to DTO <see cref="CartDto"/>. 
+	/// The model <see cref="Cart"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CartController : ControllerBase
@@ -24,8 +36,8 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CartController"/> class.
 		/// </summary>
-		/// <param name="cartRepository">The repository for managing shopping carts.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="cartRepository">The repository for managing shopping carts. <see cref="ICartRepository"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CartController(ICartRepository cartRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
@@ -33,7 +45,6 @@ namespace SelXPressApi.Controllers
 		}
 
 		#region Get Methods
-
 		/// <summary>
 		/// Get all the shopping carts from the database.
 		/// </summary>
@@ -66,7 +77,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any carts were found
 			if (carts.Count == 0)
-				throw new NotFoundException("There are no shopping carts in the database, please try again", "CRT-1401");
+				throw new NotFoundException("There is no carts in the database, please try again", "CRT-1401");
 
 			return Ok(carts);
 		}
@@ -99,7 +110,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the cart with the given ID exists
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Retrieve the cart by its ID
 			var cart = await _cartRepository.GetCartById(id);
@@ -138,15 +149,13 @@ namespace SelXPressApi.Controllers
 
 			// Check if any cart were found
 			if (carts.Count == 0)
-				throw new NotFoundException("There are no shopping carts for the user with the id : " + id, "CRT-1403");
+				throw new NotFoundException($"There are no shopping carts for the user with the ID : {id}", "CRT-1403");
 
 			return Ok(carts);
 		}
-
 		#endregion
 
 		#region Post Methods
-
 		/// <summary>
 		/// Create a shopping cart by admin.
 		/// </summary>
@@ -155,7 +164,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform the operation.</exception>
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid or required fields are missing.</exception>
 		[HttpPost]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -178,7 +187,7 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("There are missing fields, please try again with some data", "CRT-1102");
 
 			await _cartRepository.CreateCartByAdmin(cartDto);
-			return Ok();
+			return StatusCode(201);
 		}
 
 		/// <summary>
@@ -220,11 +229,9 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful creation of the shopping cart.
 			return Ok();
 		}
-
 		#endregion
 
 		#region Put Methods
-
 		/// <summary>
 		/// Updates a shopping cart based on its ID.
 		/// </summary>
@@ -252,7 +259,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if a shopping cart with the provided ID exists in the database.
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Check if the model state is valid (data annotations on the DTO).
 			if (!ModelState.IsValid)
@@ -268,12 +275,9 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful update of the shopping cart.
 			return Ok();
 		}
-
-
 		#endregion
 
 		#region Delete Methods
-
 		/// <summary>
 		/// Deletes a shopping cart based on its ID.
 		/// </summary>
@@ -305,7 +309,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if a shopping cart with the provided ID exists in the database.
 			if (!await _cartRepository.CartExists(id))
-				throw new NotFoundException("The shopping cart with the id : " + id + " doesn't exist", "CRT-1402");
+				throw new NotFoundException($"The cart with the ID : {id} doesn't exist", "CRT-1402");
 
 			// Delete the shopping cart with the provided ID using the repository.
 			await _cartRepository.DeleteCart(id);
@@ -313,8 +317,6 @@ namespace SelXPressApi.Controllers
 			// Return a 200 OK response indicating the successful deletion of the shopping cart.
 			return Ok();
 		}
-
-
 		#endregion
 	}
 }

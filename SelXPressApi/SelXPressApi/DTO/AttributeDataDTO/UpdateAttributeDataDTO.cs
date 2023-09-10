@@ -1,9 +1,21 @@
 ﻿namespace SelXPressApi.DTO.AttributeDataDTO
 {
-    /// <summary>
-    /// Data transfer object for updating an AttributeData.
-    /// </summary>
-    public class UpdateAttributeDataDTO
+	/// <summary>
+	/// Data transfer object for updating an AttributeData. 
+	/// Here you can access to model <see cref="Models.AttributeData"/>. 
+	/// The main DTO is <see cref="AttributeDataDto"/>.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class UpdateAttributeDataDTO
     {
         /// <summary>
         /// New value for the Key.

@@ -8,18 +8,33 @@ using Attribute = SelXPressApi.Models.Attribute;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository class for managing attributes and their data.
+	/// Repository class for managing Attributes and their data in the SelXPressApi application.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class AttributeRepository : IAttributeRepository
     {
         private readonly DataContext _context;
         private ICommonMethods _commonMethods;
 
-        public AttributeRepository(DataContext context, ICommonMethods commonMethods)
-        {
-            _context = context;
-            _commonMethods = commonMethods;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AttributeRepository"/> class.
+		/// </summary>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		public AttributeRepository(DataContext context, ICommonMethods commonMethods)
+		{
+			_context = context;
+			_commonMethods = commonMethods;
+		}
 
 		/// <summary>
 		/// Checks if an attribute with the given ID exists.
@@ -42,6 +57,8 @@ namespace SelXPressApi.Repository
             {
                 Name = createAttribute.Name,
                 Type = createAttribute.Type,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
             _context.Attributes.Add(newAttribute);
             return await _commonMethods.Save();
@@ -99,11 +116,19 @@ namespace SelXPressApi.Repository
 
             if (attribute != null)
             {
-                if (updateAttribute.Name != null && attribute.Name != updateAttribute.Name)
-                    _context.Attributes.Where(a => a.Id == id).ExecuteUpdate(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
-
-                if (updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
-                    _context.Attributes.Where(a => a.Id == id).ExecuteUpdate(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
+	            if (updateAttribute.Name != null && attribute.Name != updateAttribute.Name)
+	            {
+		            await _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Name, x => updateAttribute.Name));
+		            await _context.Attributes.Where(a => a.Id == id)
+			            .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.UpdatedAt, x => DateTime.Now));
+	            }
+                
+	            if (updateAttribute.Type != null && attribute.Type != updateAttribute.Type)
+	            {
+		            await  _context.Attributes.Where(a => a.Id == id).ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.Type, x => updateAttribute.Type));
+		            await _context.Attributes.Where(a => a.Id == id)
+			            .ExecuteUpdateAsync(p1 => p1.SetProperty(x => x.UpdatedAt, x => DateTime.Now));
+	            }
 
                 return await _commonMethods.Save();
             }

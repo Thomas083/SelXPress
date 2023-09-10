@@ -5,12 +5,26 @@ using SelXPressApi.DTO.CategoryDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing categories.
+	/// API controller for managing Categories. 
+	/// Here you can access to DTO <see cref="CategoryDTO"/>. 
+	/// The model <see cref="Models.Cart"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CategoryController : ControllerBase
@@ -22,9 +36,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CategoryController"/> class.
 		/// </summary>
-		/// <param name="categoryRepository">The category repository to retrieve and manage category.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="categoryRepository">The category repository to retrieve and manage category. <see cref="ICategoryRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CategoryController(ICategoryRepository categoryRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_categoryRepository = categoryRepository;
@@ -44,7 +58,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> GetCategory()
+		public async Task<IActionResult> GetCategories()
 		{
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -60,9 +74,7 @@ namespace SelXPressApi.Controllers
 			// Return the list of categories
 			return Ok(categories);
 		}
-		#endregion
 
-		#region Get Method
 		/// <summary>
 		/// Get a category based on its ID.
 		/// </summary>
@@ -79,7 +91,7 @@ namespace SelXPressApi.Controllers
 		{
 			// Check if the category with the given ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the id : " + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : {id} doesn't exist", "CAT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -160,10 +172,10 @@ namespace SelXPressApi.Controllers
 
 			// Check if the category with the specified ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the ID : " + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : { id } doesn't exist", "CAT-1402");
 
-			// Update the category
-			await _categoryRepository.UpdateCategory(categoryUpdate, id);
+            // Update the category
+            await _categoryRepository.UpdateCategory(categoryUpdate, id);
 
 			return Ok();
 		}
@@ -196,7 +208,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the category with the specified ID exists
 			if (!await _categoryRepository.CategoryExists(id))
-				throw new NotFoundException("The category with the ID :" + id + " doesn't exist", "CAT-1402");
+				throw new NotFoundException($"The category with the ID : {id} doesn't exist", "CAT-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)

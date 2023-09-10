@@ -12,8 +12,20 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing users.
+	/// API controller for managing Users. 
+	/// Here you can access to DTO <see cref="UserDto"/>.
+	/// The model <see cref="Models.User"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class UserController : ControllerBase
@@ -26,9 +38,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserController"/> class.
 		/// </summary>
-		/// <param name="userRepository">The user repository to retrieve and manage users.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="userRepository">The user repository to retrieve and manage users. <see cref="IUserRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public UserController(IUserRepository userRepository, IMapper mapper, IAuthorizationMiddleware authorizationMiddleware)
 		{
 			_userRepository = userRepository;
@@ -97,7 +109,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given email exists
 			if (!await _userRepository.UserExistsEmail(email))
-				throw new NotFoundException("The user with the email: " + email + " doesn't exist", "USR-1403");
+				throw new NotFoundException($"The user with the email: {email} doesn't exist", "USR-1403");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -108,7 +120,6 @@ namespace SelXPressApi.Controllers
 			return Ok(user);
 		}
         #endregion
-
 
         #region Post Methods
         /// <summary>
@@ -149,7 +160,7 @@ namespace SelXPressApi.Controllers
 			else
 			{
 				// The authentication failed, throw an exception
-				throw new BadRequestException("The user could not be created, please try again", "USR-1103");
+				throw new BadRequestException("The user could not be created, please try again", "USR-1104");
 			}
 
             return StatusCode(201);
@@ -199,7 +210,6 @@ namespace SelXPressApi.Controllers
 		}
 		#endregion
 
-
 		#region Put Methods
 		/// <summary>
 		/// Update an existing user's information based on their email.
@@ -232,7 +242,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given email exists
 			if (!await _userRepository.UserExistsEmail(email))
-				throw new NotFoundException("The user with the email : " + email + " doesn't exist", "USR-1403");
+				throw new NotFoundException($"The user with the email : {email} doesn't exist", "USR-1403");
 
 			// Update the user's information using the repository
 			await _userRepository.UpdateUser(userUpdate, email);
@@ -272,7 +282,7 @@ namespace SelXPressApi.Controllers
 
 			// check if the user with the given id exists
 			if (!await _userRepository.UserExists(id))
-                throw new NotFoundException("The user with the id : " + id + " doesn't exist", "USR-1403");
+                throw new NotFoundException($"The user with the ID : {id} doesn't exist", "USR-1402");
 
 			// update the user's information using the repository
 			await _userRepository.UpdateUserById(userUpdate, id);
@@ -307,7 +317,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user with the given ID exists
 			if (!await _userRepository.UserExists(id))
-				throw new NotFoundException("The user with the ID: " + id + " doesn't exist", "USR-1402");
+				throw new NotFoundException($"The user with the ID : {id} doesn't exist", "USR-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)

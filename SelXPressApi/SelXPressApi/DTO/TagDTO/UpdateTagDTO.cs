@@ -1,9 +1,21 @@
 ﻿namespace SelXPressApi.DTO.TagDTO
 {
-    /// <summary>
-    /// Data Transfer Object for updating a tag.
-    /// </summary>
-    public class UpdateTagDTO
+	/// <summary>
+	/// Data Transfer Object for updating a Tag. 
+	/// Here you can access to model <see cref="Models.Tag"/>. 
+	/// The main DTO is <see cref="TagDto"/>.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class UpdateTagDTO
     {
         /// <summary>
         /// New name for the tag.

@@ -8,6 +8,7 @@ using SelXPressApi.DTO.ProductDTO;
 using SelXPressApi.Exceptions;
 using SelXPressApi.Interfaces;
 using SelXPressApi.Middleware;
+using SelXPressApi.Models;
 using SelXPressApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,8 +16,20 @@ using SelXPressApi.Repository;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing product.
+	/// API controller for managing Product. 
+	/// Here you can access to DTO <see cref="ProductDTO"/> and <see cref="AllProductDTO"/>. 
+	/// The model <see cref="Models.Product"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProductController : ControllerBase
@@ -28,16 +41,15 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="productRepository">The product repository to retrieve and manage products.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="context">The data context for accessing the database.</param>
-		public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper, DataContext context)
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="productRepository">The product repository to retrieve and manage products. <see cref="IProductRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="context">The data context for accessing the database. <see cref="DataContext"/></param>
+		public ProductController(IAuthorizationMiddleware authorizationMiddleware, IProductRepository productRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
 			_productRepository = productRepository;
 			_mapper = mapper;
-			_context = context;
 		}
 
 		#region Get Methods
@@ -135,7 +147,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> Get(int id)
+		public async Task<IActionResult> GetProduct(int id)
 		{
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
@@ -146,6 +158,26 @@ namespace SelXPressApi.Controllers
 				throw new NotFoundException("There are no products in the database", "PRO-1401");
 
 			return Ok(product);
+		}
+
+		[HttpGet("me")]
+		[ProducesResponseType(200, Type = typeof(List<Product>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetProductByUserForSeller()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfSeller(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "PRO-2001");
+
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			var products = await _productRepository.GetProductByUser(email);
+			if (products.Count == 0)
+				throw new NotFoundException("There is no products for the current user", "PRO-");
+			return Ok(products);
 		}
 		#endregion
 
@@ -180,7 +212,10 @@ namespace SelXPressApi.Controllers
 				throw new BadRequestException("The model is wrong, a bad request occurred", "PRO-1101");
 
 			// Create the product using the repository
-			await _productRepository.CreateProduct(product);
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			if (email == null)
+				throw new BadRequestException("You are not connected", "PRO-1104");
+			await _productRepository.CreateProduct(product, email);
 			return StatusCode(201);
 		}
 		#endregion

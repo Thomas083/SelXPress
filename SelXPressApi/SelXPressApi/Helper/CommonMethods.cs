@@ -5,8 +5,19 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Helper
 {
 	/// <summary>
-	/// Class to invoke common methods.
+	/// Class to invoke common methods. 
+	/// <see cref="ICommonMethods"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class CommonMethods : ICommonMethods
 	{
 		private readonly DataContext _context;

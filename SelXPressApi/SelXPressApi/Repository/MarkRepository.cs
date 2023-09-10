@@ -7,11 +7,29 @@ using SelXPressApi.Models;
 
 namespace SelXPressApi.Repository
 {
+	/// <summary>
+	/// Repository class for managing Marks and their data in the SelXPressApi application.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class MarkRepository : IMarkRepository
 	{
 		private readonly DataContext _context;
 		private readonly ICommonMethods _commonMethods;
 
+		/// <summary>
+		/// Initializes a new instance of the MarkRepository class.
+		/// </summary>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
 		public MarkRepository(DataContext context, ICommonMethods commonMethods)
 		{
 			_context = context;
@@ -21,6 +39,7 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Retrieves a collection of all marks.
 		/// </summary>
+		/// <returns>A collection of all marks.</returns>
 		public ICollection<Mark> GetAllMarks()
 		{
 			return _context.Marks.OrderBy(m => m.Id).ToList();
@@ -29,6 +48,7 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Retrieves a list of all marks asynchronously.
 		/// </summary>
+		/// <returns>A list of all marks.</returns>
 		public async Task<List<Mark>> GetAllMark()
 		{
 			return await _context.Marks.OrderBy(m => m.Id).ToListAsync();

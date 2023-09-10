@@ -8,6 +8,16 @@ namespace SelXPressApi.Interfaces
 	/// <summary>
 	/// Interface for interacting with order-related data in the repository.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public interface IOrderRepository
 	{
 		/// <summary>
@@ -29,6 +39,8 @@ namespace SelXPressApi.Interfaces
 		/// </summary>
 		/// <returns>A list of all orders.</returns>
 		Task<List<Order>> GetAllOrders();
+
+		Task<List<Order>> GetOrderByUser(string email);
 
 		/// <summary>
 		/// Creates a new order.

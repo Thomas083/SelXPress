@@ -11,8 +11,21 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing comments.
+	/// API controller for managing Comments. 
+	/// Here you can access to DTO <see cref="CommentDTO"/>. 
+	/// The model <see cref="Models.Comment"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CommentController : ControllerBase
@@ -26,11 +39,11 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CommentController"/> class.
 		/// </summary>
-		/// <param name="commentRepository">The comment repository to retrieve and manage comment</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
-		/// <param name="userRepository">The user repository to retrieve and manage user</param>
-		/// <param name="productRepository">The product repository to retrieve and manage product</param>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
+		/// <param name="commentRepository">The comment repository to retrieve and manage comment <see cref="ICommentRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
+		/// <param name="userRepository">The user repository to retrieve and manage user. <see cref="IUserRepository"/></param>
+		/// <param name="productRepository">The product repository to retrieve and manage product. <see cref="IProductRepository"/></param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
 		public CommentController(ICommentRepository commentRepository, IMapper mapper, IUserRepository userRepository, 
 			IProductRepository productRepository, IAuthorizationMiddleware authorizationMiddleware)
 		{
@@ -40,15 +53,16 @@ namespace SelXPressApi.Controllers
 			_productRepository = productRepository;
 			_authorizationMiddleware = authorizationMiddleware;
 		}
-		#region
-		/// <summary>
-		/// Get all comments from the database.
-		/// </summary>
-		/// <returns>Returns a list of all comments</returns>
-		/// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
-		/// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
-		/// <exception cref="NotFoundException">Thrown when no comments are found in the database.</exception>
-		[HttpGet]
+
+        #region Get Methods
+        /// <summary>
+        /// Get all comments from the database.
+        /// </summary>
+        /// <returns>Returns a list of all comments</returns>
+        /// <exception cref="ForbiddenRequestException">Thrown when the user is not authorized to perform this operation.</exception>
+        /// <exception cref="BadRequestException">Thrown when the model state is invalid.</exception>
+        /// <exception cref="NotFoundException">Thrown when no comments are found in the database.</exception>
+        [HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<CommentDTO>))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
@@ -87,7 +101,7 @@ namespace SelXPressApi.Controllers
 		public async Task<IActionResult> GetCommentById(int id)
 		{
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with the id " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException($"The comment with the ID : {id} doesn't exist", "COM-1402");
 			
 			if (!ModelState.IsValid)
 				throw new BadRequestException("The model is wrong, a bad request occured", "COM-1101");
@@ -125,7 +139,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments made by the user with ID: " + id, "COM-1403");
+				throw new NotFoundException($"There is no comments of the user with the ID : {id}", "COM-1403");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -153,7 +167,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any comment were found
 			if (comments.Count == 0)
-				throw new NotFoundException("There are no comments for the product with ID: " + id, "COM-1404");
+				throw new NotFoundException($"There is no comments of the product with the ID : {id}", "COM-1404");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -161,7 +175,6 @@ namespace SelXPressApi.Controllers
 
 			return Ok(comments);
 		}
-
 		#endregion
 
 		#region Post Methods
@@ -174,7 +187,7 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="BadRequestException">Thrown when the model state is invalid or the provided comment data is incomplete.</exception>
 		/// <exception cref="NotFoundException">Thrown when the specified user or product does not exist.</exception>
 		[HttpPost]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(201)]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
@@ -196,7 +209,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided comment data is complete
 			if (createCommentDto == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "COM-1102");
+				throw new BadRequestException("There is missing fields, please try again with some data", "COM-1102");
 
 			// Retrieve the user and product associated with the comment
 			var user = await _userRepository.GetUserById(createCommentDto.UserId);
@@ -204,15 +217,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the user and product exist
 			if (user == null)
-				throw new NotFoundException("The user with ID " + createCommentDto.UserId + " doesn't exist", "COM-1405");
+				throw new NotFoundException("The user with ID : " + createCommentDto.UserId + " doesn't exist", "COM-1405");
 			if (product == null)
-				throw new NotFoundException("The product with ID " + createCommentDto.ProductId + " doesn't exist", "COM-1406");
+				throw new NotFoundException("The product with ID : " + createCommentDto.ProductId + " doesn't exist", "COM-1406");
 
 			// Create the comment using the repository
 			await _commentRepository.CreateComment(createCommentDto);
-			return Ok();
+			return StatusCode(201);
 		}
-
 		#endregion
 
 		#region Put Methods
@@ -247,17 +259,16 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided comment update data is complete
 			if (updateCommentDto == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "COM-1102");
+				throw new BadRequestException("There is missing fields, please try again with some data", "COM-1102");
 
 			// Check if the comment with the given ID exists
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with ID " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException($"The comment with the ID : {id} doesn't exist", "COM-1402");
 
 			// Update the comment using the repository
 			await _commentRepository.UpdateCommentById(updateCommentDto, id);
 			return Ok();
 		}
-
 		#endregion
 
 		#region Delete Methods
@@ -291,13 +302,12 @@ namespace SelXPressApi.Controllers
 
 			// Check if the comment with the given ID exists
 			if (!await _commentRepository.CommentExists(id))
-				throw new NotFoundException("The comment with ID " + id + " doesn't exist", "COM-1402");
+				throw new NotFoundException($"The comment with the ID : {id} doesn't exist", "COM-1402");
 
 			// Delete the comment using the repository
 			await _commentRepository.DeleteCommentById(id);
 			return Ok();
 		}
-
 		#endregion
 	}
 }

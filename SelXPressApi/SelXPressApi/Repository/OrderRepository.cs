@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SelXPressApi.Data;
 using SelXPressApi.DTO.OrderDTO;
@@ -13,8 +13,18 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository class for managing orders.
+	/// Repository class for managing Orders.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class OrderRepository : IOrderRepository
     {
         private readonly DataContext _context;
@@ -24,9 +34,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderRepository"/> class.
 		/// </summary>
-		/// <param name="context">The data context.</param>
-		/// <param name="commonMethods">Common methods instance.</param>
-		/// <param name="mapper">AutoMapper instance.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public OrderRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;
@@ -51,13 +61,42 @@ namespace SelXPressApi.Repository
 		/// <returns>True if the order creation was successful, otherwise false.</returns>
 		public async Task<bool> CreateOrder(CreateOrderDTO createOrder)
 		{
-			var orderEntity = _mapper.Map<Order>(createOrder);
+			float totalPrice = 0;
+			List<Cart> cartList = await _context.Carts.Where(c => c.UserId == createOrder.UserId).Include(p => p.Product).ToListAsync();
+			
+			var user = await _context.Users.Where(u => u.Id == createOrder.UserId).FirstAsync();
+			
+			var newOrder = new Order
+			{
+				User = user,
+				TotalPrice = totalPrice,
+				CreatedAt = DateTime.Now,
+				OrderProducts = new List<OrderProduct>()
+			};
 
-			// Set the creation date of the order to the current UTC time
-			orderEntity.CreatedAt = DateTime.UtcNow;
-
-			_context.Orders.Add(orderEntity);
-
+			for (int i = 0; i < cartList.Count; i++)
+			{
+				var orderProductToAdd = new OrderProduct()
+				{
+					Order = newOrder,
+					OrderId = newOrder.Id,
+					Product = cartList[i].Product,
+					ProductId = cartList[i].ProductId,
+					Quantity = cartList[i].Quantity
+				};
+				totalPrice = totalPrice + orderProductToAdd.Product.Price;
+				if (orderProductToAdd.Quantity > 1)
+				{
+					for (int j = 1; j < orderProductToAdd.Quantity; j++)
+					{
+						totalPrice = totalPrice + orderProductToAdd.Product.Price;
+					}
+				}
+				newOrder.OrderProducts.Add(orderProductToAdd);
+			}
+			newOrder.TotalPrice = totalPrice;
+			_context.Orders.Add(newOrder);
+			await _context.Carts.Where(c => c.UserId == createOrder.UserId).ExecuteDeleteAsync();
 			return await _commonMethods.Save();
 		}
 
@@ -87,6 +126,7 @@ namespace SelXPressApi.Repository
 			var orders = await _context.Orders
 				.Include(o => o.User)
 				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
 				.ToListAsync();
 
 			return orders;
@@ -97,9 +137,13 @@ namespace SelXPressApi.Repository
 		/// </summary>
 		/// <param name="id">The unique identifier of the order.</param>
 		/// <returns>The order with the specified identifier, or null if not found.</returns>
-		public async Task<Order?> GetOrderById(int id)
+		public async Task<Order> GetOrderById(int id)
 		{
-			return await _context.Orders.FindAsync(id);
+			return await _context.Orders.Where(o => o.Id == id)
+				.Include(o => o.User)
+				.Include(o => o.OrderProducts)
+				.ThenInclude(op => op.Product)
+				.FirstAsync();
 		}
 
 		/// <summary>
@@ -126,5 +170,30 @@ namespace SelXPressApi.Repository
 			// Save changes to the database and return the result
 			return await _commonMethods.Save();
 		}
+
+		/// <summary>
+		/// Retrieves a list of orders for a user based on their email address.
+		/// </summary>
+		/// <param name="email">The email address of the user for whom to retrieve orders.</param>
+		/// <returns>A list of orders associated with the specified user's email address, or null if the user does not exist.</returns>
+		public async Task<List<Order>> GetOrderByUser(string email)
+		{
+			// Check if a user with the specified email address exists in the database
+			if (await _context.Users.Where(u => u.Email == email).AnyAsync())
+			{
+				// Retrieve the user with the specified email address
+				var user = await _context.Users.Where(u => u.Email == email).FirstAsync();
+				// Retrieve and return the list of orders associated with the user
+				var orders = await _context.Orders.Where(o => o.User == user)
+					.Include(o => o.User)
+					.Include(o => o.OrderProducts)
+					.ThenInclude(op => op.Product)
+					.ToListAsync();
+				return orders;
+			}
+
+			return null; // Return null if the user does not exist in the database
+		}
+
 	}
 }

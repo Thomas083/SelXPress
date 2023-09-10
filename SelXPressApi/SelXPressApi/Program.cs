@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft;
 using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,53 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "SelXPressApi",
+        Version = "v1",
+        Description = "SelXPressApi",
+        Contact = new OpenApiContact
+        {
+            Name = "SelXPressApi",
+            Email = string.Empty,
+            Url = new Uri("https://localhost:5001/swagger/v1/swagger.json"),
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Use under LICX",
+            Url = new Uri("https://localhost:5001/swagger/v1/swagger.json"),
+        }
+    });
+});
+builder.Services.AddSwaggerGen(sw => 
+            sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Insert JWT Token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            }));
+
+builder.Services.AddSwaggerGen(w =>
+            w.AddSecurityRequirement(
+                new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                    }
+                }));
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -115,6 +163,7 @@ app.MapControllers();
 app.UseHttpLogging();
 app.UseSession();
 app.UseAuthentication();
+app.UseAuthorization();
 app.AddGlobalErrorHandler();
 
 app.Run();

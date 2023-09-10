@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.IdentityModel.Tokens;
 using SelXPressApi.DocumentationErrorTemplate;
 using SelXPressApi.DTO.OrderDTO;
@@ -13,8 +14,21 @@ using SelXPressApi.Models;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing orders.
+	/// API controller for managing Orders. 
+	/// Here you can acces to DTO <see cref="OrderDTO"/>. 
+	/// The model <see cref="Models.Order"/>
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+
 	[Route("api/[controller]")]
 	[ApiController]
 	public class OrderController : ControllerBase
@@ -26,9 +40,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="orderRepository">The order repository to retrieve and manage orders.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="orderRepository">The order repository to retrieve and manage orders. <see cref="IOrderRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		public OrderController(IAuthorizationMiddleware authorizationMiddleware, IOrderRepository orderRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
@@ -46,8 +60,10 @@ namespace SelXPressApi.Controllers
 		/// <exception cref="NotFoundException">Thrown when there are no orders in the database.</exception>
 		[HttpGet]
 		[ProducesResponseType(200, Type = typeof(List<Order>))]
+		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
 		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
 		public async Task<IActionResult> GetAllOrders()
 		{
@@ -95,11 +111,32 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Retrieve order from the repository
 			var order = await _orderRepository.GetOrderById(id);
 			return Ok(order);
+		}
+
+		[HttpGet("me")]
+		[ProducesResponseType(200, Type = typeof(List<Order>))]
+		[ProducesResponseType(401, Type = typeof(UnauthorizedErrorTemplate))]
+		[ProducesResponseType(403, Type = typeof(ForbiddenErrorTemplate))]
+		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
+		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
+		public async Task<IActionResult> GetOrderByUser()
+		{
+			await _authorizationMiddleware.CheckIfTokenExists(HttpContext);
+			if (!await _authorizationMiddleware.CheckRoleIfAdmin(HttpContext) &&
+			    !await _authorizationMiddleware.CheckRoleIfCustomer(HttpContext))
+				throw new ForbiddenRequestException("You are not authorized to do this operation", "ORD-2001");
+
+			string? email = HttpContext.Response.Headers["EmailHeader"];
+			var orders = await _orderRepository.GetOrderByUser(email);
+			if (orders.Count == 0)
+				throw new NotFoundException("There is no orders for this user", "ORD-1403");
+			
+			return Ok(orders);
 		}
 		#endregion
 
@@ -167,7 +204,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Update order
 			await _orderRepository.UpdateOrder(id, order);
@@ -203,7 +240,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if order exists
 			if (!await _orderRepository.OrderExists(id))
-				throw new NotFoundException("The order with ID " + id + " doesn't exist", "ORD-1401");
+				throw new NotFoundException($"The order with ID : {id} doesn't exist", "ORD-1402");
 
 			// Delete order
 			await _orderRepository.DeleteOrder(id);

@@ -1,9 +1,25 @@
 ﻿using SelXPressApi.DTO.CartDTO;
 using SelXPressApi.DTO.CommentDTO;
 using SelXPressApi.DTO.OrderDTOProductDTO;
+using SelXPressApi.Models;
 
 namespace SelXPressApi.DTO.ProductDTO
 {
+	/// <summary>
+	/// Represents a data transfer object (DTO) for a Product. 
+	/// Here you can access to model <see cref="Models.Product"/>. 
+	/// The main DTO is <see cref="ProductDTO"/>.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class AllProductDTO
 	{
 		/// <summary>
@@ -54,6 +70,6 @@ namespace SelXPressApi.DTO.ProductDTO
 		/// <summary>
 		/// Gets or sets the comments related to the product.
 		/// </summary>
-		public ICollection<CommentRateDTO> Comments { get; set; }
+		public ICollection<Comment> Comments { get; set; }
 	}
 }

@@ -11,8 +11,18 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Repository
 {
 	/// <summary>
-	/// Repository for managing product attributes.
+	/// Repository for managing Product Attributes.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class ProductAttributeRepository : IProductAttributeRepository
     {
         private readonly DataContext _context;
@@ -22,9 +32,9 @@ namespace SelXPressApi.Repository
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductAttributeRepository"/> class.
 		/// </summary>
-		/// <param name="context">The database context.</param>
-		/// <param name="commonMethods">Common methods interface.</param>
-		/// <param name="mapper">Automapper instance for object mapping.</param>
+		/// <param name="context">The database context. <see cref="DataContext"/></param>
+		/// <param name="commonMethods">Common methods provider. <see cref="ICommonMethods"/></param>
+		/// <param name="mapper">Automapper instance. <see cref="IMapper"/></param>
 		public ProductAttributeRepository(DataContext context, ICommonMethods commonMethods, IMapper mapper)
 		{
 			_context = context;
@@ -49,9 +59,13 @@ namespace SelXPressApi.Repository
 		/// <returns><c>true</c> if the product attribute is successfully created; otherwise, <c>false</c>.</returns>
 		public async Task<bool> CreateProductAttribute(CreateProductAttributeDTO createProductAttribute)
 		{
-			var productAttributeEntity = _mapper.Map<ProductAttribute>(createProductAttribute);
+			var newProductAttribute = new ProductAttribute
+			{
+				ProductId = createProductAttribute.ProductId,
+				AttributeId = createProductAttribute.AttributeId,
+			};
 
-			_context.ProductAttributes.Add(productAttributeEntity);
+			_context.ProductAttributes.Add(newProductAttribute);
 			return await _commonMethods.Save();
 		}
 
@@ -81,7 +95,10 @@ namespace SelXPressApi.Repository
 		/// <returns>A list of all product attributes.</returns>
 		public async Task<List<ProductAttribute>> GetAllProductAttributes()
 		{
-			var productAttributes = await _context.ProductAttributes.ToListAsync();
+			var productAttributes = await _context.ProductAttributes
+				.Include(p => p.Product)
+				.Include(a => a.Attribute)
+				.ToListAsync();
 			return productAttributes;
 		}
 
@@ -93,6 +110,8 @@ namespace SelXPressApi.Repository
 		public async Task<ProductAttribute?> GetProductAttributeById(int id)
 		{
 			var productAttribute = await _context.ProductAttributes
+				.Include(a => a.Attribute)
+				.Include(p => p.Product)
 				.FirstOrDefaultAsync(pa => pa.Id == id);
 
 			return productAttribute;

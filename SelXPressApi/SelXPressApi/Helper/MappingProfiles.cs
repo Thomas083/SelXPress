@@ -16,11 +16,24 @@ using SelXPressApi.DTO.OrderDTOProductDTO;
 
 namespace SelXPressApi.Helper
 {
-    /// <summary>
-    /// AutoMapper profile for mapping between model and DTO classes.
-    /// </summary>
-    public class MappingProfiles : Profile
+	/// <summary>
+	/// AutoMapper profile for mapping between model and DTO classes.
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	public class MappingProfiles : Profile
     {
+        /// <summary>
+        /// Constructor for MappingProfiles class.
+        /// </summary>
         public MappingProfiles()
         {
             // Mapping User model to UserDto
@@ -45,6 +58,9 @@ namespace SelXPressApi.Helper
             // Mapping AttributeData model to AttributeDataDto
             CreateMap<AttributeData, AttributeDataDto>();
 
+            // Mapping AttributeData model to CreateAttributeDataDTO
+            CreateMap<AttributeData, CreateAttributeDataDTO>();
+
             // Mapping Product model to ProductDTO
             CreateMap<Product, ProductDTO>();
 
@@ -62,6 +78,9 @@ namespace SelXPressApi.Helper
 
             // Mapping OrderProduct model to OrderProductDTO
             CreateMap<OrderProduct, OrderProductDTO>();
+
+            // Mapping UpdateProductDTO to Product
+            CreateMap<UpdateProductDTO, Product>();
         }
     }
 }

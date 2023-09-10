@@ -7,8 +7,8 @@
             <select v-model="selectedOption" class="select-categories" @change="setCatagoryData">
                 <option v-for="category in categoryList" :key="category.id" :value="category.name">{{ category.name }}</option>
             </select>
-            <input class="search-input" type="text" placeholder="Search in SelXpress...">
-            <button class="loop"><img src="../../assets/Header/loop.png" /></button>
+            <input v-model="formData.search" class="search-input" type="text" placeholder="Search in SelXpress...">
+            <button class="loop" v-on:click="sendSearchData"><img src="../../assets/Header/loop.png" /></button>
         </div>
         <div class="header-login">
             <p class="welcome-login">Welcome,</p>
@@ -21,53 +21,31 @@
             <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
-            <p class="circle-number">0</p>
         </div>
     </header>
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
 
 export default {
     name: "HeaderRegistered",
     data() {
         return {
-            user: JSON.parse(localStorage.getItem('user')).email,
-            selectedOption: 'All',
+            user: '',
+            selectedOption: 'Select a category',
             formData: {
                 search: '',
                 categoryId: 0
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean',
-                    tags:[
-                        {
-                            id: 1,
-                            name: 'Fishing',
-                            categoryId: 1
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Sport',
-                    tags: [
-                        {
-                            id: 1,
-                            name: 'Football',
-                            categoryId: 2
-                        },
-                    ],
-                },
-            ],
+            categories: null,
         }
     },
     methods: {
         goToHome() {
             this.$router.push({ path: '/' });
-            window.location.reload();
         },
         goToUserProfile() {
             this.$router.push({ path: '/user' });
@@ -77,25 +55,46 @@ export default {
             window.location.reload();
         },
         goToCart() {
-            this.$router.push({ path: '/cart'});
+            this.$router.push({ path: '/cart' });
         },
         setCatagoryData() {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            console.dir(this.formData)
+            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'info', position: 'bottom-right' });
+            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all` });
+            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}` })
         }
     },
     computed: {
         categoryList() {
             const newList = this.categories
-            newList.unshift({
-                id: 0,
-                name: 'All',
-                tags: []
+            if (newList !== null) {
+                newList.unshift({
+                    id: 0,
+                    name: 'Select a category',
+                    tags: []
+                });
+                return newList
+            }
+        },
+    },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
             });
-            return newList
-        }
+        GET(ENDPOINTS.GET_ONE_USER, JSON.parse(localStorage.getItem('user')).token)
+            .then((response) => {
+                this.user = response.data.username
+            })
+            .catch((error) => {
+                console.dir(error);
+                0;
+            });
     },
 };
 </script>
@@ -215,19 +214,6 @@ p {
 
 .order-logo {
     height: 15vh;
-}
-
-.circle-number {
-    background-color: var(--main-orange);
-    border-radius: 30px;
-    padding: 0.5rem;
-    margin-top: 1vh;
-    color: var(--main-white);
-    font-family: url(../../font/Inter/static/Inter-SemiBold.ttf);
-    font-size: 2rem;
-    height: 5vh;
-    display: flex;
-    align-items: center;
 }
 
 @media screen and (max-width: 1080px) {

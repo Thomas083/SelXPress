@@ -8,6 +8,16 @@ namespace SelXPressApi.Interfaces
 	/// <summary>
 	/// Interface for performing CRUD operations on products.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public interface IProductRepository
 	{
 		/// <summary>
@@ -31,7 +41,9 @@ namespace SelXPressApi.Interfaces
 		/// </summary>
 		/// <param name="id">The unique identifier of the product.</param>
 		/// <returns>The product with the specified ID.</returns>
-		Task<Product> GetProductById(int id);
+		Task<AllProductDTO> GetProductById(int id);
+
+		Task<List<AllProductDTO>> GetProductByUser(string email);
 
 		/// <summary>
 		/// Checks if a product with the given ID exists.
@@ -45,7 +57,7 @@ namespace SelXPressApi.Interfaces
 		/// </summary>
 		/// <param name="createProductDTO">DTO containing the details of the product to create.</param>
 		/// <returns>True if the product was created successfully; otherwise, false.</returns>
-		Task<bool> CreateProduct(CreateProductDTO createProductDTO);
+		Task<bool> CreateProduct(CreateProductDTO createProductDTO, string email);
 
 		/// <summary>
 		/// Updates an existing product.

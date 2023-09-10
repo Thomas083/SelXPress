@@ -21,46 +21,26 @@
             <button class="order-logo-btn" @click="goToCart()">
                 <img class='order-logo' src="../../assets/Header/panier.png" />
             </button>
-            <p class="circle-number">0</p>
         </div>
     </header>
 </template>
   
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
+import { createToast } from 'mosha-vue-toastify';
+
 
 export default {
     name: "HeaderNotRegistered",
     data() {
         return {
-            selectedOption: 'All',
+            selectedOption: 'Select a category',
             formData: {
                 search: '',
                 categoryId: 0
             },
-            categories: [
-                {
-                    id: 1,
-                    name: 'Ocean',
-                    tags:[
-                        {
-                            id: 1,
-                            name: 'Fishing',
-                            categoryId: 1
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: 'Sport',
-                    tags: [
-                        {
-                            id: 1,
-                            name: 'Football',
-                            categoryId: 2
-                        },
-                    ],
-                },
-            ],
+            categories: null
         }
     },
     methods: {
@@ -68,31 +48,44 @@ export default {
             this.$router.push({ path: '/' });
         },
         goToSignIn() {
-            this.$router.push({ path: '/login'});
+            this.$router.push({ path: '/login' });
         },
         goToSignUp() {
-            this.$router.push({ path: '/register'});
+            this.$router.push({ path: '/register' });
         },
         goToCart() {
-            this.$router.push({ path: '/cart'});
+            createToast('You need to be connected to see your cart', { type: 'warning', position: 'bottom-right' });
         },
         setCatagoryData() {
             this.formData.categoryId = this.categoryList.find((category) => category.name === this.selectedOption).id;
         },
         sendSearchData() {
-            console.dir(this.formData)
+            if (this.formData.categoryId === 0) createToast(`Please select a category to search your product`, { type: 'info', position: 'bottom-right' });
+            else if (this.formData.search === '' || this.formData.search === null) this.$router.push({ path: `/products/${this.formData.categoryId}/all`});
+            else this.$router.push({ path: `/products/${this.formData.categoryId}/${this.formData.search}`});
         }
     },
     computed: {
         categoryList() {
             const newList = this.categories
-            newList.unshift({
-                id: 0,
-                name: 'All',
-                tags: []
-            });
-            return newList
+            if (newList !== null) {
+                newList.unshift({
+                    id: 0,
+                    name: 'Select a category',
+                    tags: []
+                });
+                return newList
+            }
         }
+    },
+    mounted() {
+        GET(ENDPOINTS.GET_ALL_CATEGORIES)
+            .then((response) => {
+                this.categories = response.data
+            })
+            .catch((error) => {
+                console.dir(error)
+            });
     },
 };
 </script>

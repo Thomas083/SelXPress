@@ -8,10 +8,24 @@ namespace SelXPressApi.Helper
 	/// <summary>
 	/// Class for seeding initial data into the DataContext.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	public class Seed
 	{
 		private readonly DataContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Seed"/> class.
+		/// </summary>
+		/// <param name="dataContext">The database context used for data seeding.</param>
 		public Seed(DataContext dataContext)
 		{
 			_context = dataContext;
@@ -111,7 +125,8 @@ namespace SelXPressApi.Helper
 					Name = "color",
 					Type = "select",
 					CreatedAt = DateTime.Now,
-					UpdatedAt = DateTime.Now
+					UpdatedAt = DateTime.Now,
+					ProductAttributes = new List<ProductAttribute>()
 				};
                 
 				AttributeData blueAttributeData = new AttributeData()
@@ -144,7 +159,8 @@ namespace SelXPressApi.Helper
 					Name = "size",
 					Type = "select",
 					CreatedAt = DateTime.Now,
-					UpdatedAt = DateTime.Now
+					UpdatedAt = DateTime.Now,
+					ProductAttributes = new List<ProductAttribute>()
 				};
 
 				AttributeData xsAttributeData = new AttributeData()
@@ -190,6 +206,8 @@ namespace SelXPressApi.Helper
 				sizeAttribute.AttributeData.Add(lAttributeData);
 				sizeAttribute.AttributeData.Add(xlAttributeData);
 				
+				//todo creation of the seller product object
+				
 				//Creation of 3 product
 				Product product1 = new Product()
 				{
@@ -203,7 +221,8 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
 				};
 
 				Product product2 = new Product()
@@ -219,7 +238,9 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
+					
 				};
 
 				Product product3 = new Product()
@@ -234,28 +255,39 @@ namespace SelXPressApi.Helper
 					Carts = new List<Cart>(),
 					OrderProducts = new List<OrderProduct>(),
 					ProductAttributes = new List<ProductAttribute>(),
-					Comments = new List<Comment>()
+					Comments = new List<Comment>(),
+					//todo add seller product object
 				};
 				//Creation of the productAttribute object and set it in the product object
 				ProductAttribute productAttribute1 = new ProductAttribute()
 				{
 					Attribute = colorAttribute,
-					Product = product1
+					AttributeId = colorAttribute.Id,
+					Product = product1,
+					ProductId = product1.Id
 				};
 				ProductAttribute productAttribute2 = new ProductAttribute()
 				{
 					Attribute = colorAttribute,
-					Product = product2
+					AttributeId = colorAttribute.Id,
+					Product = product2,
+					ProductId = product2.Id
 				};
 				ProductAttribute productAttribute3 = new ProductAttribute()
 				{
 					Attribute = sizeAttribute,
-					Product = product3
+					AttributeId = sizeAttribute.Id,
+					Product = product3,
+					ProductId = product3.Id
 				};
 				
 				product1.ProductAttributes.Add(productAttribute1);
 				product2.ProductAttributes.Add(productAttribute2);
 				product3.ProductAttributes.Add(productAttribute3);
+				
+				colorAttribute.ProductAttributes.Add(productAttribute1);
+				colorAttribute.ProductAttributes.Add(productAttribute2);
+				sizeAttribute.ProductAttributes.Add(productAttribute3);
 				
 				//Creation of 3 comment
 				Comment comment1 = new Comment()

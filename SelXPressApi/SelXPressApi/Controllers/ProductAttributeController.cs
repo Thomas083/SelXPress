@@ -12,8 +12,20 @@ using System.Threading.Tasks;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing product attributes.
+	/// API controller for managing Product Attributes. 
+	/// Here you can acess to DTO <see cref="ProductAttributeDTO"/>. 
+	/// The model <see cref="Models.ProductAttribute"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ProductAttributeController : ControllerBase
@@ -25,9 +37,9 @@ namespace SelXPressApi.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProductAttributeController"/> class.
 		/// </summary>
-		/// <param name="authorizationMiddleware">The middleware for authorization-related operations.</param>
-		/// <param name="productAttributeRepository">The product attribute repository to retrieve and manage product attributes.</param>
-		/// <param name="mapper">The AutoMapper instance for object mapping.</param>
+		/// <param name="authorizationMiddleware">The middleware for authorization-related operations. <see cref="IAuthorizationMiddleware"/></param>
+		/// <param name="productAttributeRepository">The product attribute repository to retrieve and manage product attributes. <see cref="IProductAttributeRepository"/></param>
+		/// <param name="mapper">The AutoMapper instance for object mapping. <see cref="IMapper"/></param>
 		public ProductAttributeController(IAuthorizationMiddleware authorizationMiddleware, IProductAttributeRepository productAttributeRepository, IMapper mapper)
 		{
 			_authorizationMiddleware = authorizationMiddleware;
@@ -58,7 +70,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any product attributes were found
 			if (productAttributes.Count == 0)
-				throw new NotFoundException("There are no Product Attributes in the database", "PAT-1401");
+				throw new NotFoundException("There are no product attributes in the database", "PAT-1401");
 
 			return Ok(productAttributes);
 		}
@@ -75,7 +87,7 @@ namespace SelXPressApi.Controllers
 		[ProducesResponseType(404, Type = typeof(NotFoundErrorTemplate))]
 		[ProducesResponseType(400, Type = typeof(BadRequestErrorTemplate))]
 		[ProducesResponseType(500, Type = typeof(InternalServerErrorTemplate))]
-		public async Task<IActionResult> Get(int id)
+		public async Task<IActionResult> GetProductAttribute(int id)
 		{
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -86,7 +98,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute was found
 			if (productAttribute == null)
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			return Ok(productAttribute);
 		}
@@ -163,17 +175,14 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided product attribute update data is complete
 			if (updateProductAttribute == null)
-				throw new BadRequestException("Some fields are missing, please try again with complete data", "PAT-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "PAT-1102");
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Update the product attribute using the repository
 			var result = await _productAttributeRepository.UpdateProductAttribute(id, updateProductAttribute);
-
-			if (!result)
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
 
 			return Ok();
 		}
@@ -213,7 +222,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the product attribute with the given ID exists
 			if (!await _productAttributeRepository.ProductAttributeExists(id))
-				throw new NotFoundException("The product attribute with the given ID does not exist", "PAT-1401");
+				throw new NotFoundException($"The product attribute with the ID : {id} doesn't exist", "PAT-1402");
 
 			// Delete the product attribute using the repository
 			await _productAttributeRepository.DeleteProductAttribute(id);

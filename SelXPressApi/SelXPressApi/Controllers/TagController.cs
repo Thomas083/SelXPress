@@ -9,8 +9,20 @@ using SelXPressApi.Middleware;
 namespace SelXPressApi.Controllers
 {
 	/// <summary>
-	/// API controller for managing tag.
+	/// API controller for managing Tag. 
+	/// Here you can access to DTO <see cref="TagDto"/>. 
+	/// The model <see cref="Models.Tag"/>.
 	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
 	[Route("api/[controller]")]
     [ApiController]
     public class TagController : ControllerBase
@@ -55,7 +67,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if any tags were found
 			if (tags.Count == 0)
-				throw new NotFoundException("No tags found in the database", "TAG-1401");
+				throw new NotFoundException("There is no tags in the database, please try again", "TAG-1401");
 
 			return Ok(tags);
 		}
@@ -75,7 +87,7 @@ namespace SelXPressApi.Controllers
 		{
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"The tag with ID : {id} doesn't exist", "TAG-1402");
 
 			// Check if the model state is valid
 			if (!ModelState.IsValid)
@@ -112,7 +124,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided tag data is complete
 			if (newTag.Name == null)
-				throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "TAG-1102");
 
 			// Create the tag using the repository
 			await _tagRepository.CreateTag(newTag);
@@ -152,11 +164,11 @@ namespace SelXPressApi.Controllers
 
 			// Check if the provided tag update data is complete
 			if (tagUpdate == null)
-				throw new BadRequestException("Missing fields, please provide valid data", "TAG-1102");
+				throw new BadRequestException("There are missing fields, please try again with some data", "TAG-1102");
 
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"The tag with ID : {id} doesn't exist", "TAG-1402");
 
 			// Update the tag using the repository
 			await _tagRepository.UpdateTag(id, tagUpdate);
@@ -195,7 +207,7 @@ namespace SelXPressApi.Controllers
 
 			// Check if the tag with the given ID exists
 			if (!await _tagRepository.TagExists(id))
-				throw new NotFoundException($"Tag with ID: {id} does not exist", "TAG-1402");
+				throw new NotFoundException($"The tag with ID : {id} doesn't exist", "TAG-1402");
 
 			// Delete the tag using the repository
 			await _tagRepository.DeleteTag(id);

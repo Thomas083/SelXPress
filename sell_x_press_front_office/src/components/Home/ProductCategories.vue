@@ -1,77 +1,79 @@
 <template>
-        <div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                    <img src="../../assets/categories-product-maquette-1.jpg" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    <div class="products-by-categories-container">
+    <div class="products-by-categories-container" v-if="selectedProduct.length !== 0">
         <div class="title-show-more-container">
-            <h2>Ocean and Waters</h2>
-            <button class="show-more-btn">Show more</button>
+            <h2>{{ category.name }}</h2>
+            <button class="show-more-btn" v-on:click="goToCategory(category.id, category.name)">Show more</button>
         </div>
         <div class="products-container">
-            <img src="../../assets/categories-product-maquette-1.jpg" />
-            <img src="../../assets/categories-product-maquette-1.jpg" />
-            <img src="../../assets/categories-product-maquette-1.jpg" />
-            <img src="../../assets/categories-product-maquette-1.jpg" />
-            <img src="../../assets/categories-product-maquette-1.jpg" />
+            <img v-for="product in selectedProduct" :src="product.picture" :key="product.id" v-on:click="goToProduct(product.id, product.name)" />
         </div>
     </div>
 </template>
 
 <script>
+import { GET } from '@/api/axios';
+import { ENDPOINTS } from '@/api/endpoints';
 
 export default {
-    name: 'ProductCategories'
+    name: 'ProductCategories',
+    props: {
+        category: {
+            type: Object,
+            required: true,
+        },
+    },
+    data() {
+        return {
+            numProducts: 5,
+            products: null
+        }
+    },
+    methods: {
+        shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        },
+        goToCategory(id, name) {
+            this.$router.push({ path: `/products/${id}/${name}`})
+        },
+        goToProduct(id, name) {
+            this.$router.push({ path: `/product/${id}/${name}`})
+        }
+    },
+    computed: {
+        selectedProduct() {
+            const productList = [];
+            if (this.products && this.products.length <= this.numProducts) {
+                for (let i = 0; i < this.products.length; i++) {
+                    if (this.products[i].category.id === this.category.id) productList.push(this.products[i]);             
+                }
+            } else if (this.products && this.products.length > this.numProducts) {
+                for (let i = 0; i < this.products.length; i++) {
+                    if (this.products[i].category.id === this.category.id) productList.push(this.products[i]);             
+                }
+                const shuffledProducts = [...productList];
+                this.shuffleArray(shuffledProducts);
+                return shuffledProducts.slice(0, this.numProducts);
+            }
+            return productList;
+        }
+    },
+    mounted () {
+        GET(ENDPOINTS.GET_ALL_PRODUCTS)
+        .then((response) => {
+            this.products = response.data;
+        })
+        .catch((error) => {
+            console.dir(error);
+        });
+    },
 }
 
 </script>
 
 <style scoped>
-
-.carousel-item.active {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10vw;
-}
-
-.carousel {
-    background-color: var(--main-white);
-    margin: 5rem;
-    padding: 2rem 0;
-    border: none;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
 .products-by-categories-container {
     background-color: var(--main-white);
     margin: 1rem;
@@ -80,6 +82,7 @@ export default {
     display: flex;
     flex-direction: column;
 }
+
 .title-show-more-container {
     display: flex;
     flex-direction: row;

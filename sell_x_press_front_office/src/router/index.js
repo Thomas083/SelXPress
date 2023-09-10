@@ -1,13 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/identification/LoginView.vue'
-import RegisterView from '../views/identification/RegisterView.vue'
-import ForgotView from '../views/identification/ForgotView.vue'
-import ProductListView from "../views/ProductListView.vue"
-import ProductDetailsView from "../views/ProductDetailsView.vue"
-import UserView from '../views/UserView.vue'
-import CartView from '../views/CartView.vue'
-import HistoryView from '../views/HistoryView.vue'
+import HomeView from '@/views/HomeView.vue'
+import LoginView from '@/views/identification/LoginView.vue'
+import RegisterView from '@/views/identification/RegisterView.vue'
+import ForgotView from '@/views/identification/ForgotView.vue'
+import ProductListView from "@/views/ProductListView.vue"
+import ProductDetailsView from "@/views/ProductDetailsView.vue"
+import UserView from '@/views/UserView.vue'
+import CartView from '@/views/CartView.vue'
+import HistoryView from '@/views/HistoryView.vue'
+import AboutUsView from '@/views/AboutUsView.vue'
+import CareerView from '@/views/CareerView.vue'
 
 const routes = [
   {
@@ -56,6 +58,16 @@ const routes = [
     name: 'products',
     component: ProductListView,
     props: true,
+  },
+  {
+    path: '/about_us',
+    name: 'aboutus',
+    component: AboutUsView
+  },
+  {
+    path: '/career',
+    name: 'career',
+    component: CareerView
   }
 
 ]
@@ -70,6 +82,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.length === 0) {
     // Route doesn't exist, redirect to home
     next({ name: 'home' });
+  } else if (to.name === 'user' & !localStorage.getItem('user')) {
+    next({ name: 'home'});
   } else {
     // Route exists, proceed with navigation
     next();

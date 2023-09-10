@@ -1,9 +1,21 @@
 ﻿namespace SelXPressApi.DTO.ProductAttributeDTO
 {
-    /// <summary>
-    /// Data transfer object for representing a product attribute.
-    /// </summary>
-    public class ProductAttributeDTO
+	/// <summary>
+	/// Data transfer object for representing a Product Attribute. 
+	/// Here you can access to model <see cref="Models.ProductAttribute"/>. 
+	/// </summary>
+	/// <seealso  cref="Models"/>
+	/// <seealso  cref="DTO"/>
+	/// <seealso  cref="Controllers"/>
+	/// <seealso  cref="Repository"/>
+	/// <seealso  cref="Helper"/>
+	/// <seealso  cref="DocumentationErrorTemplate"/>
+	/// <seealso  cref="Exceptions"/>
+	/// <seealso  cref="Interfaces"/>
+	/// <seealso  cref="Middleware"/>
+	/// <seealso  cref="Data"/>
+	/// </summary>
+	public class ProductAttributeDTO
     {
         /// <summary>
         /// Gets or sets the ID of the product attribute.
