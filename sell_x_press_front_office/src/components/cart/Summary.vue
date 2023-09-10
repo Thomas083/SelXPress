@@ -37,6 +37,10 @@ export default {
   },
   methods: {
     goToPayement() {
+      if (!this.cart[0]?.userId) {
+        createToast({ title: 'You need to add products in your cart to order', description: 'Please add products to your cart' }, { type: 'info', position: 'bottom-right' });
+        return
+      }
       this.sendOrder.totalPrice = this.totalPrice
       this.sendOrder.userId = this.cart[0].userId
       for (let i = 0; i < this.cart.length; i++) {
