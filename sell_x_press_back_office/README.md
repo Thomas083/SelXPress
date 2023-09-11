@@ -1,6 +1,3 @@
-Certainly! Here's a README.md template for your "sell_x_press_back_office" project:
-
-```markdown
 # Sell X Press Back Office
 
 ## Overview
@@ -24,7 +21,7 @@ To get started with the Sell X Press Back Office application, follow these steps
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Thomas083/SelXPress/tree/main
    cd sell_x_press_back_office
    ```
 
@@ -82,6 +79,3 @@ Contributions to Sell X Press Back Office are welcome! Feel free to open issues 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-```
-
-Replace `<repository-url>` with the actual URL of your Git repository. This README.md provides an overview of your project, installation instructions, usage guidelines, and information about dependencies. Make sure to customize it further to suit your project's specific needs.
