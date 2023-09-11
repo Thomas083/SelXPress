@@ -1,6 +1,6 @@
 # SelXPress
 
-<div style="display: flex; justify-content: center; flex-wrap:wrap;">
+<div style="display: flex; justify-content: center;">
   <img src="./sell_x_press_front_office/src/assets/Header/Logo.png" height="200" alt="SelXpress Front Office">
   <div style="width: 20px;"></div>
   <img src="./sell_x_press_back_office/src/assets/Header/logo_back_office.png" height="200" alt="SelXpress Back Office">
@@ -23,27 +23,27 @@ With SelXPress, customers can enjoy a convenient and secure online shopping expe
  - [Readme Links](#read-links)
 
 ## Collaborator
-<div style="display: flex; flex-wrap:wrap; gap: 1rem;">
-<div style="display: flex; flex-wrap:wrap; gap: 1rem;">
+<div style="display: flex; gap: 1rem;">
+<div style="display: flex; gap: 1rem;">
   <img src="./sell_x_press_front_office/src/assets/AboutUs/front.png" height="100" alt="SelXpress Front Office">
   <div style="width: 20px;"></div>
-  <div style="display: flex; justify-content: center; flex-wrap:wrap; flex-direction: column">
+  <div style="display: flex; justify-content: center; flex-direction: column">
   <li><a href="https://github.com/MaxenceLer59">Leroy Maxence</a></li>
   <li><a href="https://github.com/JuLamalle">Lamalle Julien</a></li>
   </div>
 </div>
-<div style="display: flex; flex-wrap:wrap; gap: 1rem;">
+<div style="display: flex; gap: 1rem;">
   <img src="./sell_x_press_front_office/src/assets/AboutUs/back.png" height="100" alt="SelXpress Front Office">
   <div style="width: 20px;"></div>
-  <div style="display: flex; justify-content: center; flex-wrap:wrap; flex-direction: column">
+  <div style="display: flex; justify-content: center; flex-direction: column">
   <li><a href="https://github.com/Thomas083">Debray Thomas</a></li>
   <li><a href="https://github.com/ugo-bertrand">Bertrand Ugo</a></li>
   </div>
 </div>
-<div style="display: flex; flex-wrap:wrap; gap: 1rem;">
+<div style="display: flex; gap: 1rem;">
   <img src="./sell_x_press_front_office/src/assets/AboutUs/docker.png" height="100" alt="SelXpress Front Office">
   <div style="width: 20px;"></div>
-  <div style="display: flex; justify-content: center; flex-wrap:wrap; flex-direction: column">
+  <div style="display: flex; justify-content: center; flex-direction: column">
   <li><a href="https://github.com/DavidVacossin">Vacossin David</a></li>
   </div>
 </div>
