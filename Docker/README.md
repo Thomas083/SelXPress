@@ -15,26 +15,15 @@ Copy the ``.env-example``, create a ``.env`` named file and modify the parameter
 
 ## Urls: 
 
-##### front-office: 
-http://localhost:4000
-
-##### back-office: 
-http://localhost:4001
-
-##### api: 
-https://localhost:7094
-
-##### swagger: 
-https://localhost:7094/swagger/
-
-##### smtp: 
-http://localhost:2500
-
-##### smtp-webUI: 
-http://localhost:8080
-
-##### smtp-database: 
-http://localhost:8085
+| Container | URL |
+|:---------------:|:---------------|
+| Front | http://localhost:4000 |
+| Back | http://localhost:4001 |
+| API | https://localhost:7094 |
+| Swagger | https://localhost:7094/swagger/ |
+| SMTP | http://localhost:2500 |
+| SMTP-WebUI | http://localhost:8080 |
+| SMTP-Database | http://localhost:8085 |
 
 ## For testing in local the smtp server
 
