@@ -82,4 +82,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Documentation
 
-[Link to the Front-Office documentation](https://docs.google.com/document/d/1Gbn8Au27-EOZcRPAvDuXpPDr-Jqim_hIeiFSN9PLWtI/edit?usp=sharing)
+[Link to the Front-Office documentation](../Documentation/User%20Documentation/Documentation%20Utilisateur%20FrontOffice%20SelXPress.pdf)

@@ -83,4 +83,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Documentation
 
-[Link to the Back-Office documentation](https://docs.google.com/document/d/1MWYLJkRqq-ZV87-Oyp1VXoDAVKT2WuHIfASo-qEHQlM/edit?usp=sharing)
+[Link to the Back-Office documentation](../Documentation/User%20Documentation/Documentation%20Utilisateur%20BackOffice%20SelXPress.pdf)
