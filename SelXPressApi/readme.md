@@ -88,6 +88,6 @@ This table lists entity codes associated with error messages for various entitie
 
 
 # Link to technical documentation
-1. ### [Access to MCD](..\Documentation\Technical-Documentation\ModeleRelationnelleSellXPress.drawio)
+1. ### [Access to MCD](..\Documentation\Technical-Documentation\MCDSellXPress.jpg)
 2. ### [Access to Api Doc](..\Documentation\Technical-Documentation\Help\index.html) 
     - You can run index.hmtl tu access to the documentation of each method from the api
