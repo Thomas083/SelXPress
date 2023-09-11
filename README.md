@@ -61,7 +61,8 @@ With SelXPress, customers can enjoy a convenient and secure online shopping expe
 ## Project Management
 - [Notion](https://www.notion.so/Home-page-project-99454b9e2b284caaac0574663e56db30?pvs=4)
   -  Our Notion organization enabled us to describe all the tasks involved in the project, from setting up the various sprints to managing training and vacations for the various collaborators .
-- Communication for the project is essential to its successful development. This was managed via discord with the implementation of a ticketing system with the possibility of making them: Urgent/Medium/Not Urgent.
+- Discord
+  - Communication for the project is essential to its successful development. We used this for the implementation of a ticketing system with the possibility of making them: Urgent/Medium/Not Urgent.
 
 ## Readme Links
 - [Front-Office](./sell_x_press_front_office/README.md)
