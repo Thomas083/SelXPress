@@ -1,6 +1,6 @@
-# Liste des Codes d'Entité et Messages d'Erreur
+# List of Entity Codes and Error Messages
 
-Ce tableau répertorie les codes d'entité associés à des messages d'erreur pour différentes entités dans l'application.
+This table lists entity codes associated with error messages for various entities in the application.
 
 | Entity            | Code      | Message                                                               |
 | ----------------- | --------- | --------------------------------------------------------------------- |
@@ -85,3 +85,9 @@ Ce tableau répertorie les codes d'entité associés à des messages d'erreur po
 | SRV (Service)     | SRV-1701  | An error occured while the decoding of the jwt token                  |
 |                   | SRV-1401  | The email address is not in the database                              |
 |                   | SRV-1702  | The token is not valid, please try again with another token           |
+
+
+# Link to technical documentation
+1. ### [Access to MCD](../Documentation/Technical-Documentation/MCDSellXPress.jpg)
+2. ### [Access to Api Doc](../Documentation/Technical-Documentation/Help/index.html) 
+    - You can run index.hmtl tu access to the documentation of each method from the api

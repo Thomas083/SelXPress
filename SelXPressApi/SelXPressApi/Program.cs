@@ -55,16 +55,16 @@ builder.Services.AddSwaggerGen(s =>
         Title = "SelXPressApi",
         Version = "v1",
         Description = "SelXPressApi",
-        Contact = new OpenApiContact
+        Contact = new OpenApiContact()
         {
-            Name = "SelXPressApi",
+            Name = "SelXPress's front office",
             Email = string.Empty,
-            Url = new Uri("https://localhost:5001/swagger/v1/swagger.json"),
+            Url = new Uri("https://localhost:4000"),
         },
         License = new OpenApiLicense
         {
-            Name = "Use under LICX",
-            Url = new Uri("https://localhost:5001/swagger/v1/swagger.json"),
+            Name = "SelXPress's back office",
+            Url = new Uri("https://localhost:4001"),
         }
     });
 });
