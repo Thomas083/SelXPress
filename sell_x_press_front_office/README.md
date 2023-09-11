@@ -22,7 +22,7 @@ To get started with the Sell X Press Front Office application, follow these step
 
    ```bash
    git clone https://github.com/Thomas083/SelXPress/tree/main
-   cd sell_x_press_front_office
+   cd SelXPress/sell_x_press_front_office
    ```
 
 2. Install the required dependencies:
@@ -78,3 +78,5 @@ Contributions to Sell X Press Front Office are welcome! Feel free to open issues
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+[Link to the Front-Office documentation](https://docs.google.com/document/d/1Gbn8Au27-EOZcRPAvDuXpPDr-Jqim_hIeiFSN9PLWtI/edit?usp=sharing)
