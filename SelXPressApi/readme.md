@@ -85,3 +85,9 @@ This table lists entity codes associated with error messages for various entitie
 | SRV (Service)     | SRV-1701  | An error occured while the decoding of the jwt token                  |
 |                   | SRV-1401  | The email address is not in the database                              |
 |                   | SRV-1702  | The token is not valid, please try again with another token           |
+
+
+# Link to technical documentation
+1. ### [Access to MCD](..\Documentation\Technical-Documentation\ModeleRelationnelleSellXPress.drawio)
+2. ### [Access to Api Doc](..\Documentation\Technical-Documentation\Help\index.html) 
+    - You can run index.hmtl tu access to the documentation of each method from the api
