@@ -1,27 +1,44 @@
-# SelXPress
+# Docker
 
-For docker :
+## Launch Docker:
 
-Copy the .env-example, create a .env named file and modify the parameters in { }
+Copy the ``.env-example``, create a ``.env`` named file and modify the parameters in ``{}``
 
-Launch the containers: 
+## Launch the container: 
 
-docker-compose up
+``cd ./docker`` 
+``docker-compose up``
 
-Connect to the database in SQL Server container:
+## Connect to the database in SQL Server container:
 
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "<Password>"
+``/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "<Password>"``
 
-Urls: 
+## Urls: 
 
-front-office: http://localhost:4000
-back-office: http://localhost:4001
-api: https://localhost:7094
-swagger: https://localhost:7094/swagger/
-smtp: http://localhost:2500
-smtp-webUI: http://localhost:8080
-smtp-database: http://localhost:8085
+##### front-office: 
+http://localhost:4000
 
-For testing in local the smtp server, simply execute the python file "testing_smtp.py"
+##### back-office: 
+http://localhost:4001
+
+##### api: 
+https://localhost:7094
+
+##### swagger: 
+https://localhost:7094/swagger/
+
+##### smtp: 
+http://localhost:2500
+
+##### smtp-webUI: 
+http://localhost:8080
+
+##### smtp-database: 
+http://localhost:8085
+
+## For testing in local the smtp server
+
+``cd ./docker``
+``python testing_smtp.py``
 
 
