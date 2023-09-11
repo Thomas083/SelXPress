@@ -1,6 +1,6 @@
-# Liste des Codes d'Entité et Messages d'Erreur
+# List of Entity Codes and Error Messages
 
-Ce tableau répertorie les codes d'entité associés à des messages d'erreur pour différentes entités dans l'application.
+This table lists entity codes associated with error messages for various entities in the application.
 
 | Entity            | Code      | Message                                                               |
 | ----------------- | --------- | --------------------------------------------------------------------- |
