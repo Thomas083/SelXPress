@@ -13,6 +13,7 @@ Sell X Press Back Office is a full-stack web application developed using Vue.js 
 - [Development Dependencies](#development-dependencies)
 - [Contributing](#contributing)
 - [License](#license)
+- [Documentation](#documentation)
 
 ## Installation
 
@@ -79,5 +80,7 @@ Contributions to Sell X Press Back Office are welcome! Feel free to open issues 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Documentation
 
 [Link to the Back-Office documentation](https://docs.google.com/document/d/1MWYLJkRqq-ZV87-Oyp1VXoDAVKT2WuHIfASo-qEHQlM/edit?usp=sharing)

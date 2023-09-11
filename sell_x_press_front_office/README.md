@@ -13,6 +13,7 @@ Sell X Press Front Office is a front-end application built with Vue.js for manag
 - [Development Dependencies](#development-dependencies)
 - [Contributing](#contributing)
 - [License](#license)
+- [Documentation](#documentation)
 
 ## Installation
 
@@ -78,5 +79,7 @@ Contributions to Sell X Press Front Office are welcome! Feel free to open issues
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Documentation
 
 [Link to the Front-Office documentation](https://docs.google.com/document/d/1Gbn8Au27-EOZcRPAvDuXpPDr-Jqim_hIeiFSN9PLWtI/edit?usp=sharing)
